@@ -1,0 +1,883 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// CORE ENTITIES
+// ============================================
+
+model Dealer {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+  logo      String?
+  address   String?
+  phone     String?
+  email     String?
+  taxNumber String?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  users            User[]
+  students         Student[]
+  trainers         Trainer[]
+  groups           Group[]
+  branches         Branch[]
+  locations        Location[]
+  facilities       Facility[]
+  periods          Period[]
+  preRegistrations PreRegistration[]
+  payments         Payment[]
+  cashTransactions CashTransaction[]
+  smsMessages      SmsMessage[]
+  auditLogs        AuditLog[]
+  settings         DealerSettings?
+
+  materials         Material[]
+  expenseItems      ExpenseItem[]
+  incomeItems       IncomeItem[]
+  discountTypes     DiscountType[]
+  duesTypes         DuesType[]
+  sizeDefinitions   SizeDefinition[]
+  taskDefinitions   TaskDefinition[]
+  otherPaymentTypes OtherPaymentType[]
+  developmentTypes  DevelopmentType[]
+  personnelTypes    PersonnelType[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model DealerSettings {
+  id            String   @id @default(cuid())
+  dealerId      String   @unique
+  currency      String   @default("TRY")
+  timezone      String   @default("Europe/Istanbul")
+  smsBalance    Int      @default(0)
+  paytrEnabled  Boolean  @default(false)
+  netgsmEnabled Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+// UserRole: SUPER_ADMIN | DEALER_ADMIN | TRAINER
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          String    @default("DEALER_ADMIN") // SUPER_ADMIN, DEALER_ADMIN, TRAINER
+  isActive      Boolean   @default(true)
+  emailVerified DateTime?
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  dealerId  String?
+  dealer    Dealer?  @relation(fields: [dealerId], references: [id])
+  trainerId String?  @unique
+  trainer   Trainer? @relation(fields: [trainerId], references: [id])
+
+  permissions UserPermission[]
+  auditLogs   AuditLog[]
+  sessions    Session[]
+  accounts    Account[]
+
+  @@index([email])
+  @@index([dealerId])
+  @@index([role])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============================================
+// PERMISSIONS
+// ============================================
+// Permissions are stored as strings matching the Permission type in TypeScript
+
+model UserPermission {
+  id         String   @id @default(cuid())
+  userId     String
+  permission String   // See lib/types/permissions.ts for valid values
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permission])
+  @@index([userId])
+}
+
+// ============================================
+// ORGANIZATIONAL STRUCTURE
+// ============================================
+
+model Branch {
+  id          String   @id @default(cuid())
+  dealerId    String
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dealer   Dealer          @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  groups   Group[]
+  students Student[]
+  trainers TrainerBranch[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  address   String?
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer     Dealer     @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  facilities Facility[]
+  students   Student[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model Facility {
+  id         String   @id @default(cuid())
+  dealerId   String
+  locationId String
+  name       String
+  capacity   Int?
+  address    String?
+  isActive   Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  dealer   Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id])
+  groups   Group[]
+  students Student[]
+
+  @@unique([dealerId, locationId, name])
+  @@index([dealerId])
+  @@index([locationId])
+}
+
+model Period {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer   Dealer          @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  groups   Group[]
+  students StudentPeriod[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+  @@index([isActive])
+}
+
+// ============================================
+// GROUPS
+// ============================================
+
+model Group {
+  id          String   @id @default(cuid())
+  dealerId    String
+  branchId    String
+  facilityId  String
+  periodId    String
+  name        String
+  description String?
+  maxCapacity Int?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dealer   Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  branch   Branch   @relation(fields: [branchId], references: [id])
+  facility Facility @relation(fields: [facilityId], references: [id])
+  period   Period   @relation(fields: [periodId], references: [id])
+
+  schedules          GroupSchedule[]
+  students           StudentGroup[]
+  trainers           TrainerGroup[]
+  attendanceSessions AttendanceSession[]
+
+  @@unique([dealerId, branchId, facilityId, periodId, name])
+  @@index([dealerId])
+  @@index([branchId])
+  @@index([facilityId])
+  @@index([periodId])
+}
+
+model GroupSchedule {
+  id        String   @id @default(cuid())
+  groupId   String
+  dayOfWeek Int      // 0=Sunday, 1=Monday, etc.
+  startTime String   // HH:mm format
+  endTime   String   // HH:mm format
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+}
+
+// ============================================
+// PRE-REGISTRATION
+// ============================================
+// PreRegistrationStatus: PENDING | CONTACTED | CONVERTED | CANCELLED
+
+model PreRegistration {
+  id        String   @id @default(cuid())
+  dealerId  String
+  firstName String
+  lastName  String
+  birthDate DateTime?
+  gender    String?  // MALE, FEMALE, OTHER
+
+  parentName  String
+  parentPhone String
+  parentEmail String?
+
+  branchInterest String?
+  notes          String?
+
+  status               String    @default("PENDING") // PENDING, CONTACTED, CONVERTED, CANCELLED
+  source               String?   // website, phone, walk-in
+  convertedToStudentId String?
+  convertedAt          DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([status])
+  @@index([parentPhone])
+}
+
+// ============================================
+// STUDENTS
+// ============================================
+// Gender: MALE | FEMALE | OTHER
+
+model Student {
+  id            String   @id @default(cuid())
+  dealerId      String
+  studentNumber String
+  firstName     String
+  lastName      String
+  birthDate     DateTime
+  gender        String   // MALE, FEMALE, OTHER
+  tcKimlikNo    String?  // Encrypted
+  photoUrl      String?
+
+  phone   String?
+  email   String?
+  address String?
+
+  parentName       String
+  parentPhone      String
+  parentEmail      String?
+  parentTcKimlik   String? // Encrypted
+  emergencyContact String?
+  emergencyPhone   String?
+
+  branchId   String
+  locationId String
+  facilityId String
+
+  monthlyFee      Float   @default(0)
+  registrationFee Float   @default(0)
+  discountTypeId  String?
+  discountAmount  Float   @default(0)
+
+  isActive         Boolean   @default(true)
+  registrationDate DateTime  @default(now())
+  withdrawalDate   DateTime?
+  withdrawalReason String?
+
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  dealer       Dealer        @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  branch       Branch        @relation(fields: [branchId], references: [id])
+  location     Location      @relation(fields: [locationId], references: [id])
+  facility     Facility      @relation(fields: [facilityId], references: [id])
+  discountType DiscountType? @relation(fields: [discountTypeId], references: [id])
+
+  groups       StudentGroup[]
+  periods      StudentPeriod[]
+  attendances  Attendance[]
+  payments     Payment[]
+  materials    StudentMaterial[]
+  developments StudentDevelopment[]
+  sizes        StudentSize[]
+
+  @@unique([dealerId, studentNumber])
+  @@index([dealerId])
+  @@index([branchId])
+  @@index([locationId])
+  @@index([facilityId])
+  @@index([isActive])
+  @@index([parentPhone])
+}
+
+model StudentGroup {
+  id        String    @id @default(cuid())
+  studentId String
+  groupId   String
+  joinedAt  DateTime  @default(now())
+  leftAt    DateTime?
+  isActive  Boolean   @default(true)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, groupId])
+  @@index([studentId])
+  @@index([groupId])
+  @@index([isActive])
+}
+
+model StudentPeriod {
+  id        String   @id @default(cuid())
+  studentId String
+  periodId  String
+  fee       Float
+  isPaid    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  period  Period  @relation(fields: [periodId], references: [id])
+
+  @@unique([studentId, periodId])
+  @@index([studentId])
+  @@index([periodId])
+}
+
+// ============================================
+// TRAINERS
+// ============================================
+
+model Trainer {
+  id         String    @id @default(cuid())
+  dealerId   String
+  firstName  String
+  lastName   String
+  birthDate  DateTime?
+  gender     String?   // MALE, FEMALE, OTHER
+  tcKimlikNo String?   // Encrypted
+  photoUrl   String?
+
+  phone   String
+  email   String?
+  address String?
+
+  taskDefinitionId String? // Gorev tanimi
+  hireDate         DateTime @default(now())
+  salary           Float    @default(0)
+  salaryType       String?  // fixed, per_hour, per_session
+  bankName         String?  // Bank name
+  bankAccount      String?  // Encrypted IBAN
+
+  isActive        Boolean   @default(true)
+  terminationDate DateTime?
+
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  dealer             Dealer              @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  user               User?
+  branches           TrainerBranch[]
+  groups             TrainerGroup[]
+  salaryPayments     TrainerSalary[]
+  attendanceSessions AttendanceSession[]
+
+  @@index([dealerId])
+  @@index([isActive])
+  @@index([phone])
+}
+
+model TrainerBranch {
+  id        String   @id @default(cuid())
+  trainerId String
+  branchId  String
+  createdAt DateTime @default(now())
+
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  branch  Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, branchId])
+  @@index([trainerId])
+  @@index([branchId])
+}
+
+model TrainerGroup {
+  id        String   @id @default(cuid())
+  trainerId String
+  groupId   String
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, groupId])
+  @@index([trainerId])
+  @@index([groupId])
+}
+
+model TrainerSalary {
+  id        String    @id @default(cuid())
+  trainerId String
+  amount    Float
+  month     Int       // 1-12
+  year      Int
+  paidAt    DateTime?
+  notes     String?
+  createdAt DateTime  @default(now())
+
+  trainer Trainer @relation(fields: [trainerId], references: [id], onDelete: Cascade)
+
+  @@unique([trainerId, month, year])
+  @@index([trainerId])
+}
+
+// ============================================
+// ATTENDANCE
+// ============================================
+// AttendanceStatus: PRESENT | ABSENT | LATE | EXCUSED
+
+model AttendanceSession {
+  id        String   @id @default(cuid())
+  groupId   String
+  trainerId String
+  date      DateTime
+  startTime String?
+  endTime   String?
+  notes     String?
+  isClosed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  group       Group        @relation(fields: [groupId], references: [id])
+  trainer     Trainer      @relation(fields: [trainerId], references: [id])
+  attendances Attendance[]
+
+  @@unique([groupId, date])
+  @@index([groupId])
+  @@index([trainerId])
+  @@index([date])
+}
+
+model Attendance {
+  id        String   @id @default(cuid())
+  sessionId String
+  studentId String
+  status    String   // PRESENT, ABSENT, LATE, EXCUSED
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  session AttendanceSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student Student           @relation(fields: [studentId], references: [id])
+
+  @@unique([sessionId, studentId])
+  @@index([sessionId])
+  @@index([studentId])
+}
+
+// ============================================
+// ACCOUNTING & PAYMENTS
+// ============================================
+// PaymentType: REGISTRATION_FEE | MONTHLY_FEE | MATERIAL | OTHER
+// PaymentMethod: CASH | CREDIT_CARD | BANK_TRANSFER | ONLINE_PAYTR
+// PaymentStatus: PENDING | COMPLETED | FAILED | REFUNDED
+
+model Payment {
+  id        String @id @default(cuid())
+  dealerId  String
+  studentId String
+  type      String @default("MONTHLY_FEE") // REGISTRATION_FEE, MONTHLY_FEE, MATERIAL, OTHER
+  method    String @default("CASH")        // CASH, CREDIT_CARD, BANK_TRANSFER, ONLINE_PAYTR
+  status    String @default("PENDING")     // PENDING, COMPLETED, FAILED, REFUNDED
+
+  amount  Float
+  dueDate DateTime
+  paidAt  DateTime?
+
+  periodMonth Int?
+  periodYear  Int?
+
+  paytrOrderId String?
+  paytrToken   String?
+
+  description String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer  Dealer  @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@index([dealerId])
+  @@index([studentId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([paytrOrderId])
+}
+
+// TransactionType: INCOME | EXPENSE
+
+model CashTransaction {
+  id       String   @id @default(cuid())
+  dealerId String
+  branchId String?
+  type     String   // INCOME, EXPENSE
+  amount   Float
+  date     DateTime @default(now())
+
+  categoryId   String?
+  categoryType String? // expense, income
+
+  description     String
+  receiptNumber   String?
+  notes           String?
+  createdByUserId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([branchId])
+  @@index([date])
+  @@index([type])
+}
+
+// ============================================
+// SMS
+// ============================================
+// SmsStatus: PENDING | SENT | FAILED | DELIVERED
+
+model SmsMessage {
+  id             String    @id @default(cuid())
+  dealerId       String
+  recipients     String    // JSON array of phone numbers
+  recipientCount Int
+  message        String
+  title          String?
+  branchId       String?
+  facilityId     String?
+
+  status       String    @default("PENDING") // PENDING, SENT, FAILED, DELIVERED
+  netgsmJobId  String?
+  errorMessage String?
+
+  sentAt          DateTime?
+  createdAt       DateTime  @default(now())
+  createdByUserId String
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================
+// SETTINGS ENTITIES
+// ============================================
+
+model Material {
+  id          String   @id @default(cuid())
+  dealerId    String
+  name        String
+  description String?
+  price       Float    @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  dealer   Dealer            @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  students StudentMaterial[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model StudentMaterial {
+  id         String   @id @default(cuid())
+  studentId  String
+  materialId String
+  quantity   Int      @default(1)
+  givenAt    DateTime @default(now())
+  notes      String?
+
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  material Material @relation(fields: [materialId], references: [id])
+
+  @@index([studentId])
+  @@index([materialId])
+}
+
+model ExpenseItem {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model IncomeItem {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model DiscountType {
+  id         String    @id @default(cuid())
+  dealerId   String
+  name       String
+  percentage Float     @default(0)
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  dealer   Dealer    @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  students Student[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model DuesType {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  amount    Float    @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model SizeDefinition {
+  id        String        @id @default(cuid())
+  dealerId  String
+  name      String        // e.g., "T-Shirt", "Shoes"
+  sizes     String        // JSON array: ["XS","S","M","L","XL"]
+  isActive  Boolean       @default(true)
+  createdAt DateTime      @default(now())
+
+  dealer       Dealer        @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  studentSizes StudentSize[]
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model StudentSize {
+  id               String   @id @default(cuid())
+  studentId        String
+  sizeDefinitionId String
+  size             String
+  updatedAt        DateTime @updatedAt
+
+  student        Student        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  sizeDefinition SizeDefinition @relation(fields: [sizeDefinitionId], references: [id])
+
+  @@unique([studentId, sizeDefinitionId])
+  @@index([studentId])
+}
+
+model TaskDefinition {
+  id          String   @id @default(cuid())
+  dealerId    String
+  name        String   // e.g., "Antrenor", "Yardimci Antrenor"
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model OtherPaymentType {
+  id        String   @id @default(cuid())
+  dealerId  String
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model DevelopmentType {
+  id          String   @id @default(cuid())
+  dealerId    String
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model PersonnelType {
+  id          String   @id @default(cuid())
+  dealerId    String
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@unique([dealerId, name])
+  @@index([dealerId])
+}
+
+model StudentDevelopment {
+  id        String   @id @default(cuid())
+  studentId String
+  date      DateTime @default(now())
+  category  String   // technical, physical, mental
+  metric    String   // ball_control, speed, teamwork
+  score     Int      // 1-10
+  notes     String?
+  trainerId String?
+  createdAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([date])
+}
+
+// ============================================
+// AUDIT & LOGGING
+// ============================================
+
+model AuditLog {
+  id       String  @id @default(cuid())
+  dealerId String?
+  userId   String?
+
+  actor        String  // User email or "system"
+  action       String  // CREATE, UPDATE, DELETE, LOGIN, LOGOUT, VIEW
+  entity       String  // Student, Trainer, Payment, etc.
+  entityId     String?
+  oldValue     String? // JSON - PII masked
+  newValue     String? // JSON - PII masked
+  ipAddress    String?
+  userAgent    String?
+  status       String  // SUCCESS, FAILURE
+  errorMessage String?
+
+  timestamp DateTime @default(now())
+
+  dealer Dealer? @relation(fields: [dealerId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([dealerId])
+  @@index([userId])
+  @@index([entity])
+  @@index([action])
+  @@index([timestamp])
+}
