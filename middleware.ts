@@ -35,7 +35,7 @@ const securityHeaders = {
 export default auth(async function middleware(request) {
   const pathname = request.nextUrl.pathname;
 
-  // Skip static files and API routes (except auth)
+  // Skip static files and API routes
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
@@ -43,6 +43,16 @@ export default auth(async function middleware(request) {
     pathname.startsWith("/favicon")
   ) {
     return NextResponse.next();
+  }
+
+  // Handle root path
+  if (pathname === "/") {
+    const locale = getLocale(request);
+    const session = request.auth;
+    if (session) {
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
+    }
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
 
   // Check if pathname has locale
@@ -61,6 +71,15 @@ export default auth(async function middleware(request) {
   // Get current locale from path
   const currentLocale = pathname.split("/")[1];
 
+  // Handle locale-only path (e.g., /tr, /en)
+  if (pathname === `/${currentLocale}`) {
+    const session = request.auth;
+    if (session) {
+      return NextResponse.redirect(new URL(`/${currentLocale}/dashboard`, request.url));
+    }
+    return NextResponse.redirect(new URL(`/${currentLocale}/login`, request.url));
+  }
+
   // Check if this is an auth page
   const isAuthPage =
     pathname.includes("/login") || pathname.includes("/forgot-password");
@@ -68,7 +87,7 @@ export default auth(async function middleware(request) {
   // Get session from auth wrapper
   const session = request.auth;
 
-  // Redirect unauthenticated users to login
+  // Redirect unauthenticated users to login (except auth pages)
   if (!session && !isAuthPage) {
     const loginUrl = new URL(`/${currentLocale}/login`, request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);

@@ -8,8 +8,8 @@ import { UserRole } from "@/lib/types";
 export const authConfig: NextAuthConfig = {
   session: { strategy: "jwt" },
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/tr/login",
+    error: "/tr/login",
   },
   providers: [
     Credentials({
@@ -22,20 +22,9 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const pathname = nextUrl.pathname;
-
-      // Check if this is an auth page
-      const isAuthPage =
-        pathname.includes("/login") || pathname.includes("/forgot-password");
-
-      if (isAuthPage) {
-        if (isLoggedIn) return false; // Redirect to dashboard
-        return true;
-      }
-
-      return isLoggedIn;
+    authorized() {
+      // Let middleware handle all authorization logic
+      return true;
     },
     async jwt({ token, user }) {
       if (user) {
