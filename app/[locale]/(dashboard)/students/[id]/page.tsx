@@ -59,6 +59,9 @@ export default async function StudentDetailPage({
     notFound();
   }
 
+  type StudentGroup = (typeof student.groups)[number];
+  type Payment = (typeof student.payments)[number];
+
   const age = differenceInYears(new Date(), student.birthDate);
 
   return (
@@ -224,7 +227,7 @@ export default async function StudentDetailPage({
               <div className="border-t pt-4">
                 <p className="text-sm text-muted-foreground mb-2">Gruplar</p>
                 <div className="flex flex-wrap gap-2">
-                  {student.groups.map((sg) => (
+                  {student.groups.map((sg: StudentGroup) => (
                     <Badge key={sg.id} variant="outline">
                       {sg.group.name}
                     </Badge>
@@ -285,7 +288,7 @@ export default async function StudentDetailPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {student.payments.map((payment) => (
+                {student.payments.map((payment: Payment) => (
                   <TableRow key={payment.id}>
                     <TableCell>
                       {format(payment.dueDate, "d MMM yyyy", { locale: dateLocale })}

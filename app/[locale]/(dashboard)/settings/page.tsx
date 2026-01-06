@@ -117,6 +117,8 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
     },
   ];
 
+  type SettingsItem = (typeof settingsItems)[number];
+
   return (
     <div className="space-y-6">
       <div>
@@ -127,7 +129,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {settingsItems.map((item) => (
+        {settingsItems.map((item: SettingsItem) => (
           <Link key={item.title} href={item.href}>
             <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
               <CardHeader className="pb-2">

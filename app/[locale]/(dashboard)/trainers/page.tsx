@@ -50,6 +50,7 @@ export default async function TrainersPage({ params }: TrainersPageProps) {
   });
 
   type Trainer = (typeof trainers)[number];
+  type TrainerBranch = Trainer["branches"][number];
 
   return (
     <div className="space-y-6">
@@ -107,7 +108,7 @@ export default async function TrainersPage({ params }: TrainersPageProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      {trainer.branches.map((b) => b.branch.name).join(", ") ||
+                      {trainer.branches.map((b: TrainerBranch) => b.branch.name).join(", ") ||
                         "-"}
                     </TableCell>
                     <TableCell>

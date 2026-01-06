@@ -64,6 +64,8 @@ export default async function GroupStudentsPage({
     notFound();
   }
 
+  type StudentGroup = (typeof group.students)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -107,7 +109,7 @@ export default async function GroupStudentsPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {group.students.map((sg) => (
+                {group.students.map((sg: StudentGroup) => (
                   <TableRow key={sg.student.id}>
                     <TableCell className="font-medium">
                       {sg.student.firstName} {sg.student.lastName}

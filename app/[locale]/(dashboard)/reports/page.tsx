@@ -62,6 +62,8 @@ export default async function ReportsPage({ params }: ReportsPageProps) {
     },
   ];
 
+  type ReportType = (typeof reportTypes)[number];
+
   return (
     <div className="space-y-6">
       <div>
@@ -72,7 +74,7 @@ export default async function ReportsPage({ params }: ReportsPageProps) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {reportTypes.map((report) => (
+        {reportTypes.map((report: ReportType) => (
           <Link key={report.title} href={report.href}>
             <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
               <CardHeader>

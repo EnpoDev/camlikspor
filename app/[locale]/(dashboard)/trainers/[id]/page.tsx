@@ -58,6 +58,10 @@ export default async function TrainerDetailPage({
     notFound();
   }
 
+  type TrainerBranch = (typeof trainer.branches)[number];
+  type TrainerGroup = (typeof trainer.groups)[number];
+  type SalaryPayment = (typeof trainer.salaryPayments)[number];
+
   const age = trainer.birthDate
     ? differenceInYears(new Date(), trainer.birthDate)
     : null;
@@ -180,7 +184,7 @@ export default async function TrainerDetailPage({
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Branslar</p>
                 <div className="flex flex-wrap gap-2">
-                  {trainer.branches.map((tb) => (
+                  {trainer.branches.map((tb: TrainerBranch) => (
                     <Badge key={tb.branch.id} variant="outline">
                       {tb.branch.name}
                     </Badge>
@@ -192,7 +196,7 @@ export default async function TrainerDetailPage({
               <div>
                 <p className="text-sm text-muted-foreground mb-2">Gruplar</p>
                 <div className="flex flex-wrap gap-2">
-                  {trainer.groups.map((tg) => (
+                  {trainer.groups.map((tg: TrainerGroup) => (
                     <Badge key={tg.group.id} variant="secondary">
                       {tg.group.name}
                     </Badge>
@@ -265,7 +269,7 @@ export default async function TrainerDetailPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {trainer.salaryPayments.map((payment) => (
+                {trainer.salaryPayments.map((payment: SalaryPayment) => (
                   <TableRow key={payment.id}>
                     <TableCell>{payment.month}</TableCell>
                     <TableCell>{payment.year}</TableCell>
