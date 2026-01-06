@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
-import { getPreRegistrations } from "@/lib/data/pre-registration";
+import { getPreRegistrations, type PreRegistrationListItem } from "@/lib/data/pre-registration";
 import { UserRole } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -112,7 +112,7 @@ export default async function PreRegistrationPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {preRegistrations.map((reg) => (
+                {preRegistrations.map((reg: PreRegistrationListItem) => (
                   <TableRow key={reg.id}>
                     <TableCell className="font-medium">
                       {reg.firstName} {reg.lastName}

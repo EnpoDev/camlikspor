@@ -60,8 +60,19 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
     orderBy: { name: "asc" },
   });
 
+  type Dealer = (typeof dealers)[number];
+  type DealerStat = {
+    id: string;
+    name: string;
+    slug: string;
+    studentCount: number;
+    totalPayments: number;
+    thisMonthPayments: number;
+    paymentCount: number;
+  };
+
   // Calculate payment stats for each dealer
-  const dealerStats = dealers.map((dealer) => {
+  const dealerStats: DealerStat[] = dealers.map((dealer: Dealer) => {
     const totalPayments = dealer.payments.reduce((sum, p) => sum + p.amount, 0);
     const thisMonthPayments = dealer.payments
       .filter((p) => p.paidAt && p.paidAt >= startOfMonth && p.paidAt <= endOfMonth)
@@ -86,18 +97,19 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
     _sum: { amount: true },
   });
 
+  type PendingPayment = (typeof pendingPayments)[number];
   const pendingMap = new Map(
-    pendingPayments.map((p) => [
+    pendingPayments.map((p: PendingPayment) => [
       p.dealerId,
       { count: p._count, amount: p._sum.amount || 0 },
     ])
   );
 
   // Overall totals
-  const totalAllPayments = dealerStats.reduce((sum, d) => sum + d.totalPayments, 0);
-  const totalThisMonth = dealerStats.reduce((sum, d) => sum + d.thisMonthPayments, 0);
-  const totalPending = pendingPayments.reduce((sum, p) => sum + (p._sum.amount || 0), 0);
-  const totalStudents = dealerStats.reduce((sum, d) => sum + d.studentCount, 0);
+  const totalAllPayments = dealerStats.reduce((sum: number, d: DealerStat) => sum + d.totalPayments, 0);
+  const totalThisMonth = dealerStats.reduce((sum: number, d: DealerStat) => sum + d.thisMonthPayments, 0);
+  const totalPending = pendingPayments.reduce((sum: number, p: PendingPayment) => sum + (p._sum.amount || 0), 0);
+  const totalStudents = dealerStats.reduce((sum: number, d: DealerStat) => sum + d.studentCount, 0);
 
   // Recent payments
   const recentPayments = await prisma.payment.findMany({
@@ -109,6 +121,8 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
     orderBy: { paidAt: "desc" },
     take: 10,
   });
+
+  type RecentPayment = (typeof recentPayments)[number];
 
   return (
     <div className="space-y-6">
@@ -191,7 +205,7 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
               </TableRow>
             </TableHeader>
             <TableBody>
-              {dealerStats.map((dealer) => {
+              {dealerStats.map((dealer: DealerStat) => {
                 const pending = pendingMap.get(dealer.id);
                 return (
                   <TableRow key={dealer.id}>
@@ -253,7 +267,7 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {recentPayments.map((payment) => (
+                {recentPayments.map((payment: RecentPayment) => (
                   <TableRow key={payment.id}>
                     <TableCell>
                       {payment.paidAt

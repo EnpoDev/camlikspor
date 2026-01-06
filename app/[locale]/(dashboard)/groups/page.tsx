@@ -47,6 +47,8 @@ export default async function GroupsPage({ params }: GroupsPageProps) {
     orderBy: { name: "asc" },
   });
 
+  type Group = (typeof groups)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -89,7 +91,7 @@ export default async function GroupsPage({ params }: GroupsPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {groups.map((group) => (
+                {groups.map((group: Group) => (
                   <TableRow key={group.id}>
                     <TableCell className="font-medium">{group.name}</TableCell>
                     <TableCell>{group.branch.name}</TableCell>

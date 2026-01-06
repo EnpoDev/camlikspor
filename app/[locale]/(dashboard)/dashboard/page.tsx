@@ -12,7 +12,7 @@ import {
   Gift,
   UserPlus,
 } from "lucide-react";
-import { getDashboardStats } from "@/lib/data/dashboard";
+import { getDashboardStats, type DashboardStats } from "@/lib/data/dashboard";
 import { format } from "date-fns";
 import { tr, enUS, es } from "date-fns/locale";
 import { UserRole } from "@/lib/types";
@@ -80,7 +80,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statCards.map((stat) => (
+        {statCards.map((stat: typeof statCards[number]) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
@@ -147,7 +147,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           <CardContent>
             {stats.upcomingBirthdays.length > 0 ? (
               <div className="space-y-2">
-                {stats.upcomingBirthdays.map((student) => (
+                {stats.upcomingBirthdays.map((student: DashboardStats["upcomingBirthdays"][number]) => (
                   <div key={student.id} className="flex justify-between text-sm">
                     <span>{student.name}</span>
                     <span className="text-muted-foreground">
@@ -173,7 +173,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           <CardContent>
             {stats.recentPreRegistrations.length > 0 ? (
               <div className="space-y-2">
-                {stats.recentPreRegistrations.map((reg) => (
+                {stats.recentPreRegistrations.map((reg: DashboardStats["recentPreRegistrations"][number]) => (
                   <div key={reg.id} className="flex justify-between text-sm">
                     <span>{reg.studentName}</span>
                     <span className="text-muted-foreground">

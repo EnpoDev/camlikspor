@@ -55,6 +55,8 @@ export default async function UsersPage({ params }: UsersPageProps) {
     orderBy: { createdAt: "desc" },
   });
 
+  type User = (typeof users)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -96,7 +98,7 @@ export default async function UsersPage({ params }: UsersPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                {users.map((user: User) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.name}</TableCell>
                     <TableCell>

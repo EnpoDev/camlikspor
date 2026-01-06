@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
-import { getStudents } from "@/lib/data/students";
+import { getStudents, type StudentListItem } from "@/lib/data/students";
 import { UserRole } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -127,7 +127,7 @@ export default async function StudentsPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {students.map((student) => (
+                {students.map((student: StudentListItem) => (
                   <TableRow key={student.id}>
                     <TableCell className="font-mono">
                       {student.studentNumber}

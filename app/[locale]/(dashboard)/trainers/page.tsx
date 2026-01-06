@@ -49,6 +49,8 @@ export default async function TrainersPage({ params }: TrainersPageProps) {
     orderBy: { firstName: "asc" },
   });
 
+  type Trainer = (typeof trainers)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -92,7 +94,7 @@ export default async function TrainersPage({ params }: TrainersPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {trainers.map((trainer) => (
+                {trainers.map((trainer: Trainer) => (
                   <TableRow key={trainer.id}>
                     <TableCell className="font-medium">
                       {trainer.firstName}

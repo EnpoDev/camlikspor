@@ -51,6 +51,9 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
     orderBy: { name: "asc" },
   });
 
+  type Group = (typeof groups)[number];
+  type Session = (typeof sessions)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -71,7 +74,7 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {groups.slice(0, 6).map((group) => (
+        {groups.slice(0, 6).map((group: Group) => (
           <Card key={group.id}>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg">{group.name}</CardTitle>
@@ -99,7 +102,7 @@ export default async function AttendancePage({ params }: AttendancePageProps) {
             </div>
           ) : (
             <div className="space-y-4">
-              {sessions.map((session) => (
+              {sessions.map((session: Session) => (
                 <div
                   key={session.id}
                   className="flex items-center justify-between border-b pb-4 last:border-0"

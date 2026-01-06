@@ -56,6 +56,8 @@ export default async function DealersPage({ params }: DealersPageProps) {
     orderBy: { createdAt: "desc" },
   });
 
+  type Dealer = (typeof dealers)[number];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -88,7 +90,7 @@ export default async function DealersPage({ params }: DealersPageProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {dealers.filter((d) => d.isActive).length}
+              {dealers.filter((d: Dealer) => d.isActive).length}
             </div>
           </CardContent>
         </Card>
@@ -98,7 +100,7 @@ export default async function DealersPage({ params }: DealersPageProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {dealers.reduce((sum, d) => sum + d._count.students, 0)}
+              {dealers.reduce((sum: number, d: Dealer) => sum + d._count.students, 0)}
             </div>
           </CardContent>
         </Card>
@@ -130,7 +132,7 @@ export default async function DealersPage({ params }: DealersPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dealers.map((dealer) => (
+                {dealers.map((dealer: Dealer) => (
                   <TableRow key={dealer.id}>
                     <TableCell>
                       <div className="flex items-center gap-2">
