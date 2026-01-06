@@ -140,7 +140,7 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {payments.slice(0, 20).map((payment) => (
+                {payments.slice(0, 20).map((payment: Payment) => (
                   <TableRow key={payment.id}>
                     <TableCell className="font-medium">
                       {payment.student.firstName} {payment.student.lastName}
