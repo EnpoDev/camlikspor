@@ -100,7 +100,8 @@ export default async function DealerPaymentsPage({ params }: DealerPaymentsPageP
   });
 
   type PendingPayment = (typeof pendingPayments)[number];
-  const pendingMap = new Map(
+  type PendingMapValue = { count: number; amount: number };
+  const pendingMap = new Map<string, PendingMapValue>(
     pendingPayments.map((p: PendingPayment) => [
       p.dealerId,
       { count: p._count, amount: p._sum.amount || 0 },
