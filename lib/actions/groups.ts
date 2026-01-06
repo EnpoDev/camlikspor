@@ -146,7 +146,7 @@ export async function deleteGroupAction(id: string): Promise<{ success: boolean;
 
     await prisma.group.update({
       where: { id },
-      data: { isActive: false, deletedAt: new Date() },
+      data: { isActive: false },
     });
 
     revalidatePath("/[locale]/groups");
@@ -187,11 +187,8 @@ export async function copyGroupAction(
         branchId: originalGroup.branchId,
         facilityId: originalGroup.facilityId,
         periodId: originalGroup.periodId,
-        minAge: originalGroup.minAge,
-        maxAge: originalGroup.maxAge,
+        description: originalGroup.description,
         maxCapacity: originalGroup.maxCapacity,
-        fee: originalGroup.fee,
-        notes: originalGroup.notes,
         schedules: {
           create: originalGroup.schedules.map((s) => ({
             dayOfWeek: s.dayOfWeek,

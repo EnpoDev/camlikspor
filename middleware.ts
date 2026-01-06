@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { auth } from "@/lib/auth";
+import NextAuth from "next-auth";
+import { authConfig } from "@/lib/auth.config";
 import { match as matchLocale } from "@formatjs/intl-localematcher";
 import Negotiator from "negotiator";
 import { i18n } from "@/lib/i18n/config";
+
+// Edge-compatible auth (no Prisma)
+const { auth } = NextAuth(authConfig);
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {};
@@ -28,7 +32,7 @@ const securityHeaders = {
   "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 };
 
-export async function middleware(request: NextRequest) {
+export default auth(async function middleware(request) {
   const pathname = request.nextUrl.pathname;
 
   // Skip static files and API routes (except auth)
@@ -61,8 +65,8 @@ export async function middleware(request: NextRequest) {
   const isAuthPage =
     pathname.includes("/login") || pathname.includes("/forgot-password");
 
-  // Get session
-  const session = await auth();
+  // Get session from auth wrapper
+  const session = request.auth;
 
   // Redirect unauthenticated users to login
   if (!session && !isAuthPage) {
@@ -85,7 +89,7 @@ export async function middleware(request: NextRequest) {
   });
 
   return response;
-}
+});
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|icons|manifest).*)"],

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { UserRole } from "@/lib/types";
 import { getDefaultPermissionsForRole } from "@/lib/utils/permissions";
+import { authConfig } from "@/lib/auth.config";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -12,11 +13,7 @@ const loginSchema = z.object({
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
@@ -69,30 +66,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id!;
-        token.role = user.role;
-        token.dealerId = user.dealerId;
-        token.dealerName = user.dealerName;
-        token.dealerSlug = user.dealerSlug;
-        token.permissions = user.permissions;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as UserRole;
-        session.user.dealerId = token.dealerId as string | null;
-        session.user.dealerName = token.dealerName as string | null;
-        session.user.dealerSlug = token.dealerSlug as string | null;
-        session.user.permissions = token.permissions as string[];
-      }
-      return session;
-    },
-  },
 });
 
 // Helper function to hash password
