@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 
 // Default dealer slug for main website (can be configured via env)
-const DEFAULT_DEALER_SLUG = process.env.DEFAULT_DEALER_SLUG || "demo-spor-kulubu";
+const DEFAULT_DEALER_SLUG = process.env.DEFAULT_DEALER_SLUG || "camlikspor";
 
 interface PublicDealer {
   id: string;
