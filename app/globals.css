@@ -122,3 +122,33 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print styles for invoices */
+@media print {
+  .print\:hidden,
+  [class*="print:hidden"] {
+    display: none !important;
+  }
+
+  .invoice-printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+    padding: 2rem;
+  }
+
+  .invoice-printable * {
+    visibility: visible;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .invoice-printable,
+  .invoice-printable * {
+    visibility: visible;
+  }
+}

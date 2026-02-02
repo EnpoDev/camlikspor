@@ -4,11 +4,12 @@ import type { Locale } from "@/lib/i18n/config";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Printer, Mail, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
 import { getInvoice } from "@/lib/actions/invoices";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { InvoiceActions } from "./invoice-actions";
+import { PrintButton } from "./print-button";
 
 interface Props {
   params: Promise<{ locale: Locale; id: string }>;
@@ -67,15 +68,12 @@ export default async function InvoiceDetailPage({ params }: Props) {
         <div className="flex items-center gap-2">
           <Badge className={status.color}>{status.label}</Badge>
           <InvoiceActions invoice={invoice} locale={locale} />
-          <Button variant="outline" onClick={() => window.print()}>
-            <Printer className="mr-2 h-4 w-4" />
-            Yazdır / PDF
-          </Button>
+          <PrintButton />
         </div>
       </div>
 
       {/* Printable Invoice */}
-      <div className="bg-white rounded-lg border shadow-sm p-8 print:shadow-none print:border-none">
+      <div className="invoice-printable bg-white rounded-lg border shadow-sm p-8 print:shadow-none print:border-none">
         {/* Invoice Header */}
         <div className="flex justify-between items-start mb-8">
           <div>
@@ -243,24 +241,6 @@ export default async function InvoiceDetailPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Print Styles */}
-      <style jsx global>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          .bg-white.rounded-lg,
-          .bg-white.rounded-lg * {
-            visibility: visible;
-          }
-          .bg-white.rounded-lg {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-          }
-        }
-      `}</style>
     </div>
   );
 }
