@@ -73,6 +73,7 @@ model Dealer {
   periods          Period[]
   preRegistrations PreRegistration[]
   payments         Payment[]
+  invoices         Invoice[]
   cashTransactions CashTransaction[]
   smsMessages      SmsMessage[]
   auditLogs        AuditLog[]
@@ -94,6 +95,9 @@ model Dealer {
   productCategories ProductCategory[]
   orders            ShopOrder[]
   galleryImages     GalleryImage[]
+
+  // Subscription
+  subscription DealerSubscription?
 
   // Domain and commission relations
   domains             DealerDomain[]
@@ -119,6 +123,125 @@ model DealerSettings {
   updatedAt     DateTime @updatedAt
 
   dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// SUBSCRIPTION & BILLING SYSTEM
+// ============================================
+// PlanStatus: ACTIVE | INACTIVE | ARCHIVED
+// SubscriptionStatus: TRIAL | ACTIVE | PAST_DUE | CANCELLED | EXPIRED
+
+model SubscriptionPlan {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  slug        String  @unique
+
+  // Pricing
+  monthlyPrice Float
+  yearlyPrice  Float?
+  currency     String @default("TRY")
+
+  // Limits
+  maxStudents     Int  @default(50)
+  maxTrainers     Int  @default(5)
+  maxGroups       Int  @default(10)
+  maxSmsPerMonth  Int  @default(100)
+  maxProducts     Int  @default(20)
+  maxSubDealers   Int  @default(0)
+
+  // Features (JSON array of feature keys)
+  features String? // ["sms", "shop", "reports", "custom_domain", "api_access"]
+
+  // Settings
+  trialDays   Int     @default(14)
+  isPublic    Boolean @default(true)
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscriptions DealerSubscription[]
+
+  @@index([isActive])
+  @@index([isPublic])
+}
+
+model DealerSubscription {
+  id       String @id @default(cuid())
+  dealerId String @unique
+  planId   String
+
+  // Status
+  status String @default("TRIAL") // TRIAL, ACTIVE, PAST_DUE, CANCELLED, EXPIRED
+
+  // Billing period
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  billingCycle       String   @default("monthly") // monthly, yearly
+
+  // Trial
+  trialEndsAt DateTime?
+
+  // Cancellation
+  cancelAtPeriodEnd Boolean   @default(false)
+  cancelledAt       DateTime?
+  cancellationReason String?
+
+  // Usage tracking
+  currentStudents Int @default(0)
+  currentTrainers Int @default(0)
+  currentGroups   Int @default(0)
+  currentSmsSent  Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dealer   Dealer           @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  plan     SubscriptionPlan @relation(fields: [planId], references: [id])
+  invoices DealerInvoice[]
+
+  @@index([dealerId])
+  @@index([planId])
+  @@index([status])
+  @@index([currentPeriodEnd])
+}
+
+model DealerInvoice {
+  id             String @id @default(cuid())
+  subscriptionId String
+  invoiceNo      String @unique
+
+  // Amounts
+  subtotal       Float
+  taxAmount      Float  @default(0)
+  discountAmount Float  @default(0)
+  total          Float
+
+  // Period
+  periodStart DateTime
+  periodEnd   DateTime
+
+  // Status
+  status     String    @default("DRAFT") // DRAFT, SENT, PAID, OVERDUE, CANCELLED
+  dueDate    DateTime
+  paidAt     DateTime?
+  paidAmount Float?
+
+  // Payment reference
+  paymentMethod String?
+  paymentRef    String?
+
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  subscription DealerSubscription @relation(fields: [subscriptionId], references: [id])
+
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([dueDate])
 }
 
 // ============================================
@@ -560,6 +683,7 @@ model Student {
   periods      StudentPeriod[]
   attendances  Attendance[]
   payments     Payment[]
+  invoices     Invoice[]
   materials    StudentMaterial[]
   developments StudentDevelopment[]
   sizes        StudentSize[]
@@ -774,6 +898,7 @@ model Payment {
 
   dealer  Dealer  @relation(fields: [dealerId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id])
+  invoice Invoice?
 
   @@index([dealerId])
   @@index([studentId])
@@ -839,6 +964,67 @@ model SmsMessage {
   @@index([dealerId])
   @@index([status])
   @@index([createdAt])
+}
+
+// ============================================
+// INVOICES
+// ============================================
+// InvoiceStatus: DRAFT | SENT | PAID | CANCELLED | OVERDUE
+
+model Invoice {
+  id           String   @id @default(cuid())
+  dealerId     String
+  studentId    String
+  invoiceNo    String
+
+  // Invoice details
+  issueDate    DateTime @default(now())
+  dueDate      DateTime
+  periodMonth  Int?
+  periodYear   Int?
+
+  // Amounts
+  subtotal     Float
+  discountAmount Float @default(0)
+  taxAmount    Float    @default(0)
+  total        Float
+
+  // Status
+  status       String   @default("DRAFT") // DRAFT, SENT, PAID, CANCELLED, OVERDUE
+  paidAt       DateTime?
+  paidAmount   Float?
+  paymentMethod String?
+
+  // References
+  paymentId    String?  @unique
+
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealer       Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  student      Student  @relation(fields: [studentId], references: [id])
+  payment      Payment? @relation(fields: [paymentId], references: [id])
+  items        InvoiceItem[]
+
+  @@unique([dealerId, invoiceNo])
+  @@index([dealerId])
+  @@index([studentId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model InvoiceItem {
+  id          String @id @default(cuid())
+  invoiceId   String
+  description String
+  quantity    Int    @default(1)
+  unitPrice   Float
+  total       Float
+
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
 }
 
 // ============================================

@@ -152,7 +152,7 @@ async function main() {
 
   console.log("Product categories created");
 
-  // Create sample products
+  // Create sample products with Unsplash images
   const products = [
     {
       name: "Profesyonel Maç Forması",
@@ -160,7 +160,7 @@ async function main() {
       description: "Nefes alabilir kumaştan üretilmiş profesyonel maç forması. Ter emici özelliği ile maksimum konfor sağlar.",
       price: 450,
       categoryId: formaCategory.id,
-      images: JSON.stringify(["/images/products/forma-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1580087256394-dc596e1c8f4f?w=800&q=80"]),
     },
     {
       name: "Antrenman Forması",
@@ -168,7 +168,7 @@ async function main() {
       description: "Günlük antrenmanlar için ideal, hafif ve dayanıklı forma.",
       price: 250,
       categoryId: formaCategory.id,
-      images: JSON.stringify(["/images/products/forma-2.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1622541866107-b0b7a628b0a8?w=800&q=80"]),
     },
     {
       name: "Kışlık Eşofman Takımı",
@@ -176,7 +176,7 @@ async function main() {
       description: "Soğuk havalarda sıcak tutan, su geçirmez eşofman takımı.",
       price: 850,
       categoryId: esofmanCategory.id,
-      images: JSON.stringify(["/images/products/esofman-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80"]),
     },
     {
       name: "Yazlık Eşofman Takımı",
@@ -184,7 +184,7 @@ async function main() {
       description: "Hafif ve hava alan yazlık eşofman takımı.",
       price: 550,
       categoryId: esofmanCategory.id,
-      images: JSON.stringify(["/images/products/esofman-2.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1556906781-9a412961c28c?w=800&q=80"]),
     },
     {
       name: "Profesyonel Krampon",
@@ -192,7 +192,7 @@ async function main() {
       description: "Çim sahalar için özel tasarlanmış profesyonel krampon.",
       price: 1200,
       categoryId: ayakkabiCategory.id,
-      images: JSON.stringify(["/images/products/krampon-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1511886929837-354d827aae26?w=800&q=80"]),
     },
     {
       name: "Halı Saha Ayakkabısı",
@@ -200,7 +200,7 @@ async function main() {
       description: "Halı saha için ideal, kaymaz tabanlı spor ayakkabısı.",
       price: 750,
       categoryId: ayakkabiCategory.id,
-      images: JSON.stringify(["/images/products/ayakkabi-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80"]),
     },
     {
       name: "Futbol Topu - Maç",
@@ -208,7 +208,7 @@ async function main() {
       description: "FIFA onaylı profesyonel maç topu.",
       price: 350,
       categoryId: aksesuarCategory.id,
-      images: JSON.stringify(["/images/products/top-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1614632537423-1e6c2e7e0aab?w=800&q=80"]),
     },
     {
       name: "Kaleci Eldiveni",
@@ -216,7 +216,7 @@ async function main() {
       description: "Profesyonel kaleci eldiveni, ekstra kavrama özelliği.",
       price: 280,
       categoryId: aksesuarCategory.id,
-      images: JSON.stringify(["/images/products/eldiven-1.jpg"]),
+      images: JSON.stringify(["https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=800&q=80"]),
     },
   ];
 
@@ -380,6 +380,94 @@ async function main() {
   });
 
   console.log("Task definitions created");
+
+  // Create subscription plans
+  const starterPlan = await prisma.subscriptionPlan.upsert({
+    where: { slug: "starter" },
+    update: {},
+    create: {
+      name: "Başlangıç",
+      description: "Küçük futbol okulları için ideal başlangıç paketi",
+      slug: "starter",
+      monthlyPrice: 299,
+      yearlyPrice: 2990,
+      maxStudents: 50,
+      maxTrainers: 3,
+      maxGroups: 5,
+      maxSmsPerMonth: 100,
+      maxProducts: 10,
+      maxSubDealers: 0,
+      features: JSON.stringify(["sms", "reports", "attendance"]),
+      trialDays: 14,
+      isPublic: true,
+      isActive: true,
+      sortOrder: 1,
+    },
+  });
+
+  const professionalPlan = await prisma.subscriptionPlan.upsert({
+    where: { slug: "professional" },
+    update: {},
+    create: {
+      name: "Profesyonel",
+      description: "Büyüyen futbol okulları için gelişmiş özellikler",
+      slug: "professional",
+      monthlyPrice: 599,
+      yearlyPrice: 5990,
+      maxStudents: 200,
+      maxTrainers: 10,
+      maxGroups: 20,
+      maxSmsPerMonth: 500,
+      maxProducts: 50,
+      maxSubDealers: 3,
+      features: JSON.stringify(["sms", "reports", "attendance", "shop", "invoices", "api_access"]),
+      trialDays: 14,
+      isPublic: true,
+      isActive: true,
+      sortOrder: 2,
+    },
+  });
+
+  const enterprisePlan = await prisma.subscriptionPlan.upsert({
+    where: { slug: "enterprise" },
+    update: {},
+    create: {
+      name: "Kurumsal",
+      description: "Çoklu şubeler için tam özellikli paket",
+      slug: "enterprise",
+      monthlyPrice: 1299,
+      yearlyPrice: 12990,
+      maxStudents: 999999,
+      maxTrainers: 999999,
+      maxGroups: 999999,
+      maxSmsPerMonth: 2000,
+      maxProducts: 200,
+      maxSubDealers: 10,
+      features: JSON.stringify(["sms", "reports", "attendance", "shop", "invoices", "api_access", "custom_domain", "white_label", "priority_support"]),
+      trialDays: 30,
+      isPublic: true,
+      isActive: true,
+      sortOrder: 3,
+    },
+  });
+
+  console.log("Subscription plans created:", starterPlan.name, professionalPlan.name, enterprisePlan.name);
+
+  // Create subscription for camlikspor (Enterprise plan with active status)
+  await prisma.dealerSubscription.upsert({
+    where: { dealerId: camlıksporDealer.id },
+    update: {},
+    create: {
+      dealerId: camlıksporDealer.id,
+      planId: enterprisePlan.id,
+      status: "ACTIVE",
+      currentPeriodStart: new Date(),
+      currentPeriodEnd: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+      billingCycle: "yearly",
+    },
+  });
+
+  console.log("Dealer subscription created for camlikspor");
 
   console.log("\n=== Seed completed ===");
   console.log("\nLogin credentials:");

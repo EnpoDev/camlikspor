@@ -27,7 +27,7 @@ export function HeroSection({
   dictionary,
   useRootPaths = false,
 }: HeroSectionProps) {
-  const defaultHeroImage = "/images/hero-default.jpg";
+  const defaultHeroImage = "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1920&q=80";
   const backgroundImage = heroImage || defaultHeroImage;
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 

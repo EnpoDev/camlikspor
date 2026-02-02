@@ -80,10 +80,17 @@ export function GroupSmsForm({
 
     setIsPending(true);
     try {
-      // TODO: Implement SMS sending via Netgsm
-      // For now, just show a success message
-      toast.success(`${selectedPhones.length} kisiye SMS gonderildi`);
-      router.push(`/${locale}/groups/${groupId}`);
+      const { sendSmsAction } = await import("@/lib/actions/sms");
+      const result = await sendSmsAction(selectedPhones, message, {
+        groupId,
+      });
+
+      if (result.success) {
+        toast.success(result.message);
+        router.push(`/${locale}/groups/${groupId}`);
+      } else {
+        toast.error(result.message);
+      }
     } catch {
       toast.error("SMS gonderilemedi");
     } finally {
