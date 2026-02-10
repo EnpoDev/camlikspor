@@ -39,6 +39,10 @@ export default async function CommissionsPage({ params, searchParams }: Props) {
     redirect(`/${locale}/login`);
   }
 
+  if (session.user.isSubDealer) {
+    redirect(`/${locale}/dashboard`);
+  }
+
   const dict = await getDictionary(locale);
   const currentPage = parseInt(page) || 1;
 

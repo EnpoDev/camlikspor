@@ -6,22 +6,20 @@ import { i18n, type Locale } from "@/lib/i18n/config";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   ShoppingBag,
-  Filter,
-  Search,
-  Grid3X3,
-  LayoutGrid,
   SlidersHorizontal,
-  Heart,
   Eye,
 } from "lucide-react";
 import { getPublicDealer } from "@/lib/utils/get-public-dealer";
+import { FavoriteButton } from "@/components/public/favorite-button";
+import { ShopViewToggle } from "@/components/public/shop-view-toggle";
+import { ShopSearch } from "@/components/public/shop-search";
+import { ShopPriceFilter } from "@/components/public/shop-price-filter";
 
 interface ShopPageProps {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; search?: string; minPrice?: string; maxPrice?: string }>;
 }
 
 export async function generateMetadata() {
@@ -35,7 +33,7 @@ export async function generateMetadata() {
 
 export default async function ShopPage({ params, searchParams }: ShopPageProps) {
   const { locale: localeParam } = await params;
-  const { category: categorySlug } = await searchParams;
+  const { category: categorySlug, search: searchQuery, minPrice, maxPrice } = await searchParams;
 
   const locale = i18n.locales.includes(localeParam as Locale)
     ? (localeParam as Locale)
@@ -69,6 +67,15 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
       isActive: true,
       ...(categorySlug && {
         category: { slug: categorySlug },
+      }),
+      ...(searchQuery && {
+        name: { contains: searchQuery },
+      }),
+      ...((minPrice || maxPrice) && {
+        price: {
+          ...(minPrice ? { gte: parseFloat(minPrice) } : {}),
+          ...(maxPrice ? { lte: parseFloat(maxPrice) } : {}),
+        },
       }),
     },
     orderBy: { createdAt: "desc" },
@@ -118,14 +125,14 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-12">
+      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {selectedCategory || "Tüm Ürünler"}
+              {searchQuery ? `"${searchQuery}" araması` : selectedCategory || "Tüm Ürünler"}
             </h1>
             <p className="text-white/80 text-lg">
-              {products.length} ürün listeleniyor
+              {products.length} ürün {searchQuery ? "bulundu" : "listeleniyor"}
             </p>
           </div>
         </div>
@@ -138,27 +145,21 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
             <div className="sticky top-24 space-y-6">
               {/* Search */}
               <Card className="p-4 border-0 shadow-lg">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Ürün ara..."
-                    className="pl-10 bg-slate-50 dark:bg-slate-800 border-0"
-                  />
-                </div>
+                <ShopSearch basePath={`/${locale}/shop`} defaultValue={searchQuery || ""} />
               </Card>
 
               {/* Categories */}
               {categories.length > 0 && (
                 <Card className="p-4 border-0 shadow-lg">
                   <div className="flex items-center gap-2 mb-4 pb-3 border-b">
-                    <SlidersHorizontal className="h-5 w-5 text-blue-600" />
+                    <SlidersHorizontal className="h-5 w-5 text-emerald-600" />
                     <h2 className="font-bold text-lg">Kategoriler</h2>
                   </div>
                   <div className="space-y-1">
                     <Link href={`/${locale}/shop`}>
                       <Button
                         variant={!categorySlug ? "default" : "ghost"}
-                        className={`w-full justify-between ${!categorySlug ? "bg-blue-600 hover:bg-blue-700" : ""}`}
+                        className={`w-full justify-between ${!categorySlug ? "bg-emerald-600 hover:bg-emerald-700" : ""}`}
                       >
                         <span>Tüm Ürünler</span>
                         <Badge variant={!categorySlug ? "secondary" : "outline"} className="ml-2">
@@ -173,7 +174,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                       >
                         <Button
                           variant={categorySlug === cat.slug ? "default" : "ghost"}
-                          className={`w-full justify-between ${categorySlug === cat.slug ? "bg-blue-600 hover:bg-blue-700" : ""}`}
+                          className={`w-full justify-between ${categorySlug === cat.slug ? "bg-emerald-600 hover:bg-emerald-700" : ""}`}
                         >
                           <span>{cat.name}</span>
                           <Badge
@@ -189,42 +190,23 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                 </Card>
               )}
 
-              {/* Price Filter Placeholder */}
+              {/* Price Filter */}
               <Card className="p-4 border-0 shadow-lg">
-                <div className="flex items-center gap-2 mb-4 pb-3 border-b">
-                  <Filter className="h-5 w-5 text-blue-600" />
-                  <h2 className="font-bold text-lg">Fiyat Aralığı</h2>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex gap-2">
-                    <Input placeholder="Min" className="bg-slate-50 dark:bg-slate-800 border-0" />
-                    <Input placeholder="Max" className="bg-slate-50 dark:bg-slate-800 border-0" />
-                  </div>
-                  <Button variant="outline" className="w-full">
-                    Filtrele
-                  </Button>
-                </div>
+                <ShopPriceFilter
+                  basePath={`/${locale}/shop`}
+                  currentParams={[
+                    categorySlug ? `category=${categorySlug}` : "",
+                    searchQuery ? `search=${encodeURIComponent(searchQuery)}` : "",
+                  ].filter(Boolean).join("&")}
+                  defaultMin={minPrice || ""}
+                  defaultMax={maxPrice || ""}
+                />
               </Card>
             </div>
           </aside>
 
           {/* Products Grid */}
           <div className="flex-1">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-6 bg-white dark:bg-slate-800 rounded-xl p-4 shadow-lg">
-              <p className="text-muted-foreground">
-                <span className="font-semibold text-foreground">{products.length}</span> ürün bulundu
-              </p>
-              <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="hidden md:flex">
-                  <Grid3X3 className="h-5 w-5" />
-                </Button>
-                <Button variant="ghost" size="icon" className="hidden md:flex">
-                  <LayoutGrid className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-
             {products.length === 0 ? (
               <Card className="border-0 shadow-lg">
                 <CardContent className="text-center py-20">
@@ -241,7 +223,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid gap-6 grid-cols-2 md:grid-cols-3">
+              <ShopViewToggle productCount={products.length} label="ürün bulundu">
                 {products.map((product) => {
                   const imageUrl = getFirstImage(product.images);
                   const totalStock = getTotalStock(product.variants);
@@ -268,7 +250,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                           )}
 
                           {/* Category Badge */}
-                          <Badge className="absolute top-3 left-3 bg-blue-600 hover:bg-blue-600 shadow-lg">
+                          <Badge className="absolute top-3 left-3 bg-emerald-600 hover:bg-emerald-600 shadow-lg">
                             {product.category.name}
                           </Badge>
 
@@ -283,9 +265,14 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
 
                           {/* Hover Actions */}
                           <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                            <Button size="icon" variant="secondary" className="h-9 w-9 rounded-full shadow-lg">
-                              <Heart className="h-4 w-4" />
-                            </Button>
+                            <FavoriteButton
+                              productId={product.id}
+                              name={product.name}
+                              price={product.price}
+                              image={imageUrl || undefined}
+                              slug={product.slug}
+                              className="h-9 w-9 rounded-full shadow-lg"
+                            />
                             <Button size="icon" variant="secondary" className="h-9 w-9 rounded-full shadow-lg">
                               <Eye className="h-4 w-4" />
                             </Button>
@@ -293,7 +280,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
 
                           {/* Quick Add Button */}
                           <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
-                            <Button className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg" disabled={isOutOfStock}>
+                            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 shadow-lg" disabled={isOutOfStock}>
                               <ShoppingBag className="mr-2 h-4 w-4" />
                               {isOutOfStock ? "Stokta Yok" : "Sepete Ekle"}
                             </Button>
@@ -304,11 +291,11 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                           <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">
                             {product.category.name}
                           </p>
-                          <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
                             {product.name}
                           </h3>
                           <div className="flex items-center justify-between">
-                            <p className="text-xl font-bold text-blue-600">
+                            <p className="text-xl font-bold text-emerald-600">
                               {formatPrice(product.price)}
                             </p>
                             {!isOutOfStock && (
@@ -322,7 +309,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                     </Link>
                   );
                 })}
-              </div>
+              </ShopViewToggle>
             )}
           </div>
         </div>

@@ -129,7 +129,7 @@ export default async function HomePage({ params }: HomePageProps) {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
               <Trophy className="h-4 w-4 text-yellow-400" />
-              <span className="text-white/90 text-sm font-medium">Profesyonel Futbol Eğitimi</span>
+              <span className="text-white/90 text-sm font-medium">Profesyonel Futbol Eğitimi ve Ekipmanları</span>
             </div>
 
             {/* Main Title */}
@@ -228,7 +228,7 @@ export default async function HomePage({ params }: HomePageProps) {
                     <CheckCircle className="h-6 w-6 text-emerald-600 flex-shrink-0 mt-0.5" />
                     <div>
                       <h4 className="font-semibold">Modern Altyapı</h4>
-                      <p className="text-muted-foreground text-sm">Sentetik çim sahalar ve profesyonel ekipmanlar</p>
+                      <p className="text-muted-foreground text-sm">Sentetik çim sahalar ve profesyonel eğitim ortamı</p>
                     </div>
                   </div>
                 </div>
@@ -280,13 +280,13 @@ export default async function HomePage({ params }: HomePageProps) {
                 </p>
               </Card>
 
-              <Card className="text-center p-6 border-0 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-blue-50 to-white dark:from-blue-950 dark:to-slate-900">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-blue-600 flex items-center justify-center">
+              <Card className="text-center p-6 border-0 shadow-lg hover:shadow-xl transition-shadow bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950 dark:to-slate-900">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-emerald-600 flex items-center justify-center">
                   <Dumbbell className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="font-bold text-lg mb-2">Modern Tesisler</h3>
                 <p className="text-muted-foreground text-sm">
-                  Son teknoloji sentetik sahalar ve ekipmanlar
+                  Son teknoloji sentetik sahalar ve eğitim alanları
                 </p>
               </Card>
 
@@ -319,20 +319,12 @@ export default async function HomePage({ params }: HomePageProps) {
         <section className="py-20 bg-white dark:bg-slate-950">
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
-              <div className="flex items-center justify-between mb-12">
-                <div>
-                  <Badge className="mb-3 bg-amber-100 text-amber-700 hover:bg-amber-100">
-                    Galeri
-                  </Badge>
-                  <h2 className="text-3xl md:text-4xl font-bold mb-2">Tesislerimiz ve Etkinliklerimiz</h2>
-                  <p className="text-muted-foreground text-lg">Antrenmanlardan ve turnuvalardan kareler</p>
-                </div>
-                <Link href={`/${locale}/gallery`}>
-                  <Button variant="outline" className="hidden md:flex">
-                    Tüm Galeri
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+              <div className="mb-12">
+                <Badge className="mb-3 bg-amber-100 text-amber-700 hover:bg-amber-100">
+                  Galeri
+                </Badge>
+                <h2 className="text-3xl md:text-4xl font-bold mb-2">Tesislerimiz ve Etkinliklerimiz</h2>
+                <p className="text-muted-foreground text-lg">Antrenmanlardan ve turnuvalardan kareler</p>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -351,14 +343,6 @@ export default async function HomePage({ params }: HomePageProps) {
                 ))}
               </div>
 
-              <div className="mt-8 text-center md:hidden">
-                <Link href={`/${locale}/gallery`}>
-                  <Button variant="outline">
-                    Tüm Galeri
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
             </div>
           </div>
         </section>
@@ -452,8 +436,8 @@ export default async function HomePage({ params }: HomePageProps) {
                   )}
                   {dealer.contactEmail && (
                     <a href={`mailto:${dealer.contactEmail}`} className="flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                      <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center flex-shrink-0">
-                        <Mail className="h-5 w-5 text-blue-600" />
+                      <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-5 w-5 text-emerald-600" />
                       </div>
                       <div className="min-w-0">
                         <p className="text-xs text-muted-foreground">E-posta</p>
@@ -462,7 +446,12 @@ export default async function HomePage({ params }: HomePageProps) {
                     </a>
                   )}
                   {dealer.contactAddress && (
-                    <div className="flex items-center gap-3 p-4">
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(dealer.contactAddress)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                    >
                       <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900 flex items-center justify-center flex-shrink-0">
                         <MapPin className="h-5 w-5 text-amber-600" />
                       </div>
@@ -470,7 +459,7 @@ export default async function HomePage({ params }: HomePageProps) {
                         <p className="text-xs text-muted-foreground">Adres</p>
                         <p className="font-medium text-sm truncate">{dealer.contactAddress}</p>
                       </div>
-                    </div>
+                    </a>
                   )}
                   <div className="flex items-center gap-3 p-4">
                     <div className="w-10 h-10 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center flex-shrink-0">
@@ -499,7 +488,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   {(dealer.socialFacebook || dealer.socialInstagram || dealer.socialTwitter || dealer.socialYoutube) && (
                     <div className="flex gap-3">
                       {dealer.socialFacebook && (
-                        <a href={dealer.socialFacebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-colors">
+                        <a href={dealer.socialFacebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center hover:bg-emerald-600 hover:text-white transition-colors">
                           <Facebook className="h-5 w-5" />
                         </a>
                       )}

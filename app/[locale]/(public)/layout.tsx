@@ -4,6 +4,7 @@ import { i18n, type Locale } from "@/lib/i18n/config";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
 import { CartProvider } from "@/lib/contexts/cart-context";
+import { FavoritesProvider } from "@/lib/contexts/favorites-context";
 import { ThemeProvider } from "@/components/public/theme-provider";
 import { getPublicDealer } from "@/lib/utils/get-public-dealer";
 
@@ -43,6 +44,7 @@ export default async function PublicLayout({
 
   return (
     <CartProvider>
+      <FavoritesProvider>
       <ThemeProvider
         customSettings={dealer.themeSettings}
         layoutSettings={dealer.layoutSettings}
@@ -88,6 +90,7 @@ export default async function PublicLayout({
           />
         </div>
       </ThemeProvider>
+      </FavoritesProvider>
     </CartProvider>
   );
 }

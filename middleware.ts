@@ -34,7 +34,6 @@ const PROTECTED_ROUTES = [
   "orders",
   "gallery-admin",
   "sub-dealers",
-  "customization",
   "commissions",
 ];
 

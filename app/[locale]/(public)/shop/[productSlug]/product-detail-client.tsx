@@ -25,6 +25,7 @@ import {
   Home,
 } from "lucide-react";
 import { useCart } from "@/lib/contexts/cart-context";
+import { useFavorites } from "@/lib/contexts/favorites-context";
 
 interface ProductVariant {
   id: string;
@@ -70,10 +71,10 @@ export function ProductDetailClient({
 }: ProductDetailClientProps) {
   const router = useRouter();
   const { addItem } = useCart();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
 
   // Parse images
   const images: string[] = product.images
@@ -236,7 +237,7 @@ export function ProductDetailClient({
                     onClick={() => setSelectedImageIndex(index)}
                     className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${
                       index === selectedImageIndex
-                        ? "border-blue-600 shadow-lg shadow-blue-600/25"
+                        ? "border-emerald-600 shadow-lg shadow-emerald-600/25"
                         : "border-transparent hover:border-slate-300"
                     }`}
                   >
@@ -258,7 +259,7 @@ export function ProductDetailClient({
             {/* Header */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Badge className="bg-blue-600 hover:bg-blue-600">{product.category.name}</Badge>
+                <Badge className="bg-emerald-600 hover:bg-emerald-600">{product.category.name}</Badge>
                 {!isOutOfStock && (
                   <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">
                     <Check className="h-3 w-3 mr-1" />
@@ -267,7 +268,7 @@ export function ProductDetailClient({
                 )}
               </div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
-              <p className="text-4xl font-bold text-blue-600">
+              <p className="text-4xl font-bold text-emerald-600">
                 {formatPrice(product.price)}
               </p>
             </div>
@@ -302,10 +303,10 @@ export function ProductDetailClient({
                             disabled={stock === 0}
                             className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
                               isSelected
-                                ? "border-blue-600 bg-blue-600 text-white"
+                                ? "border-emerald-600 bg-emerald-600 text-white"
                                 : stock === 0
                                 ? "border-slate-200 text-slate-300 cursor-not-allowed line-through"
-                                : "border-slate-200 hover:border-blue-600 hover:text-blue-600"
+                                : "border-slate-200 hover:border-emerald-600 hover:text-emerald-600"
                             }`}
                           >
                             {size}
@@ -331,8 +332,8 @@ export function ProductDetailClient({
                             onClick={() => handleColorChange(color)}
                             className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
                               isSelected
-                                ? "border-blue-600 bg-blue-600 text-white"
-                                : "border-slate-200 hover:border-blue-600 hover:text-blue-600"
+                                ? "border-emerald-600 bg-emerald-600 text-white"
+                                : "border-slate-200 hover:border-emerald-600 hover:text-emerald-600"
                             }`}
                           >
                             {color}
@@ -386,7 +387,7 @@ export function ProductDetailClient({
                 <div className="flex gap-3">
                   <Button
                     size="lg"
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-lg py-6"
+                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-lg py-6"
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
                   >
@@ -397,9 +398,17 @@ export function ProductDetailClient({
                     size="lg"
                     variant="outline"
                     className="py-6"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    onClick={() =>
+                      toggleFavorite({
+                        productId: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image: images[0],
+                        slug: product.slug,
+                      })
+                    }
                   >
-                    <Heart className={`h-5 w-5 ${isWishlisted ? "fill-red-500 text-red-500" : ""}`} />
+                    <Heart className={`h-5 w-5 ${isFavorite(product.id) ? "fill-red-500 text-red-500" : ""}`} />
                   </Button>
                   <Button size="lg" variant="outline" className="py-6">
                     <Share2 className="h-5 w-5" />
@@ -411,7 +420,7 @@ export function ProductDetailClient({
             {/* Features */}
             <div className="grid grid-cols-3 gap-4">
               <Card className="border-0 shadow-md p-4 text-center">
-                <Truck className="h-6 w-6 mx-auto mb-2 text-blue-600" />
+                <Truck className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
                 <p className="text-xs font-medium">Ücretsiz Kargo</p>
               </Card>
               <Card className="border-0 shadow-md p-4 text-center">

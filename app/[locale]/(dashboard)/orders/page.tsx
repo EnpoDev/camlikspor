@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ShoppingBag, DollarSign, Clock, Eye } from "lucide-react";
+import { ShoppingBag, DollarSign, Clock } from "lucide-react";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr, enUS, es } from "date-fns/locale";
@@ -35,20 +35,20 @@ const dateLocales = {
   es: es,
 };
 
-const statusLabels: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
-  PENDING: { label: "Bekliyor", variant: "secondary" },
-  CONFIRMED: { label: "Onaylandi", variant: "default" },
-  PROCESSING: { label: "Hazirlaniyor", variant: "default" },
-  SHIPPED: { label: "Kargoda", variant: "default" },
-  DELIVERED: { label: "Teslim Edildi", variant: "default" },
-  CANCELLED: { label: "Iptal Edildi", variant: "destructive" },
+const statusVariants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
+  PENDING: "secondary",
+  CONFIRMED: "default",
+  PROCESSING: "default",
+  SHIPPED: "default",
+  DELIVERED: "default",
+  CANCELLED: "destructive",
 };
 
-const paymentStatusLabels: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
-  PENDING: { label: "Odeme Bekleniyor", variant: "outline" },
-  PAID: { label: "Odendi", variant: "default" },
-  FAILED: { label: "Basarisiz", variant: "destructive" },
-  REFUNDED: { label: "Iade Edildi", variant: "secondary" },
+const paymentStatusVariants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
+  PENDING: "outline",
+  PAID: "default",
+  FAILED: "destructive",
+  REFUNDED: "secondary",
 };
 
 export default async function OrdersPage({
@@ -97,8 +97,8 @@ export default async function OrdersPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Siparisler</h1>
-          <p className="text-muted-foreground">Siparis yonetimi</p>
+          <h1 className="text-3xl font-bold tracking-tight">{dictionary.orders?.title || "Siparisler"}</h1>
+          <p className="text-muted-foreground">{dictionary.orders?.description || "Siparis yonetimi"}</p>
         </div>
       </div>
 
@@ -107,7 +107,7 @@ export default async function OrdersPage({
         <div className="grid gap-4 md:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Toplam Siparis</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.orders?.totalOrders || "Toplam Siparis"}</CardTitle>
               <ShoppingBag className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -116,7 +116,7 @@ export default async function OrdersPage({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Bekleyen Siparisler</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.orders?.pendingOrders || "Bekleyen Siparisler"}</CardTitle>
               <Clock className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
@@ -127,7 +127,7 @@ export default async function OrdersPage({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Toplam Gelir</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.orders?.totalRevenue || "Toplam Gelir"}</CardTitle>
               <DollarSign className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
@@ -155,13 +155,13 @@ export default async function OrdersPage({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Siparis No</TableHead>
-                  <TableHead>Musteri</TableHead>
-                  <TableHead>Urun Sayisi</TableHead>
-                  <TableHead>Toplam</TableHead>
-                  <TableHead>Durum</TableHead>
-                  <TableHead>Odeme</TableHead>
-                  <TableHead>Tarih</TableHead>
+                  <TableHead>{dictionary.orders?.orderNumber || "Siparis No"}</TableHead>
+                  <TableHead>{dictionary.orders?.customer || "Musteri"}</TableHead>
+                  <TableHead>{dictionary.orders?.itemCount || "Urun Sayisi"}</TableHead>
+                  <TableHead>{dictionary.orders?.total || "Toplam"}</TableHead>
+                  <TableHead>{dictionary.common.status}</TableHead>
+                  <TableHead>{dictionary.orders?.payment || "Odeme"}</TableHead>
+                  <TableHead>{dictionary.common.date}</TableHead>
                   <TableHead className="text-right">
                     {dictionary.common.actions}
                   </TableHead>
@@ -169,14 +169,12 @@ export default async function OrdersPage({
               </TableHeader>
               <TableBody>
                 {orders.map((order: OrderListItem) => {
-                  const statusInfo = statusLabels[order.status] || {
-                    label: order.status,
-                    variant: "secondary" as const,
-                  };
-                  const paymentInfo = paymentStatusLabels[order.paymentStatus] || {
-                    label: order.paymentStatus,
-                    variant: "secondary" as const,
-                  };
+                  const orderStatusDict = dictionary.orders?.status as Record<string, string> | undefined;
+                  const paymentStatusDict = dictionary.orders?.paymentStatus as Record<string, string> | undefined;
+                  const statusLabel = orderStatusDict?.[order.status] || order.status;
+                  const statusVariant = statusVariants[order.status] || "secondary";
+                  const paymentLabel = paymentStatusDict?.[order.paymentStatus] || order.paymentStatus;
+                  const paymentVariant = paymentStatusVariants[order.paymentStatus] || "secondary";
 
                   return (
                     <TableRow key={order.id}>
@@ -191,18 +189,18 @@ export default async function OrdersPage({
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{order._count.items} adet</TableCell>
+                      <TableCell>{order._count.items} {dictionary.products?.pieces || "adet"}</TableCell>
                       <TableCell className="font-medium">
                         {formatPrice(order.total)}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={statusInfo.variant}>
-                          {statusInfo.label}
+                        <Badge variant={statusVariant}>
+                          {statusLabel}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={paymentInfo.variant}>
-                          {paymentInfo.label}
+                        <Badge variant={paymentVariant}>
+                          {paymentLabel}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-muted-foreground">

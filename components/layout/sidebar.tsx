@@ -21,7 +21,6 @@ import {
   Package,
   ShoppingCart,
   Store,
-  Palette,
   Coins,
 } from "lucide-react";
 import { UserRole } from "@/lib/types";
@@ -49,7 +48,6 @@ const iconMap: Record<string, React.ElementType> = {
   products: Package,
   orders: ShoppingCart,
   "sub-dealers": Store,
-  customization: Palette,
   commissions: Coins,
 };
 

@@ -18,11 +18,11 @@ const studentSchema = z.object({
   gender: z.string().min(1, "Cinsiyet gerekli"),
   tcKimlikNo: tcKimlikOptionalSchema,
   phone: turkishPhoneOptionalSchema,
-  email: z.string().email().optional().or(z.literal("")),
+  email: z.string().email("Gecerli bir email girin").optional(),
   address: z.string().optional(),
   parentName: z.string().min(2, "Veli adi gerekli"),
   parentPhone: turkishPhoneSchema,
-  parentEmail: z.string().email().optional().or(z.literal("")),
+  parentEmail: z.string().email("Gecerli bir email girin").optional(),
   parentTcKimlik: tcKimlikOptionalSchema,
   emergencyContact: z.string().optional(),
   emergencyPhone: turkishPhoneOptionalSchema,
@@ -54,35 +54,43 @@ export async function createStudentAction(
     return { messageKey: "authError", success: false };
   }
 
+  const str = (name: string) => (formData.get(name) as string)?.trim() || "";
+  const optStr = (name: string) => (formData.get(name) as string)?.trim() || undefined;
+
   const rawData = {
-    firstName: formData.get("firstName") as string,
-    lastName: formData.get("lastName") as string,
-    birthDate: formData.get("birthDate") as string,
-    gender: formData.get("gender") as string,
-    tcKimlikNo: formData.get("tcKimlikNo") as string,
-    phone: formData.get("phone") as string,
-    email: formData.get("email") as string,
-    address: formData.get("address") as string,
-    parentName: formData.get("parentName") as string,
-    parentPhone: formData.get("parentPhone") as string,
-    parentEmail: formData.get("parentEmail") as string,
-    parentTcKimlik: formData.get("parentTcKimlik") as string,
-    emergencyContact: formData.get("emergencyContact") as string,
-    emergencyPhone: formData.get("emergencyPhone") as string,
-    branchId: formData.get("branchId") as string,
-    locationId: formData.get("locationId") as string,
-    facilityId: formData.get("facilityId") as string,
+    firstName: str("firstName"),
+    lastName: str("lastName"),
+    birthDate: str("birthDate"),
+    gender: str("gender"),
+    tcKimlikNo: optStr("tcKimlikNo"),
+    phone: optStr("phone"),
+    email: optStr("email"),
+    address: optStr("address"),
+    parentName: str("parentName"),
+    parentPhone: str("parentPhone"),
+    parentEmail: optStr("parentEmail"),
+    parentTcKimlik: optStr("parentTcKimlik"),
+    emergencyContact: optStr("emergencyContact"),
+    emergencyPhone: optStr("emergencyPhone"),
+    branchId: str("branchId"),
+    locationId: str("locationId"),
+    facilityId: str("facilityId"),
     monthlyFee: parseFloat(formData.get("monthlyFee") as string) || 0,
     registrationFee: parseFloat(formData.get("registrationFee") as string) || 0,
-    discountTypeId: formData.get("discountTypeId") as string,
-    notes: formData.get("notes") as string,
+    discountTypeId: optStr("discountTypeId"),
+    notes: optStr("notes"),
   };
 
   const validatedFields = studentSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
+    const fieldErrors = validatedFields.error.flatten().fieldErrors;
+    const firstErrorField = Object.keys(fieldErrors)[0];
+    const firstErrorMsg = firstErrorField ? fieldErrors[firstErrorField]?.[0] : undefined;
+    console.error("Student validation errors:", JSON.stringify(fieldErrors));
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: fieldErrors,
+      message: firstErrorMsg,
       messageKey: "formValidationError",
       success: false,
     };
@@ -138,35 +146,43 @@ export async function updateStudentAction(
     return { messageKey: "authError", success: false };
   }
 
+  const str = (name: string) => (formData.get(name) as string)?.trim() || "";
+  const optStr = (name: string) => (formData.get(name) as string)?.trim() || undefined;
+
   const rawData = {
-    firstName: formData.get("firstName") as string,
-    lastName: formData.get("lastName") as string,
-    birthDate: formData.get("birthDate") as string,
-    gender: formData.get("gender") as string,
-    tcKimlikNo: formData.get("tcKimlikNo") as string,
-    phone: formData.get("phone") as string,
-    email: formData.get("email") as string,
-    address: formData.get("address") as string,
-    parentName: formData.get("parentName") as string,
-    parentPhone: formData.get("parentPhone") as string,
-    parentEmail: formData.get("parentEmail") as string,
-    parentTcKimlik: formData.get("parentTcKimlik") as string,
-    emergencyContact: formData.get("emergencyContact") as string,
-    emergencyPhone: formData.get("emergencyPhone") as string,
-    branchId: formData.get("branchId") as string,
-    locationId: formData.get("locationId") as string,
-    facilityId: formData.get("facilityId") as string,
+    firstName: str("firstName"),
+    lastName: str("lastName"),
+    birthDate: str("birthDate"),
+    gender: str("gender"),
+    tcKimlikNo: optStr("tcKimlikNo"),
+    phone: optStr("phone"),
+    email: optStr("email"),
+    address: optStr("address"),
+    parentName: str("parentName"),
+    parentPhone: str("parentPhone"),
+    parentEmail: optStr("parentEmail"),
+    parentTcKimlik: optStr("parentTcKimlik"),
+    emergencyContact: optStr("emergencyContact"),
+    emergencyPhone: optStr("emergencyPhone"),
+    branchId: str("branchId"),
+    locationId: str("locationId"),
+    facilityId: str("facilityId"),
     monthlyFee: parseFloat(formData.get("monthlyFee") as string) || 0,
     registrationFee: parseFloat(formData.get("registrationFee") as string) || 0,
-    discountTypeId: formData.get("discountTypeId") as string,
-    notes: formData.get("notes") as string,
+    discountTypeId: optStr("discountTypeId"),
+    notes: optStr("notes"),
   };
 
   const validatedFields = studentSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
+    const fieldErrors = validatedFields.error.flatten().fieldErrors;
+    const firstErrorField = Object.keys(fieldErrors)[0];
+    const firstErrorMsg = firstErrorField ? fieldErrors[firstErrorField]?.[0] : undefined;
+    console.error("Student update validation errors:", JSON.stringify(fieldErrors));
     return {
-      errors: validatedFields.error.flatten().fieldErrors,
+      errors: fieldErrors,
+      message: firstErrorMsg,
       messageKey: "formValidationError",
       success: false,
     };

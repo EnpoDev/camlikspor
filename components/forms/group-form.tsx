@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2 } from "lucide-react";
 import {
   createGroupAction,
@@ -44,6 +45,12 @@ interface Period {
   name: string;
 }
 
+interface Trainer {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
 interface GroupData {
   id: string;
   name: string;
@@ -52,6 +59,7 @@ interface GroupData {
   facilityId: string;
   periodId: string;
   maxCapacity?: number | null;
+  trainers?: { trainer: { id: string }; isPrimary: boolean }[];
 }
 
 interface GroupFormProps {
@@ -59,6 +67,7 @@ interface GroupFormProps {
   branches: Branch[];
   facilities: Facility[];
   periods: Period[];
+  trainers: Trainer[];
   locale: string;
   dictionary: Record<string, unknown>;
 }
@@ -68,11 +77,15 @@ export function GroupForm({
   branches,
   facilities,
   periods,
+  trainers,
   locale,
   dictionary,
 }: GroupFormProps) {
   const router = useRouter();
   const isEditing = !!group;
+
+  const selectedTrainerIds = group?.trainers?.map((t) => t.trainer.id) || [];
+  const primaryTrainerId = group?.trainers?.find((t) => t.isPrimary)?.trainer.id || "";
 
   const boundUpdateAction = group
     ? updateGroupAction.bind(null, group.id)
@@ -192,6 +205,54 @@ export function GroupForm({
           </div>
         </CardContent>
       </Card>
+
+      {trainers.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Antrenorler</CardTitle>
+            <CardDescription>Gruba antrenor atayin</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label>Antrenorler</Label>
+              <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
+                {trainers.map((trainer) => (
+                  <div key={trainer.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`trainer-${trainer.id}`}
+                      name="trainerIds"
+                      value={trainer.id}
+                      defaultChecked={selectedTrainerIds.includes(trainer.id)}
+                    />
+                    <label
+                      htmlFor={`trainer-${trainer.id}`}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {trainer.firstName} {trainer.lastName}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="primaryTrainerId">Ana Antrenor</Label>
+              <Select name="primaryTrainerId" defaultValue={primaryTrainerId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Ana antrenor secin" />
+                </SelectTrigger>
+                <SelectContent>
+                  {trainers.map((trainer) => (
+                    <SelectItem key={trainer.id} value={trainer.id}>
+                      {trainer.firstName} {trainer.lastName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="flex gap-4">
         <Button type="submit" disabled={isPending}>

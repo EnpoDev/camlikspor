@@ -49,6 +49,7 @@ interface UserFormProps {
   locale: string;
   dictionary: Record<string, unknown>;
   isSuperAdmin: boolean;
+  currentDealerId?: string;
 }
 
 export function UserForm({
@@ -57,6 +58,7 @@ export function UserForm({
   locale,
   dictionary,
   isSuperAdmin,
+  currentDealerId,
 }: UserFormProps) {
   const router = useRouter();
   const isEditing = !!user;
@@ -158,15 +160,20 @@ export function UserForm({
             )}
           </div>
 
-          {isSuperAdmin && (
+          {dealers.length > 0 && (
             <div className="space-y-2">
-              <Label htmlFor="dealerId">Bayi</Label>
-              <Select name="dealerId" defaultValue={user?.dealerId || "none"}>
+              <Label htmlFor="dealerId">Bayi *</Label>
+              <Select
+                name="dealerId"
+                defaultValue={user?.dealerId || currentDealerId || "none"}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Bayi secin" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">Bayi yok</SelectItem>
+                  {isSuperAdmin && (
+                    <SelectItem value="none">Bayi yok</SelectItem>
+                  )}
                   {dealers.map((dealer) => (
                     <SelectItem key={dealer.id} value={dealer.id}>
                       {dealer.name}
@@ -174,6 +181,11 @@ export function UserForm({
                   ))}
                 </SelectContent>
               </Select>
+              {state.errors?.dealerId && (
+                <p className="text-sm text-destructive">
+                  {state.errors.dealerId[0]}
+                </p>
+              )}
             </div>
           )}
         </CardContent>

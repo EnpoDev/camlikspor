@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { UserRole } from "@/lib/types";
-import { getDefaultPermissionsForRole } from "@/lib/utils/permissions";
+import { getDefaultPermissionsForRole, SUB_DEALER_RESTRICTED_PERMISSIONS } from "@/lib/utils/permissions";
+import { Permission } from "@/lib/types";
 import { authConfig } from "@/lib/auth.config";
 
 const loginSchema = z.object({
@@ -14,6 +15,34 @@ const loginSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  callbacks: {
+    ...authConfig.callbacks,
+    async jwt({ token, user }) {
+      if (user) {
+        // New login: set all fields
+        token.id = user.id!;
+        token.role = user.role;
+        token.dealerId = user.dealerId;
+        token.dealerName = user.dealerName;
+        token.dealerSlug = user.dealerSlug;
+        token.permissions = user.permissions;
+        token.isSubDealer = user.isSubDealer;
+      } else if (token.isSubDealer === undefined && token.dealerId) {
+        // Existing session without isSubDealer: check DB
+        const dealer = await prisma.dealer.findUnique({
+          where: { id: token.dealerId as string },
+          select: { parentDealerId: true },
+        });
+        token.isSubDealer = !!dealer?.parentDealerId;
+        if (token.isSubDealer) {
+          token.permissions = (token.permissions as string[]).filter(
+            (p) => !SUB_DEALER_RESTRICTED_PERMISSIONS.includes(p as Permission)
+          );
+        }
+      }
+      return token;
+    },
+  },
   providers: [
     Credentials({
       credentials: {
@@ -54,6 +83,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             ? dbPermissions
             : getDefaultPermissionsForRole(user.role as UserRole);
 
+        // Detect sub-dealer and filter restricted permissions
+        const isSubDealer = !!user.dealer?.parentDealerId;
+        const effectivePermissions = isSubDealer
+          ? permissions.filter(p => !SUB_DEALER_RESTRICTED_PERMISSIONS.includes(p as Permission))
+          : permissions;
+
         return {
           id: user.id,
           email: user.email,
@@ -62,7 +97,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           dealerId: user.dealerId,
           dealerName: user.dealer?.name || null,
           dealerSlug: user.dealer?.slug || null,
-          permissions,
+          permissions: effectivePermissions,
+          isSubDealer,
         };
       },
     }),

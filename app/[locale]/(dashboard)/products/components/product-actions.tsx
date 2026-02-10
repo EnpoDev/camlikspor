@@ -29,12 +29,7 @@ interface ProductActionsProps {
   locale: string;
   isActive: boolean;
   dictionary: {
-    common: {
-      edit: string;
-      delete: string;
-      confirmDelete: string;
-      cancel: string;
-    };
+    common: Record<string, string>;
   };
 }
 
@@ -53,13 +48,13 @@ export function ProductActions({
     try {
       const result = await deleteProductAction(id);
       if (result.success) {
-        toast.success("Urun silindi");
+        toast.success(dictionary.common.deleteSuccess || "Urun silindi");
         router.refresh();
       } else {
-        toast.error(result.message || "Bir hata olustu");
+        toast.error(result.message || dictionary.common.errorOccurred || "Hata");
       }
     } catch {
-      toast.error("Bir hata olustu");
+      toast.error(dictionary.common.errorOccurred || "Hata");
     } finally {
       setIsDeleting(false);
       setShowDeleteDialog(false);
@@ -70,13 +65,13 @@ export function ProductActions({
     try {
       const result = await updateProductStatusAction(id, !isActive);
       if (result.success) {
-        toast.success(isActive ? "Urun pasif yapildi" : "Urun aktif yapildi");
+        toast.success(dictionary.common.updateSuccess || "Guncellendi");
         router.refresh();
       } else {
-        toast.error(result.message || "Bir hata olustu");
+        toast.error(result.message || dictionary.common.errorOccurred || "Hata");
       }
     } catch {
-      toast.error("Bir hata olustu");
+      toast.error(dictionary.common.errorOccurred || "Hata");
     }
   };
 
@@ -91,6 +86,12 @@ export function ProductActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem
+            onClick={() => router.push(`/${locale}/products/${id}`)}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            {dictionary.common.view || "Goruntule"}
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onClick={() => router.push(`/${locale}/products/${id}/edit`)}
           >
             <Edit className="mr-2 h-4 w-4" />
@@ -100,12 +101,12 @@ export function ProductActions({
             {isActive ? (
               <>
                 <ToggleLeft className="mr-2 h-4 w-4" />
-                Pasif Yap
+                {dictionary.common.inactive}
               </>
             ) : (
               <>
                 <ToggleRight className="mr-2 h-4 w-4" />
-                Aktif Yap
+                {dictionary.common.active}
               </>
             )}
           </DropdownMenuItem>
@@ -125,7 +126,7 @@ export function ProductActions({
           <AlertDialogHeader>
             <AlertDialogTitle>{dictionary.common.confirmDelete}</AlertDialogTitle>
             <AlertDialogDescription>
-              Bu islem geri alinamaz. Urun kalici olarak silinecektir.
+              {dictionary.common.confirmDelete}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -137,7 +138,7 @@ export function ProductActions({
               disabled={isDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {isDeleting ? "Siliniyor..." : dictionary.common.delete}
+              {isDeleting ? (dictionary.common.loading || "...") : dictionary.common.delete}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

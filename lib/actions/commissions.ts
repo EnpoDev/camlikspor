@@ -33,6 +33,10 @@ export async function createOrUpdateCommissionSettingsAction(
     return { messageKey: "authError", success: false };
   }
 
+  if (session.user.isSubDealer) {
+    return { message: "Yetkisiz islem", success: false };
+  }
+
   const rawData = {
     childDealerId: formData.get("childDealerId") as string,
     productCommissionRate:
@@ -120,6 +124,10 @@ export async function toggleCommissionStatusAction(
     return { messageKey: "authError", success: false };
   }
 
+  if (session.user.isSubDealer) {
+    return { messageKey: "authError", success: false };
+  }
+
   try {
     await prisma.dealerCommission.update({
       where: {
@@ -152,6 +160,10 @@ export async function processCommissionPayoutAction(
   const session = await auth();
 
   if (!session?.user?.dealerId) {
+    return { messageKey: "authError", success: false };
+  }
+
+  if (session.user.isSubDealer) {
     return { messageKey: "authError", success: false };
   }
 
@@ -300,6 +312,10 @@ export async function deleteCommissionSettingsAction(
   const session = await auth();
 
   if (!session?.user?.dealerId) {
+    return { messageKey: "authError", success: false };
+  }
+
+  if (session.user.isSubDealer) {
     return { messageKey: "authError", success: false };
   }
 

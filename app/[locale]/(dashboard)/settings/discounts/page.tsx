@@ -41,11 +41,7 @@ export default async function DiscountsPage({ params }: DiscountsPageProps) {
       items={discountTypes}
       columns={[
         { key: "name", label: "Indirim Adi" },
-        {
-          key: "percentage",
-          label: "Oran (%)",
-          render: (value) => `%${value}`,
-        },
+        { key: "percentage", label: "Oran (%)", format: "percentage" },
       ]}
       dialogTitle="Indirim Tipi"
       dialogFields={[

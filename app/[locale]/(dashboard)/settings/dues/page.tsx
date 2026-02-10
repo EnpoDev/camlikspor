@@ -41,11 +41,7 @@ export default async function DuesPage({ params }: DuesPageProps) {
       items={dueTypes}
       columns={[
         { key: "name", label: "Aidat Adi" },
-        {
-          key: "amount",
-          label: "Tutar",
-          render: (value) => `${(value as number)?.toLocaleString("tr-TR")} TL`,
-        },
+        { key: "amount", label: "Tutar", format: "currency" },
       ]}
       dialogTitle="Aidat Tipi"
       dialogFields={[

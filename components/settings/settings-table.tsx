@@ -30,7 +30,7 @@ import { type SettingsFormState } from "@/lib/actions/settings";
 export interface SettingsColumn {
   key: string;
   label: string;
-  render?: (value: unknown, item: Record<string, unknown>) => React.ReactNode;
+  format?: "currency" | "percentage";
 }
 
 interface SettingsTableProps {
@@ -101,13 +101,22 @@ export function SettingsTable({
       <TableBody>
         {items.map((item) => (
           <TableRow key={item.id as string}>
-            {columns.map((column) => (
-              <TableCell key={column.key} className={column.key === columns[0].key ? "font-medium" : ""}>
-                {column.render
-                  ? column.render(item[column.key], item)
-                  : (item[column.key] as string) || "-"}
-              </TableCell>
-            ))}
+            {columns.map((column) => {
+              const value = item[column.key];
+              let display: React.ReactNode;
+              if (column.format === "currency") {
+                display = `${(value as number)?.toLocaleString("tr-TR")} TL`;
+              } else if (column.format === "percentage") {
+                display = `%${value}`;
+              } else {
+                display = (value as string) || "-";
+              }
+              return (
+                <TableCell key={column.key} className={column.key === columns[0].key ? "font-medium" : ""}>
+                  {display}
+                </TableCell>
+              );
+            })}
             <TableCell>
               <Badge variant={item.isActive ? "default" : "secondary"}>
                 {item.isActive ? dictionary.common.active : dictionary.common.inactive}
