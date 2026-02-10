@@ -26,7 +26,7 @@ export default async function NewGroupPage({ params }: NewGroupPageProps) {
       ? undefined
       : session?.user?.dealerId || undefined;
 
-  const [branches, facilities, periods] = await Promise.all([
+  const [branches, facilities, periods, trainers] = await Promise.all([
     prisma.branch.findMany({
       where: dealerId ? { dealerId, isActive: true } : { isActive: true },
       select: { id: true, name: true },
@@ -41,6 +41,11 @@ export default async function NewGroupPage({ params }: NewGroupPageProps) {
       where: dealerId ? { dealerId, isActive: true } : { isActive: true },
       select: { id: true, name: true },
       orderBy: { startDate: "desc" },
+    }),
+    prisma.trainer.findMany({
+      where: dealerId ? { dealerId, isActive: true } : { isActive: true },
+      select: { id: true, firstName: true, lastName: true },
+      orderBy: { firstName: "asc" },
     }),
   ]);
 
@@ -66,6 +71,7 @@ export default async function NewGroupPage({ params }: NewGroupPageProps) {
         branches={branches}
         facilities={facilities}
         periods={periods}
+        trainers={trainers}
         locale={locale}
         dictionary={dictionary}
       />

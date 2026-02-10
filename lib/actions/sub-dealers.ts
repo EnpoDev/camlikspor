@@ -7,15 +7,20 @@ import { revalidatePath } from "next/cache";
 import { checkSubDealerSlugExists } from "@/lib/data/sub-dealers";
 
 const subDealerSchema = z.object({
-  name: z.string().min(2, "İsim en az 2 karakter olmalı"),
+  name: z.string().min(2, "Isim en az 2 karakter olmali"),
   slug: z
     .string()
-    .min(2, "Slug en az 2 karakter olmalı")
+    .min(2, "Slug en az 2 karakter olmali")
     .regex(
       /^[a-z0-9-]+$/,
-      "Slug sadece küçük harf, rakam ve tire içerebilir"
+      "Slug sadece kucuk harf, rakam ve tire icerebilir"
     ),
-  email: z.string().email("Geçerli bir email giriniz").optional().or(z.literal("")),
+  email: z
+    .string()
+    .transform((val) => val.trim())
+    .pipe(
+      z.union([z.literal(""), z.string().email("Gecerli bir email giriniz")])
+    ),
   phone: z.string().optional(),
   address: z.string().optional(),
   logo: z.string().optional(),
@@ -44,17 +49,21 @@ export async function createSubDealerAction(
     return { messageKey: "authError", success: false };
   }
 
+  if (session.user.isSubDealer) {
+    return { message: "Yetkisiz islem", success: false };
+  }
+
   const rawData = {
-    name: formData.get("name") as string,
-    slug: formData.get("slug") as string,
-    email: formData.get("email") as string,
-    phone: formData.get("phone") as string,
-    address: formData.get("address") as string,
-    logo: formData.get("logo") as string,
+    name: (formData.get("name") as string) || "",
+    slug: (formData.get("slug") as string) || "",
+    email: (formData.get("email") as string) || "",
+    phone: (formData.get("phone") as string) || "",
+    address: (formData.get("address") as string) || "",
+    logo: (formData.get("logo") as string) || "",
     inheritParentProducts: formData.get("inheritParentProducts") === "true",
     canCreateOwnProducts: formData.get("canCreateOwnProducts") === "true",
-    customDomain: formData.get("customDomain") as string,
-    subdomain: formData.get("subdomain") as string,
+    customDomain: (formData.get("customDomain") as string) || "",
+    subdomain: (formData.get("subdomain") as string) || "",
   };
 
   const validatedFields = subDealerSchema.safeParse(rawData);
@@ -62,28 +71,28 @@ export async function createSubDealerAction(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      messageKey: "formValidationError",
+      message: "Lutfen formu kontrol edin",
       success: false,
     };
   }
-
-  // Check if slug exists
-  const slugExists = await checkSubDealerSlugExists(validatedFields.data.slug);
-  if (slugExists) {
-    return {
-      errors: { slug: ["Bu slug zaten kullanılıyor"] },
-      messageKey: "slugExists",
-      success: false,
-    };
-  }
-
-  // Get parent dealer's hierarchy level
-  const parentDealer = await prisma.dealer.findUnique({
-    where: { id: session.user.dealerId },
-    select: { hierarchyLevel: true },
-  });
 
   try {
+    // Check if slug exists
+    const slugExists = await checkSubDealerSlugExists(validatedFields.data.slug);
+    if (slugExists) {
+      return {
+        errors: { slug: ["Bu slug zaten kullaniliyor"] },
+        message: "Bu slug zaten kullaniliyor",
+        success: false,
+      };
+    }
+
+    // Get parent dealer's hierarchy level
+    const parentDealer = await prisma.dealer.findUnique({
+      where: { id: session.user.dealerId },
+      select: { hierarchyLevel: true },
+    });
+
     await prisma.dealer.create({
       data: {
         name: validatedFields.data.name,
@@ -106,13 +115,38 @@ export async function createSubDealerAction(
     revalidatePath("/sub-dealers");
 
     return {
-      messageKey: "subDealerCreated",
       success: true,
     };
   } catch (error) {
     console.error("Create sub-dealer error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Bilinmeyen hata";
+    // Check for unique constraint violations
+    if (errorMessage.includes("Unique constraint")) {
+      if (errorMessage.includes("slug")) {
+        return {
+          errors: { slug: ["Bu slug zaten kullaniliyor"] },
+          message: "Bu slug zaten kullaniliyor",
+          success: false,
+        };
+      }
+      if (errorMessage.includes("customDomain")) {
+        return {
+          errors: { customDomain: ["Bu domain zaten kullaniliyor"] },
+          message: "Bu domain zaten kullaniliyor",
+          success: false,
+        };
+      }
+      if (errorMessage.includes("subdomain")) {
+        return {
+          errors: { subdomain: ["Bu subdomain zaten kullaniliyor"] },
+          message: "Bu subdomain zaten kullaniliyor",
+          success: false,
+        };
+      }
+    }
     return {
-      messageKey: "createError",
+      message: "Alt bayi olusturulurken bir hata olustu: " + errorMessage,
       success: false,
     };
   }
@@ -129,6 +163,10 @@ export async function updateSubDealerAction(
     return { messageKey: "authError", success: false };
   }
 
+  if (session.user.isSubDealer) {
+    return { message: "Yetkisiz islem", success: false };
+  }
+
   // Verify sub-dealer belongs to this dealer
   const existingSubDealer = await prisma.dealer.findFirst({
     where: {
@@ -142,16 +180,16 @@ export async function updateSubDealerAction(
   }
 
   const rawData = {
-    name: formData.get("name") as string,
-    slug: formData.get("slug") as string,
-    email: formData.get("email") as string,
-    phone: formData.get("phone") as string,
-    address: formData.get("address") as string,
-    logo: formData.get("logo") as string,
+    name: (formData.get("name") as string) || "",
+    slug: (formData.get("slug") as string) || "",
+    email: (formData.get("email") as string) || "",
+    phone: (formData.get("phone") as string) || "",
+    address: (formData.get("address") as string) || "",
+    logo: (formData.get("logo") as string) || "",
     inheritParentProducts: formData.get("inheritParentProducts") === "true",
     canCreateOwnProducts: formData.get("canCreateOwnProducts") === "true",
-    customDomain: formData.get("customDomain") as string,
-    subdomain: formData.get("subdomain") as string,
+    customDomain: (formData.get("customDomain") as string) || "",
+    subdomain: (formData.get("subdomain") as string) || "",
   };
 
   const validatedFields = subDealerSchema.safeParse(rawData);
@@ -159,27 +197,27 @@ export async function updateSubDealerAction(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      messageKey: "formValidationError",
+      message: "Lutfen formu kontrol edin",
       success: false,
     };
   }
 
-  // Check if slug exists (excluding current)
-  if (validatedFields.data.slug !== existingSubDealer.slug) {
-    const slugExists = await checkSubDealerSlugExists(
-      validatedFields.data.slug,
-      subDealerId
-    );
-    if (slugExists) {
-      return {
-        errors: { slug: ["Bu slug zaten kullanılıyor"] },
-        messageKey: "slugExists",
-        success: false,
-      };
-    }
-  }
-
   try {
+    // Check if slug exists (excluding current)
+    if (validatedFields.data.slug !== existingSubDealer.slug) {
+      const slugExists = await checkSubDealerSlugExists(
+        validatedFields.data.slug,
+        subDealerId
+      );
+      if (slugExists) {
+        return {
+          errors: { slug: ["Bu slug zaten kullaniliyor"] },
+          message: "Bu slug zaten kullaniliyor",
+          success: false,
+        };
+      }
+    }
+
     await prisma.dealer.update({
       where: { id: subDealerId },
       data: {
@@ -200,13 +238,14 @@ export async function updateSubDealerAction(
     revalidatePath(`/sub-dealers/${subDealerId}`);
 
     return {
-      messageKey: "subDealerUpdated",
       success: true,
     };
   } catch (error) {
     console.error("Update sub-dealer error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Bilinmeyen hata";
     return {
-      messageKey: "updateError",
+      message: "Alt bayi guncellenirken bir hata olustu: " + errorMessage,
       success: false,
     };
   }
@@ -218,6 +257,10 @@ export async function deleteSubDealerAction(
   const session = await auth();
 
   if (!session?.user?.dealerId) {
+    return { messageKey: "authError", success: false };
+  }
+
+  if (session.user.isSubDealer) {
     return { messageKey: "authError", success: false };
   }
 
@@ -282,6 +325,10 @@ export async function toggleSubDealerStatusAction(
     return { messageKey: "authError", success: false };
   }
 
+  if (session.user.isSubDealer) {
+    return { messageKey: "authError", success: false };
+  }
+
   // Verify sub-dealer belongs to this dealer
   const subDealer = await prisma.dealer.findFirst({
     where: {
@@ -322,6 +369,10 @@ export async function updateProductInheritanceAction(
   const session = await auth();
 
   if (!session?.user?.dealerId) {
+    return { messageKey: "authError", success: false };
+  }
+
+  if (session.user.isSubDealer) {
     return { messageKey: "authError", success: false };
   }
 

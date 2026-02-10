@@ -63,10 +63,16 @@ export function isValidTurkishPhone(phone: string): boolean {
  */
 export const turkishPhoneSchema = z
   .string()
-  .min(10, "Telefon numarasi en az 10 karakter olmali")
+  .min(1, "Telefon numarasi gerekli")
   .refine(
     (val) => {
-      if (!val) return false;
+      const normalized = normalizePhoneNumber(val);
+      return normalized.length >= 10;
+    },
+    { message: "Telefon numarasi en az 10 hane olmali" }
+  )
+  .refine(
+    (val) => {
       const normalized = normalizePhoneNumber(val);
       return TURKISH_PHONE_REGEX.test(normalized);
     },

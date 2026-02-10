@@ -37,6 +37,10 @@ export default async function SubDealersPage({ params, searchParams }: Props) {
     redirect(`/${locale}/login`);
   }
 
+  if (session.user.isSubDealer) {
+    redirect(`/${locale}/dashboard`);
+  }
+
   const dict = await getDictionary(locale);
 
   const currentPage = parseInt(page) || 1;
@@ -65,7 +69,7 @@ export default async function SubDealersPage({ params, searchParams }: Props) {
             {dict.subDealers?.description || "Alt bayilerinizi yönetin"}
           </p>
         </div>
-        <Link href={`/${locale}/sub-dealers/create`}>
+        <Link href={`/${locale}/sub-dealers/new`}>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             {dict.subDealers?.create || "Yeni Alt Bayi"}
@@ -137,7 +141,7 @@ export default async function SubDealersPage({ params, searchParams }: Props) {
               <p className="text-muted-foreground">
                 {dict.subDealers?.noSubDealers || "Henüz alt bayi yok"}
               </p>
-              <Link href={`/${locale}/sub-dealers/create`} className="mt-4">
+              <Link href={`/${locale}/sub-dealers/new`} className="mt-4">
                 <Button variant="outline">
                   <Plus className="mr-2 h-4 w-4" />
                   {dict.subDealers?.createFirst || "İlk alt bayinizi oluşturun"}

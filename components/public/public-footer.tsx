@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Facebook,
   Instagram,
@@ -9,7 +7,6 @@ import {
   Phone,
   Mail,
   MapPin,
-  Send,
   ShieldCheck,
   Truck,
   CreditCard,
@@ -80,8 +77,8 @@ export function PublicFooter({
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-600/20 flex items-center justify-center flex-shrink-0">
-                <Truck className="h-6 w-6 text-blue-400" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center flex-shrink-0">
+                <Truck className="h-6 w-6 text-emerald-400" />
               </div>
               <div>
                 <h4 className="font-semibold text-sm">Ücretsiz Kargo</h4>
@@ -126,7 +123,7 @@ export function PublicFooter({
           <div className="lg:col-span-1 space-y-6">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-xl">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center text-white font-bold text-xl">
                   {dealerName.charAt(0)}
                 </div>
                 <span className="text-xl font-bold">{dealerName}</span>
@@ -137,23 +134,6 @@ export function PublicFooter({
               </p>
             </div>
 
-            {/* Newsletter */}
-            <div className="space-y-3">
-              <h4 className="font-semibold">Bültenimize Abone Olun</h4>
-              <p className="text-xs text-slate-400">
-                Yeni ürünler ve kampanyalardan haberdar olun
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="E-posta adresiniz"
-                  className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus:border-blue-500"
-                />
-                <Button size="icon" className="bg-blue-600 hover:bg-blue-700 flex-shrink-0">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -166,7 +146,7 @@ export function PublicFooter({
                     href={link.href}
                     className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
                   >
-                    <ChevronRight className="h-4 w-4 text-blue-500 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
                     {link.label}
                   </Link>
                 </li>
@@ -184,7 +164,7 @@ export function PublicFooter({
                     href={link.href}
                     className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
                   >
-                    <ChevronRight className="h-4 w-4 text-blue-500 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
                     {link.label}
                   </Link>
                 </li>
@@ -203,7 +183,7 @@ export function PublicFooter({
                       href={`tel:${contactPhone}`}
                       className="group flex items-start gap-3 text-sm"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors">
+                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
                         <Phone className="h-4 w-4" />
                       </div>
                       <div>
@@ -219,7 +199,7 @@ export function PublicFooter({
                       href={`mailto:${contactEmail}`}
                       className="group flex items-start gap-3 text-sm"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-600 transition-colors">
+                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
                         <Mail className="h-4 w-4" />
                       </div>
                       <div>
@@ -230,14 +210,21 @@ export function PublicFooter({
                   </li>
                 )}
                 {contactAddress && (
-                  <li className="flex items-start gap-3 text-sm">
-                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <span className="text-slate-400 text-xs block">Adres</span>
-                      <span className="text-white">{contactAddress}</span>
-                    </div>
+                  <li>
+                    <a
+                      href={`https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-start gap-3 text-sm"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
+                        <MapPin className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-xs block">Adres</span>
+                        <span className="text-white">{contactAddress}</span>
+                      </div>
+                    </a>
                   </li>
                 )}
               </ul>
@@ -253,7 +240,7 @@ export function PublicFooter({
                       href={socialFacebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-blue-600 transition-colors"
+                      className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-emerald-600 transition-colors"
                     >
                       <Facebook className="h-5 w-5" />
                     </a>

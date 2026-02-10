@@ -35,6 +35,7 @@ export const authConfig: NextAuthConfig = {
         token.dealerName = user.dealerName;
         token.dealerSlug = user.dealerSlug;
         token.permissions = user.permissions;
+        token.isSubDealer = user.isSubDealer;
       }
       return token;
     },
@@ -46,6 +47,7 @@ export const authConfig: NextAuthConfig = {
         session.user.dealerName = token.dealerName as string | null;
         session.user.dealerSlug = token.dealerSlug as string | null;
         session.user.permissions = token.permissions as string[];
+        session.user.isSubDealer = (token.isSubDealer as boolean) ?? false;
       }
       return session;
     },

@@ -1,5 +1,14 @@
 import { Permission, UserRole } from "@/lib/types";
 
+// Permissions restricted for sub-dealer admins
+export const SUB_DEALER_RESTRICTED_PERMISSIONS: Permission[] = [
+  Permission.SUB_DEALERS_VIEW,
+  Permission.SUB_DEALERS_CREATE,
+  Permission.SUB_DEALERS_EDIT,
+  Permission.SUB_DEALERS_DELETE,
+  Permission.COMMISSIONS_VIEW,
+];
+
 // Role-based default permissions
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   [UserRole.SUPER_ADMIN]: [
@@ -60,6 +69,21 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Settings
     Permission.SETTINGS_VIEW,
     Permission.SETTINGS_EDIT,
+    // Products
+    Permission.PRODUCTS_VIEW,
+    Permission.PRODUCTS_CREATE,
+    Permission.PRODUCTS_EDIT,
+    Permission.PRODUCTS_DELETE,
+    // Orders
+    Permission.ORDERS_VIEW,
+    Permission.ORDERS_EDIT,
+    // Sub-dealers
+    Permission.SUB_DEALERS_VIEW,
+    Permission.SUB_DEALERS_CREATE,
+    Permission.SUB_DEALERS_EDIT,
+    Permission.SUB_DEALERS_DELETE,
+    // Commissions
+    Permission.COMMISSIONS_VIEW,
   ],
   [UserRole.TRAINER]: [
     Permission.ATTENDANCE_VIEW,
@@ -201,31 +225,25 @@ export const MENU_ITEMS: MenuItem[] = [
     key: "products",
     labelKey: "sidebar.products",
     href: "/products",
-    permission: Permission.SETTINGS_VIEW,
+    permission: Permission.PRODUCTS_VIEW,
   },
   {
     key: "orders",
     labelKey: "sidebar.orders",
     href: "/orders",
-    permission: Permission.SETTINGS_VIEW,
+    permission: Permission.ORDERS_VIEW,
   },
   {
     key: "sub-dealers",
     labelKey: "sidebar.subDealers",
     href: "/sub-dealers",
-    permission: Permission.SETTINGS_VIEW,
-  },
-  {
-    key: "customization",
-    labelKey: "sidebar.customization",
-    href: "/customization",
-    permission: Permission.SETTINGS_VIEW,
+    permission: Permission.SUB_DEALERS_VIEW,
   },
   {
     key: "commissions",
     labelKey: "sidebar.commissions",
     href: "/commissions",
-    permission: Permission.SETTINGS_VIEW,
+    permission: Permission.COMMISSIONS_VIEW,
   },
 ];
 

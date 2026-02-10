@@ -37,6 +37,7 @@ export default function CheckoutPage() {
 
   const { items, totalItems, totalPrice, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderCompleted, setOrderCompleted] = useState(false);
   const [dealerSlug, setDealerSlug] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -63,12 +64,12 @@ export default function CheckoutPage() {
     fetchDealer();
   }, []);
 
-  // Redirect if cart is empty
+  // Redirect if cart is empty (but not after a successful order)
   useEffect(() => {
-    if (items.length === 0) {
+    if (items.length === 0 && !orderCompleted) {
       router.push(`/${locale}/shop`);
     }
-  }, [items, router, locale]);
+  }, [items, router, locale, orderCompleted]);
 
   const formatPrice = (price: number): string => {
     return new Intl.NumberFormat("tr-TR", {
@@ -115,6 +116,7 @@ export default function CheckoutPage() {
       }
 
       const result = await response.json();
+      setOrderCompleted(true);
       clearCart();
       router.push(`/${locale}/checkout/success?order=${result.orderNumber}`);
     } catch (error) {
@@ -124,7 +126,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (items.length === 0) {
+  if (items.length === 0 && !orderCompleted) {
     return null;
   }
 
@@ -153,14 +155,14 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 max-w-xl mx-auto">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-sm font-medium hidden sm:inline">Sepet</span>
             </div>
-            <div className="flex-1 h-1 bg-blue-600 rounded" />
+            <div className="flex-1 h-1 bg-emerald-600 rounded" />
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">2</span>
               </div>
               <span className="text-sm font-medium hidden sm:inline">Ödeme</span>
@@ -185,8 +187,8 @@ export default function CheckoutPage() {
               <Card className="border-0 shadow-xl">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
-                      <User className="h-5 w-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
+                      <User className="h-5 w-5 text-emerald-600" />
                     </div>
                     Müşteri Bilgileri
                   </CardTitle>
@@ -306,7 +308,7 @@ export default function CheckoutPage() {
                 <Card className="border-0 shadow-xl">
                   <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5 text-blue-600" />
+                      <ShoppingBag className="h-5 w-5 text-emerald-600" />
                       Sipariş Özeti
                     </CardTitle>
                   </CardHeader>
@@ -350,7 +352,7 @@ export default function CheckoutPage() {
                                 x{item.quantity}
                               </Badge>
                             </div>
-                            <p className="font-semibold text-blue-600 mt-1">
+                            <p className="font-semibold text-emerald-600 mt-1">
                               {formatPrice(item.price * item.quantity)}
                             </p>
                           </div>
@@ -375,13 +377,13 @@ export default function CheckoutPage() {
 
                     <div className="flex justify-between text-lg">
                       <span className="font-bold">Toplam</span>
-                      <span className="font-bold text-blue-600">{formatPrice(totalPrice)}</span>
+                      <span className="font-bold text-emerald-600">{formatPrice(totalPrice)}</span>
                     </div>
 
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-lg py-6"
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-lg py-6"
                       disabled={isSubmitting || !dealerSlug}
                     >
                       {isSubmitting ? (
@@ -411,7 +413,7 @@ export default function CheckoutPage() {
                       <span>256-bit SSL ile güvenli ödeme</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
-                      <Truck className="h-5 w-5 text-blue-600" />
+                      <Truck className="h-5 w-5 text-emerald-600" />
                       <span>2-3 iş günü içinde teslimat</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">

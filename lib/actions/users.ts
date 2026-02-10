@@ -76,6 +76,28 @@ export async function createUserAction(
   try {
     const passwordHash = await bcrypt.hash(rawData.password, 12);
 
+    let targetDealerId: string | null =
+      validatedFields.data.dealerId && validatedFields.data.dealerId !== "none"
+        ? validatedFields.data.dealerId
+        : null;
+
+    // DEALER_ADMIN: validate the target dealer is own or sub-dealer
+    if (session.user.dealerId) {
+      if (!targetDealerId) {
+        targetDealerId = session.user.dealerId;
+      } else if (targetDealerId !== session.user.dealerId) {
+        const isSubDealer = await prisma.dealer.findFirst({
+          where: {
+            id: targetDealerId,
+            parentDealerId: session.user.dealerId,
+          },
+        });
+        if (!isSubDealer) {
+          return { message: "Bu bayiye kullanici atamaniz icin yetkiniz yok", success: false };
+        }
+      }
+    }
+
     await prisma.user.create({
       data: {
         name: validatedFields.data.name,
@@ -83,9 +105,7 @@ export async function createUserAction(
         passwordHash,
         phone: validatedFields.data.phone || null,
         role: validatedFields.data.role,
-        dealerId: validatedFields.data.dealerId && validatedFields.data.dealerId !== "none"
-          ? validatedFields.data.dealerId
-          : null,
+        dealerId: targetDealerId,
       },
     });
 
@@ -143,6 +163,28 @@ export async function updateUserAction(
   }
 
   try {
+    let targetDealerId: string | null =
+      validatedFields.data.dealerId && validatedFields.data.dealerId !== "none"
+        ? validatedFields.data.dealerId
+        : null;
+
+    // DEALER_ADMIN: validate the target dealer is own or sub-dealer
+    if (session.user.dealerId) {
+      if (!targetDealerId) {
+        targetDealerId = session.user.dealerId;
+      } else if (targetDealerId !== session.user.dealerId) {
+        const isSubDealer = await prisma.dealer.findFirst({
+          where: {
+            id: targetDealerId,
+            parentDealerId: session.user.dealerId,
+          },
+        });
+        if (!isSubDealer) {
+          return { message: "Bu bayiye kullanici atamaniz icin yetkiniz yok", success: false };
+        }
+      }
+    }
+
     const updateData: {
       name: string;
       email: string;
@@ -155,9 +197,7 @@ export async function updateUserAction(
       email: validatedFields.data.email,
       phone: validatedFields.data.phone || null,
       role: validatedFields.data.role,
-      dealerId: validatedFields.data.dealerId && validatedFields.data.dealerId !== "none"
-        ? validatedFields.data.dealerId
-        : null,
+      dealerId: targetDealerId,
     };
 
     if (rawData.password) {

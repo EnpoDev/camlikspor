@@ -10,11 +10,13 @@ import { Button } from "@/components/ui/button";
 
 interface NewUserPageProps {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ dealerId?: string }>;
 }
 
-export default async function NewUserPage({ params }: NewUserPageProps) {
+export default async function NewUserPage({ params, searchParams }: NewUserPageProps) {
   const session = await auth();
   const { locale: localeParam } = await params;
+  const { dealerId: preselectedDealerId } = await searchParams;
 
   const locale = i18n.locales.includes(localeParam as Locale)
     ? (localeParam as Locale)
@@ -22,14 +24,29 @@ export default async function NewUserPage({ params }: NewUserPageProps) {
   const dictionary = await getDictionary(locale);
 
   const isSuperAdmin = session?.user?.role === UserRole.SUPER_ADMIN;
+  const dealerId = session?.user?.dealerId;
 
-  const dealers = isSuperAdmin
-    ? await prisma.dealer.findMany({
-        where: { isActive: true },
-        select: { id: true, name: true },
-        orderBy: { name: "asc" },
-      })
-    : [];
+  let dealers: { id: string; name: string }[] = [];
+
+  if (isSuperAdmin) {
+    dealers = await prisma.dealer.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+  } else if (dealerId) {
+    // DEALER_ADMIN: own dealer + sub-dealers
+    dealers = await prisma.dealer.findMany({
+      where: {
+        OR: [
+          { id: dealerId },
+          { parentDealerId: dealerId, isActive: true },
+        ],
+      },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -54,6 +71,7 @@ export default async function NewUserPage({ params }: NewUserPageProps) {
         locale={locale}
         dictionary={dictionary}
         isSuperAdmin={isSuperAdmin}
+        currentDealerId={preselectedDealerId || dealerId || undefined}
       />
     </div>
   );

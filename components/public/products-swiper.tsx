@@ -6,7 +6,8 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingBag, Heart, Eye } from "lucide-react";
+import { ShoppingBag, Eye } from "lucide-react";
+import { FavoriteButton } from "@/components/public/favorite-button";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
@@ -115,20 +116,20 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   )}
 
                   {/* Category Badge */}
-                  <Badge className="absolute top-3 left-3 bg-blue-600 hover:bg-blue-600 shadow-lg">
+                  <Badge className="absolute top-3 left-3 bg-emerald-600 hover:bg-emerald-600 shadow-lg">
                     {product.category.name}
                   </Badge>
 
                   {/* Hover Actions */}
                   <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                    <Button
-                      size="icon"
-                      variant="secondary"
+                    <FavoriteButton
+                      productId={product.id}
+                      name={product.name}
+                      price={product.price}
+                      image={imageUrl || undefined}
+                      slug={product.slug}
                       className="h-9 w-9 rounded-full shadow-lg"
-                      onClick={(e) => e.preventDefault()}
-                    >
-                      <Heart className="h-4 w-4" />
-                    </Button>
+                    />
                     <Button
                       size="icon"
                       variant="secondary"
@@ -142,7 +143,7 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   {/* Quick Add */}
                   <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                     <Button
-                      className="w-full bg-blue-600 hover:bg-blue-700 shadow-lg"
+                      className="w-full bg-emerald-600 hover:bg-emerald-700 shadow-lg"
                       onClick={(e) => e.preventDefault()}
                     >
                       <ShoppingBag className="mr-2 h-4 w-4" />
@@ -155,10 +156,10 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">
                     {product.category.name}
                   </p>
-                  <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-xl font-bold text-blue-600">
+                  <p className="text-xl font-bold text-emerald-600">
                     {formatPrice(product.price)}
                   </p>
                 </CardContent>

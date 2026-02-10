@@ -27,19 +27,19 @@ async function main() {
   const camlıksporDealer = await prisma.dealer.upsert({
     where: { slug: "camlikspor" },
     update: {
-      heroTitle: "Profesyonel Futbol Ekipmanları",
-      heroSubtitle: "Kaliteli formalar, eşofmanlar ve spor aksesuarları ile takımınızı donatın",
-      aboutText: "Çamlık Spor Kulübü olarak profesyonel futbol ekipmanları ve spor malzemeleri sunuyoruz.",
+      heroTitle: "Profesyonel Futbol Eğitimi",
+      heroSubtitle: "Profesyonel eğitmenler eşliğinde, modern tesislerde çocuğunuzun futbol yeteneğini keşfedin",
+      aboutText: "Çamlık Spor Kulübü olarak profesyonel eğitmenler eşliğinde çocuklarımıza futbol eğitimi veriyoruz.",
       contactPhone: "0532 123 45 67",
       contactEmail: "info@camlikspor.com",
       contactAddress: "Çamlık Mah. Spor Cad. No: 1, İstanbul",
       socialFacebook: "https://facebook.com/camlikspor",
       socialInstagram: "https://instagram.com/camlikspor",
       features: JSON.stringify([
-        "Ücretsiz Kargo",
-        "Güvenli Ödeme",
-        "7/24 Destek",
-        "Kolay İade"
+        "Profesyonel Eğitmenler",
+        "Modern Tesisler",
+        "Her Yaş Grubu",
+        "Esnek Antrenman Saatleri"
       ]),
       isPublicPageActive: true,
     },
@@ -50,19 +50,19 @@ async function main() {
       email: "info@camlikspor.com",
       address: "Çamlık Mah. Spor Cad. No: 1, İstanbul",
       isActive: true,
-      heroTitle: "Profesyonel Futbol Ekipmanları",
-      heroSubtitle: "Kaliteli formalar, eşofmanlar ve spor aksesuarları ile takımınızı donatın",
-      aboutText: "Çamlık Spor Kulübü olarak profesyonel futbol ekipmanları ve spor malzemeleri sunuyoruz.",
+      heroTitle: "Profesyonel Futbol Eğitimi",
+      heroSubtitle: "Profesyonel eğitmenler eşliğinde, modern tesislerde çocuğunuzun futbol yeteneğini keşfedin",
+      aboutText: "Çamlık Spor Kulübü olarak profesyonel eğitmenler eşliğinde çocuklarımıza futbol eğitimi veriyoruz.",
       contactPhone: "0532 123 45 67",
       contactEmail: "info@camlikspor.com",
       contactAddress: "Çamlık Mah. Spor Cad. No: 1, İstanbul",
       socialFacebook: "https://facebook.com/camlikspor",
       socialInstagram: "https://instagram.com/camlikspor",
       features: JSON.stringify([
-        "Ücretsiz Kargo",
-        "Güvenli Ödeme",
-        "7/24 Destek",
-        "Kolay İade"
+        "Profesyonel Eğitmenler",
+        "Modern Tesisler",
+        "Her Yaş Grubu",
+        "Esnek Antrenman Saatleri"
       ]),
       isPublicPageActive: true,
     },

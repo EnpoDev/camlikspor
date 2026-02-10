@@ -14,16 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Package, Tag, AlertTriangle, MoreHorizontal, Eye, Edit, Trash } from "lucide-react";
+import { Plus, Package, Tag, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ProductActions } from "./components/product-actions";
 
 interface ProductsPageProps {
@@ -90,20 +83,20 @@ export default async function ProductsPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Urunler</h1>
-          <p className="text-muted-foreground">Urun yonetimi</p>
+          <h1 className="text-3xl font-bold tracking-tight">{dictionary.products?.title || "Urunler"}</h1>
+          <p className="text-muted-foreground">{dictionary.products?.description || "Urun yonetimi"}</p>
         </div>
         <div className="flex gap-2">
           <Link href={`/${locale}/products/categories`}>
             <Button variant="outline">
               <Tag className="mr-2 h-4 w-4" />
-              Kategoriler
+              {dictionary.products?.categories || "Kategoriler"}
             </Button>
           </Link>
           <Link href={`/${locale}/products/new`}>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              Urun Ekle
+              {dictionary.products?.addProduct || "Urun Ekle"}
             </Button>
           </Link>
         </div>
@@ -114,7 +107,7 @@ export default async function ProductsPage({
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Toplam Urun</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.products?.totalProducts || "Toplam Urun"}</CardTitle>
               <Package className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -126,7 +119,7 @@ export default async function ProductsPage({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Kategoriler</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.products?.categories || "Kategoriler"}</CardTitle>
               <Tag className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -135,7 +128,7 @@ export default async function ProductsPage({
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Dusuk Stok</CardTitle>
+              <CardTitle className="text-sm font-medium">{dictionary.products?.lowStock || "Dusuk Stok"}</CardTitle>
               <AlertTriangle className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
@@ -164,11 +157,11 @@ export default async function ProductsPage({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-16">Gorsel</TableHead>
-                  <TableHead>Urun Adi</TableHead>
-                  <TableHead>Kategori</TableHead>
-                  <TableHead>Fiyat</TableHead>
-                  <TableHead>Varyant</TableHead>
+                  <TableHead className="w-16">{dictionary.products?.image || "Gorsel"}</TableHead>
+                  <TableHead>{dictionary.products?.productName || "Urun Adi"}</TableHead>
+                  <TableHead>{dictionary.products?.category || "Kategori"}</TableHead>
+                  <TableHead>{dictionary.products?.price || "Fiyat"}</TableHead>
+                  <TableHead>{dictionary.products?.variant || "Varyant"}</TableHead>
                   <TableHead>{dictionary.common.status}</TableHead>
                   <TableHead className="text-right">
                     {dictionary.common.actions}
@@ -210,7 +203,7 @@ export default async function ProductsPage({
                       <TableCell className="font-medium">
                         {formatPrice(product.price)}
                       </TableCell>
-                      <TableCell>{product._count.variants} adet</TableCell>
+                      <TableCell>{product._count.variants} {dictionary.products?.pieces || "adet"}</TableCell>
                       <TableCell>
                         <Badge
                           variant={product.isActive ? "default" : "secondary"}

@@ -3,17 +3,11 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { UserRole } from "@/lib/types";
 import { getGroupById } from "@/lib/data/groups";
+import { prisma } from "@/lib/prisma";
+import { GroupStudentsManager } from "@/components/groups/group-students-manager";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import {
   ArrowLeft,
   Edit,
@@ -62,9 +56,18 @@ export default async function GroupDetailPage({
     notFound();
   }
 
+  const allStudents = await prisma.student.findMany({
+    where: { dealerId: group.dealerId, isActive: true },
+    select: { id: true, firstName: true, lastName: true, studentNumber: true },
+    orderBy: { firstName: "asc" },
+  });
+
+  const assignedStudentIds = group.students.map(
+    (sg: { student: { id: string } }) => sg.student.id
+  );
+
   type Schedule = (typeof group.schedules)[number];
   type TrainerGroup = (typeof group.trainers)[number];
-  type StudentGroup = (typeof group.students)[number];
 
   return (
     <div className="space-y-6">
@@ -221,40 +224,11 @@ export default async function GroupDetailPage({
         )}
       </div>
 
-      {group.students.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Ogrenciler ({group.students.length})</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Ogrenci No</TableHead>
-                  <TableHead>Ad Soyad</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {group.students.map((sg: StudentGroup) => (
-                  <TableRow key={sg.student.id}>
-                    <TableCell className="font-mono">
-                      {sg.student.studentNumber}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/${locale}/students/${sg.student.id}`}
-                        className="hover:underline"
-                      >
-                        {sg.student.firstName} {sg.student.lastName}
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      )}
+      <GroupStudentsManager
+        groupId={id}
+        allStudents={allStudents}
+        assignedStudentIds={assignedStudentIds}
+      />
     </div>
   );
 }

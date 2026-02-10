@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 const CACHE_TTL = 300;
 
 // Default dealer slug for main website
-const DEFAULT_DEALER_SLUG = process.env.DEFAULT_DEALER_SLUG || "demo-spor-kulubu";
+const DEFAULT_DEALER_SLUG = process.env.DEFAULT_DEALER_SLUG || "camlikspor";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);

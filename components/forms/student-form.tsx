@@ -168,7 +168,7 @@ export function StudentForm({
       toast.success(message);
       router.push(`/${locale}/students`);
     } else if (state.messageKey && !state.success) {
-      const message = dictionary.errors[state.messageKey] || state.message || state.messageKey;
+      const message = state.message || dictionary.errors[state.messageKey] || state.messageKey;
       toast.error(message);
     }
   }, [state, router, locale, dictionary]);

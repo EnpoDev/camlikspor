@@ -22,12 +22,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2, Plus, X, Package } from "lucide-react";
+import { Loader2, Plus, X, Package, Upload, Link } from "lucide-react";
 import {
   createProductAction,
   updateProductAction,
   type ProductFormState,
 } from "@/lib/actions/products";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Variant {
   id?: string;
@@ -91,6 +92,7 @@ export function ProductForm({
     return [];
   });
   const [imageInput, setImageInput] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const initialState: ProductFormState = {
     errors: {},
@@ -146,6 +148,38 @@ export function ProductForm({
 
   const removeImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          toast.error(data.error || "Yukleme hatasi");
+          continue;
+        }
+
+        setImages((prev) => [...prev, data.url]);
+      }
+    } catch {
+      toast.error("Dosya yuklenirken hata olustu");
+    } finally {
+      setIsUploading(false);
+      e.target.value = "";
+    }
   };
 
   const generateSlug = (name: string) => {
@@ -260,25 +294,73 @@ export function ProductForm({
       <Card>
         <CardHeader>
           <CardTitle>Gorseller</CardTitle>
-          <CardDescription>Urun gorsellerini ekleyin (URL)</CardDescription>
+          <CardDescription>Urun gorsellerini cihazdan yukleyin veya URL olarak ekleyin</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              placeholder="Gorsel URL'si"
-              value={imageInput}
-              onChange={(e) => setImageInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addImage();
-                }
-              }}
-            />
-            <Button type="button" variant="outline" onClick={addImage}>
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
+          <Tabs defaultValue="upload">
+            <TabsList>
+              <TabsTrigger value="upload" className="gap-2">
+                <Upload className="h-4 w-4" />
+                Cihazdan Yukle
+              </TabsTrigger>
+              <TabsTrigger value="url" className="gap-2">
+                <Link className="h-4 w-4" />
+                URL ile Ekle
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="upload" className="pt-4">
+              <label
+                className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
+                  isUploading
+                    ? "border-primary bg-primary/5"
+                    : "border-muted-foreground/25 hover:border-primary hover:bg-muted/50"
+                }`}
+              >
+                {isUploading ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                    <span className="text-sm text-muted-foreground">Yukleniyor...</span>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-2">
+                    <Upload className="h-8 w-8 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      Gorsel secmek icin tiklayin veya surukleyin
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      JPG, PNG, WebP, GIF (maks. 5MB)
+                    </span>
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  multiple
+                  className="hidden"
+                  onChange={handleFileUpload}
+                  disabled={isUploading}
+                />
+              </label>
+            </TabsContent>
+            <TabsContent value="url" className="pt-4">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Gorsel URL'si"
+                  value={imageInput}
+                  onChange={(e) => setImageInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addImage();
+                    }
+                  }}
+                />
+                <Button type="button" variant="outline" onClick={addImage}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </TabsContent>
+          </Tabs>
 
           {images.length > 0 && (
             <div className="flex flex-wrap gap-2">

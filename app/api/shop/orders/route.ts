@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate products and variants exist
-    const productIds = validatedData.items.map((item) => item.productId);
+    const uniqueProductIds = [...new Set(validatedData.items.map((item) => item.productId))];
     const products = await prisma.product.findMany({
       where: {
-        id: { in: productIds },
+        id: { in: uniqueProductIds },
         dealerId: dealer.id,
         isActive: true,
       },
@@ -59,9 +59,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (products.length !== productIds.length) {
+    if (products.length !== uniqueProductIds.length) {
+      const foundIds = new Set(products.map((p) => p.id));
+      const missingIds = uniqueProductIds.filter((id) => !foundIds.has(id));
+      console.error("Products not found:", { missingIds, dealerId: dealer.id, dealerSlug: validatedData.dealerSlug });
       return NextResponse.json(
-        { message: "Bazi urunler bulunamadi" },
+        { message: "Bazı ürünler bulunamadı veya artık mevcut değil. Lütfen sepetinizi temizleyip tekrar deneyin." },
         { status: 400 }
       );
     }

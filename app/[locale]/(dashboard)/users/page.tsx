@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Mail, MoreHorizontal, Edit } from "lucide-react";
+import { Plus, Mail, MoreHorizontal, Edit, Eye } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -42,18 +42,34 @@ export default async function UsersPage({ params }: UsersPageProps) {
     : i18n.defaultLocale;
   const dictionary = await getDictionary(locale);
 
-  const dealerId =
-    session?.user?.role === UserRole.SUPER_ADMIN
-      ? undefined
-      : session?.user?.dealerId || undefined;
+  const dealerId = session?.user?.dealerId || undefined;
+  const isSuperAdmin = session?.user?.role === UserRole.SUPER_ADMIN;
 
-  const users = await prisma.user.findMany({
-    where: dealerId ? { dealerId } : {},
-    include: {
-      dealer: { select: { name: true } },
-    },
-    orderBy: { createdAt: "desc" },
-  });
+  let users: Awaited<ReturnType<typeof prisma.user.findMany<{ include: { dealer: { select: { name: true } } }; orderBy: { createdAt: "desc" } }>>>;
+  if (isSuperAdmin) {
+    users = await prisma.user.findMany({
+      include: {
+        dealer: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } else if (dealerId) {
+    // DEALER_ADMIN: show users from own dealer + sub-dealers
+    const subDealerIds = await prisma.dealer.findMany({
+      where: { parentDealerId: dealerId },
+      select: { id: true },
+    });
+    const allDealerIds = [dealerId, ...subDealerIds.map((d) => d.id)];
+    users = await prisma.user.findMany({
+      where: { dealerId: { in: allDealerIds } },
+      include: {
+        dealer: { select: { name: true } },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+  } else {
+    users = [];
+  }
 
   type User = (typeof users)[number];
 
@@ -92,7 +108,7 @@ export default async function UsersPage({ params }: UsersPageProps) {
                   <TableHead>{dictionary.users.name}</TableHead>
                   <TableHead>{dictionary.users.email}</TableHead>
                   <TableHead>{dictionary.users.role}</TableHead>
-                  <TableHead>Bayi</TableHead>
+                  <TableHead>{dictionary.sidebar?.dealers || "Bayi"}</TableHead>
                   <TableHead>{dictionary.common.status}</TableHead>
                   <TableHead className="text-right">{dictionary.common.actions}</TableHead>
                 </TableRow>
@@ -128,6 +144,12 @@ export default async function UsersPage({ params }: UsersPageProps) {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link href={`/${locale}/users/${user.id}`}>
+                              <Eye className="mr-2 h-4 w-4" />
+                              {dictionary.common.view}
+                            </Link>
+                          </DropdownMenuItem>
                           <DropdownMenuItem asChild>
                             <Link href={`/${locale}/users/${user.id}/edit`}>
                               <Edit className="mr-2 h-4 w-4" />

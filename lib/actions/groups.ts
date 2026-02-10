@@ -52,7 +52,7 @@ export async function createGroupAction(
   }
 
   try {
-    await prisma.group.create({
+    const group = await prisma.group.create({
       data: {
         dealerId: session.user.dealerId,
         name: validatedFields.data.name,
@@ -63,6 +63,20 @@ export async function createGroupAction(
         maxCapacity: validatedFields.data.maxCapacity,
       },
     });
+
+    const trainerIds = formData.getAll("trainerIds") as string[];
+    const primaryTrainerId = formData.get("primaryTrainerId") as string;
+    const allTrainerIds = [...new Set([...trainerIds, ...(primaryTrainerId ? [primaryTrainerId] : [])])];
+
+    if (allTrainerIds.length > 0) {
+      await prisma.trainerGroup.createMany({
+        data: allTrainerIds.map((trainerId) => ({
+          trainerId,
+          groupId: group.id,
+          isPrimary: trainerId === primaryTrainerId,
+        })),
+      });
+    }
 
     revalidatePath("/[locale]/groups");
     return { message: "Grup basariyla eklendi", success: true };
@@ -115,6 +129,22 @@ export async function updateGroupAction(
       },
     });
 
+    const trainerIds = formData.getAll("trainerIds") as string[];
+    const primaryTrainerId = formData.get("primaryTrainerId") as string;
+    const allTrainerIds = [...new Set([...trainerIds, ...(primaryTrainerId ? [primaryTrainerId] : [])])];
+
+    await prisma.trainerGroup.deleteMany({ where: { groupId: id } });
+
+    if (allTrainerIds.length > 0) {
+      await prisma.trainerGroup.createMany({
+        data: allTrainerIds.map((trainerId) => ({
+          trainerId,
+          groupId: id,
+          isPrimary: trainerId === primaryTrainerId,
+        })),
+      });
+    }
+
     revalidatePath("/[locale]/groups");
     revalidatePath(`/[locale]/groups/${id}`);
     return { message: "Grup basariyla guncellendi", success: true };
@@ -153,6 +183,54 @@ export async function deleteGroupAction(id: string): Promise<{ success: boolean;
     return { message: "Grup silindi", success: true };
   } catch (error) {
     console.error("Delete group error:", error);
+    return { message: "Bir hata olustu", success: false };
+  }
+}
+
+export async function updateGroupStudentsAction(
+  _prevState: GroupFormState,
+  formData: FormData
+): Promise<GroupFormState> {
+  const session = await auth();
+
+  if (!session?.user?.dealerId) {
+    return { message: "Yetkilendirme hatasi", success: false };
+  }
+
+  const groupId = formData.get("groupId") as string;
+  const studentIds = formData.getAll("studentIds") as string[];
+
+  if (!groupId) {
+    return { message: "Grup bilgisi eksik", success: false };
+  }
+
+  try {
+    // Verify the group belongs to this dealer
+    const group = await prisma.group.findFirst({
+      where: { id: groupId, dealerId: session.user.dealerId },
+    });
+
+    if (!group) {
+      return { message: "Grup bulunamadi", success: false };
+    }
+
+    // Delete existing assignments and create new ones
+    await prisma.studentGroup.deleteMany({ where: { groupId } });
+
+    if (studentIds.length > 0) {
+      await prisma.studentGroup.createMany({
+        data: studentIds.map((studentId) => ({
+          studentId,
+          groupId,
+        })),
+      });
+    }
+
+    revalidatePath("/[locale]/groups");
+    revalidatePath(`/[locale]/groups/${groupId}`);
+    return { message: "Ogrenciler basariyla guncellendi", success: true };
+  } catch (error) {
+    console.error("Update group students error:", error);
     return { message: "Bir hata olustu", success: false };
   }
 }

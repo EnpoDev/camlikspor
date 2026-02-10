@@ -36,13 +36,27 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
     notFound();
   }
 
-  const dealers = isSuperAdmin
-    ? await prisma.dealer.findMany({
-        where: { isActive: true },
-        select: { id: true, name: true },
-        orderBy: { name: "asc" },
-      })
-    : [];
+  let dealers: { id: string; name: string }[] = [];
+
+  if (isSuperAdmin) {
+    dealers = await prisma.dealer.findMany({
+      where: { isActive: true },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+  } else if (dealerId) {
+    // DEALER_ADMIN: own dealer + sub-dealers
+    dealers = await prisma.dealer.findMany({
+      where: {
+        OR: [
+          { id: dealerId },
+          { parentDealerId: dealerId, isActive: true },
+        ],
+      },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -68,6 +82,7 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
         locale={locale}
         dictionary={dictionary}
         isSuperAdmin={isSuperAdmin}
+        currentDealerId={dealerId || undefined}
       />
     </div>
   );
