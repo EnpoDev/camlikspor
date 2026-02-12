@@ -1,6 +1,7 @@
 {
   "common": {
     "save": "Kaydet",
+    "update": "Güncelle",
     "cancel": "İptal",
     "delete": "Sil",
     "edit": "Düzenle",
