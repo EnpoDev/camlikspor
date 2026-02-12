@@ -86,7 +86,7 @@ export async function createStudentAction(
   if (!validatedFields.success) {
     const fieldErrors = validatedFields.error.flatten().fieldErrors;
     const firstErrorField = Object.keys(fieldErrors)[0];
-    const firstErrorMsg = firstErrorField ? fieldErrors[firstErrorField]?.[0] : undefined;
+    const firstErrorMsg = firstErrorField ? (fieldErrors as Record<string, string[] | undefined>)[firstErrorField]?.[0] : undefined;
     console.error("Student validation errors:", JSON.stringify(fieldErrors));
     return {
       errors: fieldErrors,
@@ -178,7 +178,7 @@ export async function updateStudentAction(
   if (!validatedFields.success) {
     const fieldErrors = validatedFields.error.flatten().fieldErrors;
     const firstErrorField = Object.keys(fieldErrors)[0];
-    const firstErrorMsg = firstErrorField ? fieldErrors[firstErrorField]?.[0] : undefined;
+    const firstErrorMsg = firstErrorField ? (fieldErrors as Record<string, string[] | undefined>)[firstErrorField]?.[0] : undefined;
     console.error("Student update validation errors:", JSON.stringify(fieldErrors));
     return {
       errors: fieldErrors,

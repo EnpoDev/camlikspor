@@ -1,6 +1,7 @@
 {
   "common": {
     "save": "Guardar",
+    "update": "Actualizar",
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "edit": "Editar",
