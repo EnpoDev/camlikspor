@@ -84,7 +84,11 @@
     "commissions": "Komisyonlar",
     "products": "Ürünler",
     "orders": "Siparişler",
-    "gallery": "Galeri"
+    "gallery": "Galeri",
+    "training": "Antrenman",
+    "trainingPlans": "Antrenman Planları",
+    "tacticalBoard": "Taktik Tahtası",
+    "trainingCalendar": "Antrenman Takvimi"
   },
   "header": {
     "profile": "Profil",
@@ -262,7 +266,27 @@
     "studentCount": "Öğrenci Sayısı",
     "maxCapacity": "Kapasite",
     "schedule": "Program",
-    "trainer": "Antrenör"
+    "trainer": "Antrenör",
+    "aiCoach": {
+      "title": "AI Koç",
+      "analyze": "Grubu Analiz Et",
+      "analyzing": "AI analiz ediyor...",
+      "strengths": "Güçlü Yönler",
+      "weaknesses": "Zayıf Yönler",
+      "recommendedExercises": "Önerilen Egzersizler",
+      "playerTactics": "Oyuncu Taktikleri",
+      "formationSuggestion": "Diziliş Önerisi",
+      "weeklyFocus": "Haftalık Odak Planı",
+      "suggestedPosition": "Önerilen Pozisyon",
+      "developmentFocus": "Gelişim Odağı",
+      "reason": "Gerekçe",
+      "noData": "Yeterli veri yok. Grupta öğrenci bulunmalıdır.",
+      "error": "AI analiz yapamadı. Lütfen tekrar deneyin.",
+      "targetSkill": "Hedef Beceri",
+      "duration": "Süre",
+      "studentName": "Öğrenci",
+      "day": "Gün"
+    }
   },
   "attendance": {
     "title": "Yoklamalar",
@@ -616,6 +640,117 @@
     "paid": "Ödendi",
     "pending": "Bekliyor",
     "cancelled": "İptal"
+  },
+  "training": {
+    "title": "Antrenman",
+    "plans": {
+      "title": "Antrenman Planları",
+      "addPlan": "Yeni Plan",
+      "editPlan": "Plan Düzenle",
+      "planList": "Plan Listesi",
+      "planDetail": "Plan Detayı",
+      "noPlan": "Henüz antrenman planı bulunmuyor",
+      "createFirst": "İlk antrenman planınızı oluşturun",
+      "date": "Tarih",
+      "duration": "Süre",
+      "minutes": "dakika",
+      "focusArea": "Odak Alanı",
+      "difficulty": "Zorluk",
+      "status": "Durum",
+      "exercises": "Egzersizler",
+      "addExercise": "Egzersiz Ekle",
+      "exerciseName": "Egzersiz Adı",
+      "exerciseDescription": "Egzersiz Açıklaması",
+      "equipment": "Ekipman",
+      "orderIndex": "Sıra",
+      "targetAge": "Hedef Yaş",
+      "ageMin": "Min Yaş",
+      "ageMax": "Max Yaş",
+      "focusAreas": {
+        "passing": "Pas",
+        "shooting": "Şut",
+        "defending": "Savunma",
+        "fitness": "Fiziksel",
+        "tactics": "Taktik",
+        "goalkeeper": "Kaleci",
+        "dribbling": "Dribling",
+        "warmup": "Isınma"
+      },
+      "difficulties": {
+        "BEGINNER": "Başlangıç",
+        "INTERMEDIATE": "Orta",
+        "ADVANCED": "İleri"
+      },
+      "statuses": {
+        "DRAFT": "Taslak",
+        "PUBLISHED": "Yayında",
+        "ARCHIVED": "Arşiv"
+      }
+    },
+    "tacticalBoard": {
+      "title": "Taktik Tahtası",
+      "addBoard": "Yeni Taktik",
+      "editBoard": "Taktik Düzenle",
+      "boardList": "Kayıtlı Taktikler",
+      "noBoards": "Henüz taktik kaydedilmemiş",
+      "createFirst": "İlk taktiğinizi oluşturun",
+      "formation": "Diziliş",
+      "formations": {
+        "4-4-2": "4-4-2",
+        "4-3-3": "4-3-3",
+        "3-5-2": "3-5-2",
+        "4-2-3-1": "4-2-3-1",
+        "4-1-4-1": "4-1-4-1",
+        "3-4-3": "3-4-3"
+      },
+      "tools": {
+        "select": "Seç",
+        "arrow": "Ok",
+        "line": "Çizgi",
+        "freeDraw": "Serbest Çizim",
+        "eraser": "Silgi",
+        "player": "Oyuncu"
+      },
+      "homeTeam": "Ev Sahibi",
+      "awayTeam": "Deplasman",
+      "clearBoard": "Tahtayı Temizle",
+      "saveTactic": "Taktiği Kaydet",
+      "aiSuggest": "AI Taktik Öner"
+    },
+    "calendar": {
+      "title": "Antrenman Takvimi",
+      "noSessions": "Bu tarih aralığında antrenman oturumu bulunmuyor",
+      "addSession": "Oturum Ekle",
+      "sessionStatus": {
+        "PLANNED": "Planlandı",
+        "COMPLETED": "Tamamlandı",
+        "CANCELLED": "İptal Edildi"
+      }
+    },
+    "ai": {
+      "generatePlan": "AI ile Plan Oluştur",
+      "generating": "AI plan oluşturuyor...",
+      "generated": "AI tarafından oluşturuldu",
+      "suggestTactic": "AI Taktik Öner",
+      "suggesting": "AI taktik öneriyor...",
+      "error": "AI yanıt oluşturamadı",
+      "prompt": "AI İstemi",
+      "playerCount": "Oyuncu Sayısı",
+      "ageGroup": "Yaş Grubu",
+      "level": "Seviye",
+      "focus": "Odak",
+      "durationLabel": "Süre (dk)",
+      "generate": "Oluştur",
+      "applyPlan": "Planı Uygula",
+      "applySuggestion": "Öneriyi Uygula"
+    },
+    "overview": {
+      "title": "Antrenman Genel Bakış",
+      "totalPlans": "Toplam Plan",
+      "activePlans": "Aktif Plan",
+      "totalSessions": "Toplam Oturum",
+      "tacticalBoards": "Taktik Tahtası"
+    }
   },
   "domains": {
     "title": "Domain Yönetimi",
