@@ -14,14 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Mail, MoreHorizontal, Edit, Eye } from "lucide-react";
+import { Plus, Mail } from "lucide-react";
 import Link from "next/link";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { UserActionsDropdown } from "@/components/users/user-actions-dropdown";
 
 interface UsersPageProps {
   params: Promise<{ locale: string }>;
@@ -137,27 +132,17 @@ export default async function UsersPage({ params }: UsersPageProps) {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link href={`/${locale}/users/${user.id}`}>
-                              <Eye className="mr-2 h-4 w-4" />
-                              {dictionary.common.view}
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link href={`/${locale}/users/${user.id}/edit`}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              {dictionary.common.edit}
-                            </Link>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <UserActionsDropdown
+                        userId={user.id}
+                        userName={user.name}
+                        locale={locale}
+                        currentUserId={session?.user?.id || ""}
+                        dictionary={{
+                          view: dictionary.common.view,
+                          edit: dictionary.common.edit,
+                          delete: dictionary.common.delete,
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

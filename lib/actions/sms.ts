@@ -39,8 +39,10 @@ export async function sendSmsAction(
 
   const dealerId = session.user.dealerId;
 
-  if (!dealerId && session.user.role !== UserRole.SUPER_ADMIN) {
-    return { success: false, message: "Yetkisiz işlem" };
+  if (!dealerId) {
+    return { success: false, message: session.user.role === UserRole.SUPER_ADMIN
+      ? "SMS göndermek için bir bayi seçmelisiniz"
+      : "Yetkisiz işlem" };
   }
 
   if (!recipients.length) {
@@ -77,7 +79,7 @@ export async function sendSmsAction(
       // Log failed attempt
       await prisma.smsMessage.create({
         data: {
-          dealerId: dealerId!,
+          dealerId: dealerId,
           recipients: JSON.stringify(recipients),
           recipientCount: recipients.length,
           message,
@@ -99,7 +101,7 @@ export async function sendSmsAction(
     // Log successful send
     await prisma.smsMessage.create({
       data: {
-        dealerId: dealerId!,
+        dealerId: dealerId,
         recipients: JSON.stringify(recipients),
         recipientCount: recipients.length,
         message,

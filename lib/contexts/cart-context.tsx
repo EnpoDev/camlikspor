@@ -45,8 +45,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem(CART_STORAGE_KEY);
     if (stored) {
       try {
-        const parsed = JSON.parse(stored) as CartState;
-        setCartState(parsed);
+        const parsed = JSON.parse(stored);
+        // Handle both old format (plain array) and new format (CartState object)
+        if (Array.isArray(parsed)) {
+          setCartState({ dealerSlug: null, items: parsed });
+        } else if (parsed && Array.isArray(parsed.items)) {
+          setCartState(parsed);
+        }
       } catch {
         // Invalid stored cart, ignore
       }
@@ -124,8 +129,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(CART_STORAGE_KEY);
   }, []);
 
-  const totalItems = cartState.items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = cartState.items.reduce(
+  const items = cartState.items || [];
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
@@ -133,7 +139,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   return (
     <CartContext.Provider
       value={{
-        items: cartState.items,
+        items,
         totalItems,
         totalPrice,
         addItem,

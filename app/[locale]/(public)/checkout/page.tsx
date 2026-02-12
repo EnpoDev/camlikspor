@@ -391,6 +391,11 @@ export default function CheckoutPage() {
                           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                           Sipariş Oluşturuluyor...
                         </>
+                      ) : !dealerSlug ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Yükleniyor...
+                        </>
                       ) : (
                         <>
                           <Lock className="mr-2 h-5 w-5" />
