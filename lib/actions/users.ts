@@ -225,14 +225,25 @@ export async function deleteUserAction(id: string): Promise<{ success: boolean; 
     return { message: "Yetkilendirme hatasi", success: false };
   }
 
+  if (session.user.id === id) {
+    return { message: "Kendinizi silemezsiniz", success: false };
+  }
+
   try {
-    await prisma.user.update({
-      where: { id },
-      data: { isActive: false, deletedAt: new Date() },
-    });
+    await prisma.$transaction([
+      // AuditLog has no onDelete: Cascade, so nullify the reference first
+      prisma.auditLog.updateMany({
+        where: { userId: id },
+        data: { userId: null },
+      }),
+      // Delete the user (sessions, accounts, permissions cascade automatically)
+      prisma.user.delete({
+        where: { id },
+      }),
+    ]);
 
     revalidatePath("/[locale]/users");
-    return { message: "Kullanici silindi", success: true };
+    return { message: "Kullanici basariyla kaldirildi", success: true };
   } catch (error) {
     console.error("Delete user error:", error);
     return { message: "Bir hata olustu", success: false };

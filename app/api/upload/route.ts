@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
     const filePath = path.join(uploadDir, fileName);
 
+    await mkdir(uploadDir, { recursive: true });
     await writeFile(filePath, buffer);
 
     const url = `/uploads/products/${fileName}`;

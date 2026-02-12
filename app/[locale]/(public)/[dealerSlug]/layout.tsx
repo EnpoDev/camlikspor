@@ -88,7 +88,6 @@ export default async function PublicLayout({
           socialYoutube={dealer.socialYoutube}
           dictionary={{
             shop: publicDict.shop || "Magaza",
-            gallery: publicDict.gallery || "Galeri",
             contact: publicDict.contact || "Iletisim",
             allRightsReserved: publicDict.allRightsReserved || "Tum haklari saklidir.",
             quickLinks: publicDict.quickLinks || "Hizli Baglantilar",

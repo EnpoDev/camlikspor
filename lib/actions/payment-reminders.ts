@@ -155,14 +155,16 @@ export async function sendOverdueReminders(): Promise<ReminderResult> {
 
   const dealerId = session.user.dealerId;
 
-  if (!dealerId && session.user.role !== UserRole.SUPER_ADMIN) {
-    return { success: false, message: "Yetkisiz işlem" };
+  if (!dealerId) {
+    return { success: false, message: session.user.role === UserRole.SUPER_ADMIN
+      ? "Hatırlatma göndermek için bir bayi seçmelisiniz"
+      : "Yetkisiz işlem" };
   }
 
   try {
     // Get dealer info for message
     const dealer = await prisma.dealer.findUnique({
-      where: { id: dealerId! },
+      where: { id: dealerId },
       select: { name: true, phone: true },
     });
 
@@ -170,7 +172,7 @@ export async function sendOverdueReminders(): Promise<ReminderResult> {
       return { success: false, message: "Bayi bulunamadı" };
     }
 
-    const overdueStudents = await getOverduePaymentsForReminder(dealerId!);
+    const overdueStudents = await getOverduePaymentsForReminder(dealerId);
 
     if (overdueStudents.length === 0) {
       return {
@@ -233,13 +235,15 @@ export async function sendUpcomingReminders(
 
   const dealerId = session.user.dealerId;
 
-  if (!dealerId && session.user.role !== UserRole.SUPER_ADMIN) {
-    return { success: false, message: "Yetkisiz işlem" };
+  if (!dealerId) {
+    return { success: false, message: session.user.role === UserRole.SUPER_ADMIN
+      ? "Hatırlatma göndermek için bir bayi seçmelisiniz"
+      : "Yetkisiz işlem" };
   }
 
   try {
     const dealer = await prisma.dealer.findUnique({
-      where: { id: dealerId! },
+      where: { id: dealerId },
       select: { name: true, phone: true },
     });
 
@@ -248,7 +252,7 @@ export async function sendUpcomingReminders(
     }
 
     const upcomingStudents = await getUpcomingPaymentsForReminder(
-      dealerId!,
+      dealerId,
       daysAhead
     );
 

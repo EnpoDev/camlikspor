@@ -36,10 +36,10 @@ export default async function UserDetailPage({
   const dictionary = await getDictionary(locale);
   const dateLocale = dateLocales[locale];
 
-  const dealerId =
-    session?.user?.role === UserRole.SUPER_ADMIN
-      ? undefined
-      : session?.user?.dealerId || undefined;
+  const isSuperAdmin = session?.user?.role === UserRole.SUPER_ADMIN;
+  const dealerId = isSuperAdmin
+    ? undefined
+    : session?.user?.dealerId || undefined;
 
   const user = await prisma.user.findUnique({
     where: { id },
@@ -49,8 +49,20 @@ export default async function UserDetailPage({
     },
   });
 
-  if (!user || (dealerId && user.dealerId !== dealerId)) {
+  if (!user) {
     notFound();
+  }
+
+  // DEALER_ADMIN: allow access to own dealer + sub-dealer users
+  if (!isSuperAdmin && dealerId) {
+    const subDealerIds = await prisma.dealer.findMany({
+      where: { parentDealerId: dealerId },
+      select: { id: true },
+    });
+    const allowedDealerIds = [dealerId, ...subDealerIds.map((d) => d.id)];
+    if (!user.dealerId || !allowedDealerIds.includes(user.dealerId)) {
+      notFound();
+    }
   }
 
   return (

@@ -77,9 +77,10 @@ export function ProductDetailClient({
   const [quantity, setQuantity] = useState(1);
 
   // Parse images
-  const images: string[] = product.images
-    ? JSON.parse(product.images)
-    : [];
+  const images: string[] = (() => {
+    if (!product.images) return [];
+    try { return JSON.parse(product.images); } catch { return []; }
+  })();
 
   // Get unique sizes and colors
   const sizes = [...new Set(product.variants.map((v) => v.size))];

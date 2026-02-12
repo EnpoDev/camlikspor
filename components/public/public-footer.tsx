@@ -27,7 +27,6 @@ interface PublicFooterProps {
   socialYoutube?: string | null;
   dictionary: {
     shop: string;
-    gallery: string;
     contact: string;
     allRightsReserved: string;
     quickLinks: string;
@@ -56,8 +55,7 @@ export function PublicFooter({
   const quickLinks = [
     { href: basePath, label: "Ana Sayfa" },
     { href: `${basePath}/shop`, label: "Mağaza" },
-    { href: `${basePath}/gallery`, label: "Galeri" },
-    { href: `${basePath}#contact`, label: "İletişim" },
+{ href: `${basePath}#contact`, label: "İletişim" },
   ];
 
   const shopLinks = [

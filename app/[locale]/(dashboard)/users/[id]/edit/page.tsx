@@ -32,8 +32,16 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
     notFound();
   }
 
-  if (!isSuperAdmin && user.dealerId !== dealerId) {
-    notFound();
+  // DEALER_ADMIN: allow access to own dealer + sub-dealer users
+  if (!isSuperAdmin && dealerId) {
+    const subDealerIds = await prisma.dealer.findMany({
+      where: { parentDealerId: dealerId },
+      select: { id: true },
+    });
+    const allowedDealerIds = [dealerId, ...subDealerIds.map((d) => d.id)];
+    if (!user.dealerId || !allowedDealerIds.includes(user.dealerId)) {
+      notFound();
+    }
   }
 
   let dealers: { id: string; name: string }[] = [];
