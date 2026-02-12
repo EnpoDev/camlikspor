@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -80,9 +81,18 @@ export function Header({
         </SheetContent>
       </Sheet>
 
-      <div className="flex-1">
+      <div className="flex-1 flex items-center gap-3">
+        <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-white border">
+          <Image
+            src="/logo.png"
+            alt="Çamlık Spor"
+            width={40}
+            height={40}
+            className="rounded-full object-contain"
+          />
+        </div>
         {user.dealerName && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm font-medium text-foreground">
             {user.dealerName}
           </span>
         )}

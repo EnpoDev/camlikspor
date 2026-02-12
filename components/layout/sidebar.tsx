@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -158,9 +159,21 @@ export function Sidebar({
 
   return (
     <aside className="hidden lg:flex flex-col w-64 border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
-      <div className="p-6 border-b border-sidebar-border">
-        <Link href={`/${locale}/dashboard`}>
-          <h1 className="text-xl font-bold text-sidebar-foreground">Futbol Okullari</h1>
+      <div className="p-4 border-b border-sidebar-border">
+        <Link href={`/${locale}/dashboard`} className="flex items-center gap-3">
+          <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white">
+            <Image
+              src="/logo.png"
+              alt="Çamlık Spor"
+              width={48}
+              height={48}
+              className="rounded-full object-contain"
+            />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-bold leading-tight text-sidebar-foreground">Ümraniye Çamlık</span>
+            <span className="text-xs text-sidebar-foreground/60">Spor Kulübü</span>
+          </div>
         </Link>
       </div>
       <nav className="flex-1 overflow-y-auto p-4 space-y-1">
