@@ -47,25 +47,29 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       title: dictionary.dashboard.totalStudents,
       value: stats.totalStudents.toString(),
       icon: Users,
-      color: "text-blue-500",
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800",
     },
     {
       title: dictionary.dashboard.totalTrainers,
       value: stats.totalTrainers.toString(),
       icon: Dumbbell,
-      color: "text-green-500",
+      color: "text-amber-600",
+      bgColor: "bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800",
     },
     {
       title: dictionary.dashboard.totalGroups,
       value: stats.totalGroups.toString(),
       icon: UsersRound,
-      color: "text-purple-500",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50 dark:bg-purple-950/50 border-purple-200 dark:border-purple-800",
     },
     {
       title: dictionary.dashboard.monthlyIncome,
       value: `${stats.monthlyIncome.toLocaleString(locale)} TL`,
       icon: Calculator,
-      color: "text-orange-500",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800",
     },
   ];
 
@@ -81,7 +85,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {statCards.map((stat: typeof statCards[number]) => (
-          <Card key={stat.title}>
+          <Card key={stat.title} className={stat.bgColor}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
               <stat.icon className={`h-5 w-5 ${stat.color}`} />
