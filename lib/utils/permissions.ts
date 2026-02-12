@@ -84,12 +84,25 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.SUB_DEALERS_DELETE,
     // Commissions
     Permission.COMMISSIONS_VIEW,
+    // Training
+    Permission.TRAINING_VIEW,
+    Permission.TRAINING_CREATE,
+    Permission.TRAINING_EDIT,
+    Permission.TRAINING_DELETE,
+    Permission.TACTICAL_BOARD_VIEW,
+    Permission.TACTICAL_BOARD_CREATE,
+    Permission.TACTICAL_BOARD_EDIT,
+    Permission.TACTICAL_BOARD_DELETE,
   ],
   [UserRole.TRAINER]: [
     Permission.ATTENDANCE_VIEW,
     Permission.ATTENDANCE_TAKE,
     Permission.STUDENTS_VIEW,
     Permission.GROUPS_VIEW,
+    Permission.TRAINING_VIEW,
+    Permission.TRAINING_CREATE,
+    Permission.TACTICAL_BOARD_VIEW,
+    Permission.TACTICAL_BOARD_CREATE,
   ],
 };
 
@@ -164,6 +177,32 @@ export const MENU_ITEMS: MenuItem[] = [
     labelKey: "sidebar.attendance",
     href: "/attendance",
     permission: Permission.ATTENDANCE_VIEW,
+  },
+  {
+    key: "training",
+    labelKey: "sidebar.training",
+    href: "/training",
+    permission: Permission.TRAINING_VIEW,
+    children: [
+      {
+        key: "training-plans",
+        labelKey: "sidebar.trainingPlans",
+        href: "/training/plans",
+        permission: Permission.TRAINING_VIEW,
+      },
+      {
+        key: "tactical-board",
+        labelKey: "sidebar.tacticalBoard",
+        href: "/training/tactical-board",
+        permission: Permission.TACTICAL_BOARD_VIEW,
+      },
+      {
+        key: "training-calendar",
+        labelKey: "sidebar.trainingCalendar",
+        href: "/training/calendar",
+        permission: Permission.TRAINING_VIEW,
+      },
+    ],
   },
   {
     key: "accounting",

@@ -22,6 +22,10 @@ import {
   ShoppingCart,
   Store,
   Coins,
+  ClipboardList,
+  BookOpen,
+  Target,
+  Calendar,
 } from "lucide-react";
 import { UserRole } from "@/lib/types";
 import {
@@ -49,6 +53,10 @@ const iconMap: Record<string, React.ElementType> = {
   orders: ShoppingCart,
   "sub-dealers": Store,
   commissions: Coins,
+  training: ClipboardList,
+  "training-plans": BookOpen,
+  "tactical-board": Target,
+  "training-calendar": Calendar,
 };
 
 interface SidebarProps {
@@ -91,8 +99,8 @@ function SidebarItem({
           className={cn(
             "flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             isActive
-              ? "bg-primary text-primary-foreground"
-              : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              ? "bg-sidebar-primary text-sidebar-primary-foreground"
+              : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
           )}
         >
           <div className="flex items-center gap-3">
@@ -129,8 +137,8 @@ function SidebarItem({
       className={cn(
         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
         isActive
-          ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground"
+          ? "bg-sidebar-primary text-sidebar-primary-foreground"
+          : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       )}
     >
       <Icon className="h-5 w-5" />
@@ -149,10 +157,10 @@ export function Sidebar({
   const menuItems = getAccessibleMenuItems(userPermissions, userRole);
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 border-r bg-card">
-      <div className="p-6 border-b">
+    <aside className="hidden lg:flex flex-col w-64 border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+      <div className="p-6 border-b border-sidebar-border">
         <Link href={`/${locale}/dashboard`}>
-          <h1 className="text-xl font-bold">Futbol Okullari</h1>
+          <h1 className="text-xl font-bold text-sidebar-foreground">Futbol Okullari</h1>
         </Link>
       </div>
       <nav className="flex-1 overflow-y-auto p-4 space-y-1">
