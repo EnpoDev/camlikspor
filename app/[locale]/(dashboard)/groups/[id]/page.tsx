@@ -5,6 +5,7 @@ import { UserRole } from "@/lib/types";
 import { getGroupById } from "@/lib/data/groups";
 import { prisma } from "@/lib/prisma";
 import { GroupStudentsManager } from "@/components/groups/group-students-manager";
+import { GroupAiCoach } from "@/components/groups/group-ai-coach";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -228,6 +229,12 @@ export default async function GroupDetailPage({
         groupId={id}
         allStudents={allStudents}
         assignedStudentIds={assignedStudentIds}
+      />
+
+      <GroupAiCoach
+        groupId={id}
+        locale={locale}
+        dictionary={{ aiCoach: (dictionary.groups as unknown as Record<string, Record<string, string>>).aiCoach || {} }}
       />
     </div>
   );
