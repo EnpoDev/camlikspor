@@ -16,10 +16,131 @@ import {
 } from "@/lib/actions/training";
 import Link from "next/link";
 
+const translations = {
+  tr: {
+    newTacticalBoard: "Yeni Taktik Tahtası",
+    saveTactic: "Taktiği Kaydet",
+    title: "Başlık",
+    description: "Açıklama",
+    saving: "Kaydediliyor...",
+    tools: {
+      select: "Seç",
+      arrow: "Ok",
+      line: "Çizgi",
+      freeDraw: "Serbest Çizim",
+      eraser: "Silgi",
+      clearBoard: "Tahtayı Temizle",
+      aiSuggest: "AI Taktik Öner",
+      suggesting: "AI taktik öneriyor...",
+      saveTactic: "Kaydet",
+      homeTeam: "Ev Sahibi",
+      awayTeam: "Deplasman",
+    },
+    ai: {
+      suggestTactic: "AI Taktik Öner",
+      suggesting: "AI taktik öneriyor...",
+      error: "AI yanıt oluşturamadı",
+      applySuggestion: "Öneriyi Uygula",
+      teamStrengths: "Takım Güçlü Yönleri",
+      teamWeaknesses: "Takım Zayıf Yönleri",
+      strengthsPlaceholder: "Hızlı kanatçılar, güçlü orta saha...",
+      weaknessesPlaceholder: "Zayıf hava savunması...",
+    },
+    tacticalBoard: {
+      formation: "Rakip Diziliş",
+      formations: {
+        "4-4-2": "4-4-2",
+        "4-3-3": "4-3-3",
+        "3-5-2": "3-5-2",
+        "4-2-3-1": "4-2-3-1",
+      },
+    },
+  },
+  en: {
+    newTacticalBoard: "New Tactical Board",
+    saveTactic: "Save Tactic",
+    title: "Title",
+    description: "Description",
+    saving: "Saving...",
+    tools: {
+      select: "Select",
+      arrow: "Arrow",
+      line: "Line",
+      freeDraw: "Free Draw",
+      eraser: "Eraser",
+      clearBoard: "Clear Board",
+      aiSuggest: "AI Suggest",
+      suggesting: "AI suggesting...",
+      saveTactic: "Save",
+      homeTeam: "Home Team",
+      awayTeam: "Away Team",
+    },
+    ai: {
+      suggestTactic: "AI Suggest Tactic",
+      suggesting: "AI is suggesting...",
+      error: "AI could not generate a response",
+      applySuggestion: "Apply Suggestion",
+      teamStrengths: "Team Strengths",
+      teamWeaknesses: "Team Weaknesses",
+      strengthsPlaceholder: "Fast wingers, strong midfield...",
+      weaknessesPlaceholder: "Weak aerial defense...",
+    },
+    tacticalBoard: {
+      formation: "Opponent Formation",
+      formations: {
+        "4-4-2": "4-4-2",
+        "4-3-3": "4-3-3",
+        "3-5-2": "3-5-2",
+        "4-2-3-1": "4-2-3-1",
+      },
+    },
+  },
+  es: {
+    newTacticalBoard: "Nuevo Tablero Táctico",
+    saveTactic: "Guardar Táctica",
+    title: "Título",
+    description: "Descripción",
+    saving: "Guardando...",
+    tools: {
+      select: "Seleccionar",
+      arrow: "Flecha",
+      line: "Línea",
+      freeDraw: "Dibujo Libre",
+      eraser: "Borrador",
+      clearBoard: "Limpiar Tablero",
+      aiSuggest: "IA Sugerir",
+      suggesting: "IA sugiriendo...",
+      saveTactic: "Guardar",
+      homeTeam: "Equipo Local",
+      awayTeam: "Equipo Visitante",
+    },
+    ai: {
+      suggestTactic: "IA Sugerir Táctica",
+      suggesting: "IA está sugiriendo...",
+      error: "IA no pudo generar una respuesta",
+      applySuggestion: "Aplicar Sugerencia",
+      teamStrengths: "Fortalezas del Equipo",
+      teamWeaknesses: "Debilidades del Equipo",
+      strengthsPlaceholder: "Extremos rápidos, mediocampo fuerte...",
+      weaknessesPlaceholder: "Defensa aérea débil...",
+    },
+    tacticalBoard: {
+      formation: "Formación Rival",
+      formations: {
+        "4-4-2": "4-4-2",
+        "4-3-3": "4-3-3",
+        "3-5-2": "3-5-2",
+        "4-2-3-1": "4-2-3-1",
+      },
+    },
+  },
+};
+
 export default function NewTacticalBoardPage() {
   const params = useParams();
   const router = useRouter();
-  const locale = params.locale as string;
+  const locale = (params.locale as string) || "tr";
+  const t = translations[locale as keyof typeof translations] || translations.tr;
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,6 +154,19 @@ export default function NewTacticalBoardPage() {
   const handleSaveCanvas = (data: string, f: string) => {
     setBoardData(data);
     setFormation(f);
+  };
+
+  const handleFormSubmit = (formData: FormData) => {
+    // Get latest canvas data before submit
+    const getCanvasData = (window as unknown as Record<string, unknown>).__getTacticalBoardData as
+      | (() => { data: string; formation: string })
+      | undefined;
+    if (getCanvasData) {
+      const { data, formation: f } = getCanvasData();
+      formData.set("boardData", data);
+      formData.set("formation", f);
+    }
+    formAction(formData);
   };
 
   const handleAiSuggest = () => {
@@ -58,39 +192,6 @@ export default function NewTacticalBoardPage() {
     }
   }, [state.success, router, locale]);
 
-  // Dictionary fallbacks for client component
-  const toolDict = {
-    select: "Select",
-    arrow: "Arrow",
-    line: "Line",
-    freeDraw: "Free Draw",
-    eraser: "Eraser",
-    clearBoard: "Clear",
-    aiSuggest: "AI Suggest",
-    suggesting: "AI suggesting...",
-    saveTactic: "Save",
-    homeTeam: "Home Team",
-    awayTeam: "Away Team",
-  };
-
-  const aiDict = {
-    ai: {
-      suggestTactic: "AI Suggest Tactic",
-      suggesting: "AI is suggesting...",
-      error: "AI could not generate a response",
-      applySuggestion: "Apply Suggestion",
-    },
-    tacticalBoard: {
-      formation: "Opponent Formation",
-      formations: {
-        "4-4-2": "4-4-2",
-        "4-3-3": "4-3-3",
-        "3-5-2": "3-5-2",
-        "4-2-3-1": "4-2-3-1",
-      },
-    },
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -99,7 +200,7 @@ export default function NewTacticalBoardPage() {
             <ArrowLeft className="h-4 w-4" />
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold tracking-tight">New Tactical Board</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t.newTacticalBoard}</h1>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -109,7 +210,7 @@ export default function NewTacticalBoardPage() {
             onSave={handleSaveCanvas}
             onAiSuggest={handleAiSuggest}
             isAiLoading={isAiLoading}
-            dictionary={toolDict}
+            dictionary={t.tools}
           />
 
           {/* Save form */}
@@ -117,15 +218,13 @@ export default function NewTacticalBoardPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Save className="h-5 w-5" />
-                Save Tactic
+                {t.saveTactic}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form action={formAction} className="space-y-4">
-                <input type="hidden" name="boardData" value={boardData} />
-                <input type="hidden" name="formation" value={formation} />
+              <form action={handleFormSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">{t.title}</Label>
                   <Input
                     id="title"
                     name="title"
@@ -135,7 +234,7 @@ export default function NewTacticalBoardPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t.description}</Label>
                   <Textarea
                     id="description"
                     name="description"
@@ -150,7 +249,7 @@ export default function NewTacticalBoardPage() {
                   </p>
                 )}
                 <Button type="submit" disabled={isPending || !title}>
-                  {isPending ? "Saving..." : "Save Tactic"}
+                  {isPending ? t.saving : t.saveTactic}
                 </Button>
               </form>
             </CardContent>
@@ -160,7 +259,10 @@ export default function NewTacticalBoardPage() {
         <div>
           <AiTacticsPanel
             locale={locale}
-            dictionary={aiDict}
+            dictionary={{
+              ai: t.ai,
+              tacticalBoard: t.tacticalBoard,
+            }}
             onApply={handleAiApply}
           />
         </div>

@@ -743,7 +743,11 @@
       "durationLabel": "Duration (min)",
       "generate": "Generate",
       "applyPlan": "Apply Plan",
-      "applySuggestion": "Apply Suggestion"
+      "applySuggestion": "Apply Suggestion",
+      "teamStrengths": "Team Strengths",
+      "teamWeaknesses": "Team Weaknesses",
+      "strengthsPlaceholder": "Fast wingers, strong midfield...",
+      "weaknessesPlaceholder": "Weak aerial defense..."
     },
     "overview": {
       "title": "Training Overview",

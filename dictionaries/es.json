@@ -743,7 +743,11 @@
       "durationLabel": "Duracion (min)",
       "generate": "Generar",
       "applyPlan": "Aplicar Plan",
-      "applySuggestion": "Aplicar Sugerencia"
+      "applySuggestion": "Aplicar Sugerencia",
+      "teamStrengths": "Fortalezas del Equipo",
+      "teamWeaknesses": "Debilidades del Equipo",
+      "strengthsPlaceholder": "Extremos rapidos, mediocampo fuerte...",
+      "weaknessesPlaceholder": "Defensa aerea debil..."
     },
     "overview": {
       "title": "Vista General de Entrenamiento",
