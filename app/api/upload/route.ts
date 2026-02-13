@@ -10,7 +10,7 @@ const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 export async function POST(request: NextRequest) {
   const session = await auth();
 
-  if (!session?.user?.dealerId) {
+  if (!session?.user) {
     return NextResponse.json({ error: "Yetkisiz" }, { status: 401 });
   }
 
@@ -41,13 +41,15 @@ export async function POST(request: NextRequest) {
 
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const fileName = `${randomUUID()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
+    const folder = (formData.get("folder") as string) || "products";
+    const safeFolder = folder.replace(/[^a-zA-Z0-9-_]/g, "");
+    const uploadDir = path.join(process.cwd(), "public", "uploads", safeFolder);
     const filePath = path.join(uploadDir, fileName);
 
     await mkdir(uploadDir, { recursive: true });
     await writeFile(filePath, buffer);
 
-    const url = `/uploads/products/${fileName}`;
+    const url = `/uploads/${safeFolder}/${fileName}`;
 
     return NextResponse.json({ url });
   } catch (error) {

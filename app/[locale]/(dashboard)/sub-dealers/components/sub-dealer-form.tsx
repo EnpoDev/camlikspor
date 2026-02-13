@@ -3,12 +3,14 @@
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { Upload, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import {
   createSubDealerAction,
@@ -49,6 +51,50 @@ export function SubDealerForm({ locale, dictionary, initialData }: SubDealerForm
   const [canCreateOwnProducts, setCanCreateOwnProducts] = useState(
     initialData?.canCreateOwnProducts ?? true
   );
+  const [logoUrl, setLogoUrl] = useState(initialData?.logo || "");
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
+      toast.error("Desteklenmeyen dosya tipi. JPG, PNG, WebP veya GIF yukleyin.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Dosya boyutu 5MB'dan buyuk olamaz");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "logos");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Yukleme hatasi");
+      }
+
+      const { url } = await response.json();
+      setLogoUrl(url);
+      toast.success("Logo yuklendi");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Logo yuklenemedi");
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   const [state, formAction, isPending] = useActionState<
     SubDealerFormState,
@@ -58,6 +104,7 @@ export function SubDealerForm({ locale, dictionary, initialData }: SubDealerForm
       hasSubmitted.current = true;
       formData.set("inheritParentProducts", String(inheritParentProducts));
       formData.set("canCreateOwnProducts", String(canCreateOwnProducts));
+      formData.set("logo", logoUrl);
       if (isEditing) {
         return updateSubDealerAction(initialData.id, prevState, formData);
       }
@@ -173,8 +220,51 @@ export function SubDealerForm({ locale, dictionary, initialData }: SubDealerForm
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="logo">{dict.subDealers?.logo || "Logo URL"}</Label>
-              <Input id="logo" name="logo" defaultValue={initialData?.logo || ""} placeholder="https://..." />
+              <Label>{dict.subDealers?.logo || "Logo"}</Label>
+              {logoUrl && (
+                <div className="relative w-20 h-20 border rounded-lg overflow-hidden group">
+                  <Image
+                    src={logoUrl}
+                    alt="Logo"
+                    fill
+                    className="object-contain"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setLogoUrl("")}
+                    className="absolute top-0.5 right-0.5 bg-destructive text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Input
+                  value={logoUrl}
+                  onChange={(e) => setLogoUrl(e.target.value)}
+                  placeholder="https://... veya dosya yukleyin"
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isUploading}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {isUploading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Upload className="h-4 w-4" />
+                  )}
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
