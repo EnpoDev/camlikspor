@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     await mkdir(uploadDir, { recursive: true });
     await writeFile(filePath, buffer);
 
-    const url = `/uploads/${safeFolder}/${fileName}`;
+    const url = `/api/uploads/${safeFolder}/${fileName}`;
 
     return NextResponse.json({ url });
   } catch (error) {
