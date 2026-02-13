@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Edit, Clock, Target, Sparkles } from "lucide-react";
 import { getTrainingPlanById } from "@/lib/data/training";
 import { ExerciseList } from "@/components/training/exercise-list";
+import { TrainingPlanActions } from "@/components/training/training-plan-actions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -46,12 +47,19 @@ export default async function TrainingPlanDetailPage({ params }: PlanDetailPageP
             <p className="text-muted-foreground">{dictionary.training.plans.planDetail}</p>
           </div>
         </div>
-        <Link href={`/${locale}/training/plans/${id}/edit`}>
-          <Button variant="outline">
-            <Edit className="mr-2 h-4 w-4" />
-            {dictionary.common.edit}
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href={`/${locale}/training/plans/${id}/edit`}>
+            <Button variant="outline">
+              <Edit className="mr-2 h-4 w-4" />
+              {dictionary.common.edit}
+            </Button>
+          </Link>
+          <TrainingPlanActions
+            planId={id}
+            planTitle={plan.title}
+            locale={locale}
+          />
+        </div>
       </div>
 
       {/* Plan Info */}

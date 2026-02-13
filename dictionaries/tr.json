@@ -721,6 +721,7 @@
       "title": "Antrenman Takvimi",
       "noSessions": "Bu tarih aralığında antrenman oturumu bulunmuyor",
       "addSession": "Oturum Ekle",
+      "trainingPlan": "Antrenman Planı",
       "sessionStatus": {
         "PLANNED": "Planlandı",
         "COMPLETED": "Tamamlandı",

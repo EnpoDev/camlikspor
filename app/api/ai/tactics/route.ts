@@ -90,7 +90,11 @@ Rules:
       );
     }
 
-    const tactics = JSON.parse(textContent.text);
+    let jsonText = textContent.text.trim();
+    if (jsonText.startsWith("```")) {
+      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, "").replace(/\n?```\s*$/, "");
+    }
+    const tactics = JSON.parse(jsonText);
     return NextResponse.json(tactics);
   } catch (error) {
     console.error("AI tactics generation error:", error);

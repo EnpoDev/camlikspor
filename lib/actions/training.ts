@@ -65,16 +65,16 @@ export async function createTrainingPlanAction(
 
   const rawData = {
     title: formData.get("title") as string,
-    description: formData.get("description") as string,
-    date: formData.get("date") as string,
+    description: (formData.get("description") as string) || undefined,
+    date: (formData.get("date") as string) || undefined,
     duration: parseInt(formData.get("duration") as string) || 90,
-    focusArea: formData.get("focusArea") as string,
-    difficulty: formData.get("difficulty") as string || "INTERMEDIATE",
-    status: formData.get("status") as string || "DRAFT",
+    focusArea: (formData.get("focusArea") as string) || undefined,
+    difficulty: (formData.get("difficulty") as string) || "INTERMEDIATE",
+    status: (formData.get("status") as string) || "DRAFT",
     targetAgeMin: formData.get("targetAgeMin") ? parseInt(formData.get("targetAgeMin") as string) : undefined,
     targetAgeMax: formData.get("targetAgeMax") ? parseInt(formData.get("targetAgeMax") as string) : undefined,
     aiGenerated: formData.get("aiGenerated") === "true",
-    aiPrompt: formData.get("aiPrompt") as string,
+    aiPrompt: (formData.get("aiPrompt") as string) || undefined,
   };
 
   const validatedFields = trainingPlanSchema.safeParse(rawData);
@@ -125,12 +125,12 @@ export async function updateTrainingPlanAction(
 
   const rawData = {
     title: formData.get("title") as string,
-    description: formData.get("description") as string,
-    date: formData.get("date") as string,
+    description: (formData.get("description") as string) || undefined,
+    date: (formData.get("date") as string) || undefined,
     duration: parseInt(formData.get("duration") as string) || 90,
-    focusArea: formData.get("focusArea") as string,
-    difficulty: formData.get("difficulty") as string || "INTERMEDIATE",
-    status: formData.get("status") as string || "DRAFT",
+    focusArea: (formData.get("focusArea") as string) || undefined,
+    difficulty: (formData.get("difficulty") as string) || "INTERMEDIATE",
+    status: (formData.get("status") as string) || "DRAFT",
     targetAgeMin: formData.get("targetAgeMin") ? parseInt(formData.get("targetAgeMin") as string) : undefined,
     targetAgeMax: formData.get("targetAgeMax") ? parseInt(formData.get("targetAgeMax") as string) : undefined,
   };
@@ -281,11 +281,11 @@ export async function createTacticalBoardAction(
 
   const rawData = {
     title: formData.get("title") as string,
-    description: formData.get("description") as string,
-    formation: formData.get("formation") as string,
-    boardData: formData.get("boardData") as string,
+    description: (formData.get("description") as string) || undefined,
+    formation: (formData.get("formation") as string) || undefined,
+    boardData: (formData.get("boardData") as string) || undefined,
     aiGenerated: formData.get("aiGenerated") === "true",
-    aiPrompt: formData.get("aiPrompt") as string,
+    aiPrompt: (formData.get("aiPrompt") as string) || undefined,
   };
 
   const validatedFields = tacticalBoardSchema.safeParse(rawData);
@@ -331,9 +331,9 @@ export async function updateTacticalBoardAction(
 
   const rawData = {
     title: formData.get("title") as string,
-    description: formData.get("description") as string,
-    formation: formData.get("formation") as string,
-    boardData: formData.get("boardData") as string,
+    description: (formData.get("description") as string) || undefined,
+    formation: (formData.get("formation") as string) || undefined,
+    boardData: (formData.get("boardData") as string) || undefined,
   };
 
   const validatedFields = tacticalBoardSchema.safeParse(rawData);

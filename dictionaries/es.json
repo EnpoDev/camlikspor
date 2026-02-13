@@ -721,6 +721,7 @@
       "title": "Calendario de Entrenamiento",
       "noSessions": "No hay sesiones de entrenamiento en este rango de fechas",
       "addSession": "Agregar Sesion",
+      "trainingPlan": "Plan de Entrenamiento",
       "sessionStatus": {
         "PLANNED": "Planificado",
         "COMPLETED": "Completado",

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Target, Sparkles } from "lucide-react";
 import { getTacticalBoards } from "@/lib/data/training";
+import { TacticalBoardActions } from "@/components/training/tactical-board-actions";
 import Link from "next/link";
 
 interface TacticalBoardPageProps {
@@ -70,26 +71,35 @@ export default async function TacticalBoardListPage({ params, searchParams }: Ta
         <>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {boards.map((board) => (
-              <Link key={board.id} href={`/${locale}/training/tactical-board/${board.id}`}>
-                <Card className="hover:shadow-md transition-shadow h-full">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base line-clamp-1">{board.title}</CardTitle>
+              <Card key={board.id} className="hover:shadow-md transition-shadow h-full">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <Link href={`/${locale}/training/tactical-board/${board.id}`} className="flex-1 min-w-0">
+                      <CardTitle className="text-base line-clamp-1 hover:underline">{board.title}</CardTitle>
+                    </Link>
+                    <div className="flex items-center gap-1 shrink-0">
                       {board.aiGenerated && (
                         <Badge variant="secondary" className="text-xs">
                           <Sparkles className="mr-1 h-3 w-3" />
                           AI
                         </Badge>
                       )}
+                      <TacticalBoardActions
+                        boardId={board.id}
+                        boardTitle={board.title}
+                        locale={locale}
+                      />
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Link href={`/${locale}/training/tactical-board/${board.id}`}>
                     {board.description && (
                       <p className="text-sm text-muted-foreground line-clamp-2">
                         {board.description}
                       </p>
                     )}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-2">
                       {board.formation && (
                         <Badge variant="outline" className="text-xs">
                           {board.formation}
@@ -99,9 +109,9 @@ export default async function TacticalBoardListPage({ params, searchParams }: Ta
                         {new Date(board.createdAt).toLocaleDateString(locale)}
                       </span>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                  </Link>
+                </CardContent>
+              </Card>
             ))}
           </div>
 

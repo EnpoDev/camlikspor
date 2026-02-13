@@ -86,8 +86,9 @@ export function GroupAiCoach({ groupId, locale, dictionary }: GroupAiCoachProps)
 
       const data = await response.json();
       setResult(data);
-    } catch {
-      setError(t.error);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      setError(msg || t.error);
     } finally {
       setIsLoading(false);
     }

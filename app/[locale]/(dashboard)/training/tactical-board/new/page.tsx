@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useActionState } from "react";
+import { useState, useEffect, useActionState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,9 +52,11 @@ export default function NewTacticalBoardPage() {
     setIsAiLoading(false);
   };
 
-  if (state.success) {
-    router.push(`/${locale}/training/tactical-board`);
-  }
+  useEffect(() => {
+    if (state.success) {
+      router.push(`/${locale}/training/tactical-board`);
+    }
+  }, [state.success, router, locale]);
 
   // Dictionary fallbacks for client component
   const toolDict = {

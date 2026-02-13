@@ -67,13 +67,15 @@ export function AiTrainingGenerator({
       });
 
       if (!response.ok) {
-        throw new Error("AI plan oluşturulamadı");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "AI plan oluşturulamadı");
       }
 
       const plan = await response.json();
       setGeneratedPlan(plan);
-    } catch {
-      setError(dictionary.ai.error || "AI could not generate a response");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      setError(msg || dictionary.ai.error || "AI could not generate a response");
     } finally {
       setIsLoading(false);
     }

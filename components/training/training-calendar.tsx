@@ -4,7 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ClipboardList } from "lucide-react";
+import Link from "next/link";
 
 interface TrainingSessionItem {
   id: string;
@@ -23,8 +24,20 @@ interface TrainingSessionItem {
   };
 }
 
+interface TrainingPlanItem {
+  id: string;
+  title: string;
+  date: Date;
+  focusArea: string | null;
+  duration: number;
+  status: string;
+  difficulty: string;
+  _count: { sessions: number };
+}
+
 interface TrainingCalendarProps {
   sessions: TrainingSessionItem[];
+  plans?: TrainingPlanItem[];
   dictionary: {
     calendar: Record<string, unknown>;
     plans: Record<string, unknown>;
@@ -38,7 +51,7 @@ const STATUS_COLORS: Record<string, string> = {
   CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
 };
 
-export function TrainingCalendar({ sessions, dictionary, locale }: TrainingCalendarProps) {
+export function TrainingCalendar({ sessions, plans = [], dictionary, locale }: TrainingCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const year = currentDate.getFullYear();
@@ -69,6 +82,13 @@ export function TrainingCalendar({ sessions, dictionary, locale }: TrainingCalen
   const getSessionsForDay = (day: number) => {
     return sessions.filter((s) => {
       const d = new Date(s.date);
+      return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+    });
+  };
+
+  const getPlansForDay = (day: number) => {
+    return plans.filter((p) => {
+      const d = new Date(p.date);
       return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
     });
   };
@@ -112,6 +132,7 @@ export function TrainingCalendar({ sessions, dictionary, locale }: TrainingCalen
         {Array.from({ length: daysInMonth }).map((_, i) => {
           const day = i + 1;
           const daySessions = getSessionsForDay(day);
+          const dayPlans = getPlansForDay(day);
           return (
             <Card
               key={day}
@@ -122,6 +143,17 @@ export function TrainingCalendar({ sessions, dictionary, locale }: TrainingCalen
                   {day}
                 </div>
                 <div className="mt-1 space-y-0.5">
+                  {dayPlans.map((plan) => (
+                    <Link key={`plan-${plan.id}`} href={`/${locale}/training/plans/${plan.id}`}>
+                      <Badge
+                        variant="secondary"
+                        className="block truncate text-[10px] px-1 py-0 bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 cursor-pointer hover:opacity-80"
+                      >
+                        <ClipboardList className="inline mr-0.5 h-2.5 w-2.5" />
+                        {plan.title}
+                      </Badge>
+                    </Link>
+                  ))}
                   {daySessions.map((session) => (
                     <Badge
                       key={session.id}
@@ -140,6 +172,10 @@ export function TrainingCalendar({ sessions, dictionary, locale }: TrainingCalen
 
       {/* Status Legend */}
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1">
+          <div className="h-2 w-2 rounded-full bg-purple-100 dark:bg-purple-900" />
+          <span>{(dictionary.calendar?.trainingPlan as string) || "Antrenman Planı"}</span>
+        </div>
         {Object.entries(sessionStatus).map(([key, label]) => (
           <div key={key} className="flex items-center gap-1">
             <div className={`h-2 w-2 rounded-full ${STATUS_COLORS[key]?.split(" ")[0] || "bg-gray-300"}`} />
