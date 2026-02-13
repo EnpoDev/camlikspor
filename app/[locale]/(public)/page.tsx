@@ -116,9 +116,7 @@ export default async function HomePage({ params }: HomePageProps) {
             muted
             playsInline
             preload="none"
-            loading="lazy"
             className="absolute inset-0 w-full h-full object-cover blur-sm"
-            style={{ willChange: 'transform' }}
           >
             <source src="/videos/hero-bg.mp4" type="video/mp4" />
           </video>
