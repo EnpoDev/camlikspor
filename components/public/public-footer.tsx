@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   Facebook,
@@ -121,8 +122,13 @@ export function PublicFooter({
           <div className="lg:col-span-1 space-y-6">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 flex items-center justify-center text-white font-bold text-xl">
-                  {dealerName.charAt(0)}
+                <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white overflow-hidden">
+                  <Image
+                    src="/logo.png"
+                    alt={dealerName}
+                    fill
+                    className="object-contain p-0.5"
+                  />
                 </div>
                 <span className="text-xl font-bold">{dealerName}</span>
               </div>

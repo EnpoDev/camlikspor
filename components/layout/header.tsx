@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User, Globe, Menu } from "lucide-react";
+import { LogOut, User, Globe, Menu, KeyRound } from "lucide-react";
 import { i18n, localeNames, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -80,9 +81,18 @@ export function Header({
         </SheetContent>
       </Sheet>
 
-      <div className="flex-1">
+      <div className="flex-1 flex items-center gap-3">
+        <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-white border">
+          <Image
+            src="/logo.png"
+            alt="Çamlık Spor"
+            width={40}
+            height={40}
+            className="rounded-full object-contain"
+          />
+        </div>
         {user.dealerName && (
-          <span className="text-sm text-muted-foreground">
+          <span className="text-sm font-medium text-foreground">
             {user.dealerName}
           </span>
         )}
@@ -128,9 +138,15 @@ export function Header({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/${locale}/dashboard/profile`}>
+              <Link href={`/${locale}/settings/profile`}>
                 <User className="mr-2 h-4 w-4" />
                 <span>{dictionary.header.profile}</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/settings/password`}>
+                <KeyRound className="mr-2 h-4 w-4" />
+                <span>{dictionary.settings.changePassword}</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

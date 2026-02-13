@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Building2, Package, ShoppingCart, Users } from "lucide-react";
+import { SubDealerActions } from "./components/sub-dealer-actions";
 
 interface Props {
   params: Promise<{ locale: Locale }>;
@@ -181,11 +182,11 @@ export default async function SubDealersPage({ params, searchParams }: Props) {
                     <TableCell>{dealer._count.products}</TableCell>
                     <TableCell>{dealer._count.orders}</TableCell>
                     <TableCell>
-                      <Link href={`/${locale}/sub-dealers/${dealer.id}`}>
-                        <Button variant="ghost" size="sm">
-                          {dict.common?.view || "Görüntüle"}
-                        </Button>
-                      </Link>
+                      <SubDealerActions
+                        subDealerId={dealer.id}
+                        subDealerName={dealer.name}
+                        locale={locale}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

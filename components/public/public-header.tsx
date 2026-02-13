@@ -121,20 +121,14 @@ export function PublicHeader({
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
             <Link href={basePath} className="flex items-center gap-3 group">
-              {dealerLogo ? (
-                <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-md group-hover:shadow-lg transition-shadow">
-                  <Image
-                    src={dealerLogo}
-                    alt={dealerName}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-              ) : (
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold text-xl shadow-md group-hover:shadow-lg transition-shadow">
-                  {dealerName.charAt(0)}
-                </div>
-              )}
+              <div className="relative w-16 h-16 flex-shrink-0 rounded-full bg-white shadow-md group-hover:shadow-lg transition-shadow overflow-hidden">
+                <Image
+                  src={dealerLogo || "/logo.png"}
+                  alt={dealerName}
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <div className="hidden sm:block">
                 <span className="font-bold text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">
                   {dealerName}
