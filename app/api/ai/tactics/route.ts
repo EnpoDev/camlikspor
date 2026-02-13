@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import Anthropic from "@anthropic-ai/sdk";
 
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.dealerId) {
@@ -91,8 +94,9 @@ Rules:
     return NextResponse.json(tactics);
   } catch (error) {
     console.error("AI tactics generation error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Bilinmeyen hata";
     return NextResponse.json(
-      { message: "AI taktik olusturulamadi" },
+      { message: `AI taktik olusturulamadi: ${errorMessage}` },
       { status: 500 }
     );
   }
