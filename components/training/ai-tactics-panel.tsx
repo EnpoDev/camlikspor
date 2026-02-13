@@ -105,20 +105,20 @@ export function AiTacticsPanel({ locale, dictionary, onApply }: AiTacticsPanelPr
         </div>
 
         <div className="space-y-2">
-          <Label>Team Strengths</Label>
+          <Label>{dictionary.ai.teamStrengths || "Team Strengths"}</Label>
           <Input
             value={teamStrengths}
             onChange={(e) => setTeamStrengths(e.target.value)}
-            placeholder="Fast wingers, strong midfield..."
+            placeholder={dictionary.ai.strengthsPlaceholder || "Fast wingers, strong midfield..."}
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Team Weaknesses</Label>
+          <Label>{dictionary.ai.teamWeaknesses || "Team Weaknesses"}</Label>
           <Textarea
             value={teamWeaknesses}
             onChange={(e) => setTeamWeaknesses(e.target.value)}
-            placeholder="Weak aerial defense..."
+            placeholder={dictionary.ai.weaknessesPlaceholder || "Weak aerial defense..."}
             rows={2}
           />
         </div>

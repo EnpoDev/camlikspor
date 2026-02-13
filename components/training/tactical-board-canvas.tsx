@@ -17,7 +17,6 @@ import {
   Eraser,
   Trash2,
   Sparkles,
-  Save,
 } from "lucide-react";
 
 type Tool = "select" | "arrow" | "line" | "freeDraw" | "eraser";
@@ -427,11 +426,20 @@ export function TacticalBoardCanvas({
     }
   };
 
-  // Expose applyAiSuggestion for parent
+  // Expose functions for parent
   useEffect(() => {
     (window as unknown as Record<string, unknown>).__applyTacticalSuggestion = applyAiSuggestion;
+    (window as unknown as Record<string, unknown>).__getTacticalBoardData = () => {
+      const data = JSON.stringify({
+        homePlayers: players,
+        awayPlayers: awayPlayers,
+        drawings: drawings,
+      });
+      return { data, formation };
+    };
     return () => {
       delete (window as unknown as Record<string, unknown>).__applyTacticalSuggestion;
+      delete (window as unknown as Record<string, unknown>).__getTacticalBoardData;
     };
   });
 
@@ -496,16 +504,10 @@ export function TacticalBoardCanvas({
               : dictionary.aiSuggest || "AI Suggest"}
           </Button>
         )}
-        {onSave && (
-          <Button size="sm" onClick={handleSave}>
-            <Save className="mr-2 h-4 w-4" />
-            {dictionary.saveTactic || "Save"}
-          </Button>
-        )}
       </div>
 
       {/* Canvas */}
-      <div className="relative overflow-hidden rounded-lg border shadow-lg">
+      <div className="relative overflow-hidden rounded-lg border shadow-lg max-w-4xl mx-auto">
         <canvas
           ref={canvasRef}
           width={800}

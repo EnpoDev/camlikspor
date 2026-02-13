@@ -101,28 +101,40 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Football Club Focus */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900">
-        {/* Background Image Overlay */}
-        {dealer.heroImage && (
-          <div className="absolute inset-0">
-            <Image
-              src={dealer.heroImage}
-              alt={dealer.name || "Futbol Okulu"}
-              fill
-              className="object-cover opacity-30"
-              priority
-            />
-          </div>
-        )}
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-slate-950">
+        {/* Animated Gradient Background - Fallback for mobile and until video loads */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 animate-gradient" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-emerald-900/50 to-emerald-700 opacity-60 animate-gradient-reverse" />
+        </div>
 
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        {/* Video Background - Only on desktop, lazy loaded */}
+        <div className="hidden lg:block absolute inset-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="none"
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover blur-sm"
+            style={{ willChange: 'transform' }}
+          >
+            <source src="/videos/hero-bg.mp4" type="video/mp4" />
+          </video>
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-emerald-900/70" />
+        </div>
+
+        {/* Animated Background Elements - Visible on mobile */}
+        <div className="absolute inset-0 overflow-hidden lg:opacity-0">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-700" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600/25 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
@@ -233,22 +245,15 @@ export default async function HomePage({ params }: HomePageProps) {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                {galleryImages.slice(0, 4).map((image, index) => (
-                  <div key={image.id} className={`relative rounded-2xl overflow-hidden shadow-lg ${index === 0 ? 'col-span-2 h-48' : 'h-32'}`}>
-                    <Image
-                      src={image.url}
-                      alt={image.title || "Galeri"}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                ))}
-                {galleryImages.length === 0 && (
-                  <div className="col-span-2 h-64 bg-gradient-to-br from-emerald-100 to-emerald-200 dark:from-emerald-900 dark:to-emerald-800 rounded-2xl flex items-center justify-center">
-                    <Trophy className="h-16 w-16 text-emerald-600/50" />
-                  </div>
-                )}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <Image
+                  src="/images/about-hero.png"
+                  alt="Futbol antrenmanı yapan çocuklar"
+                  width={600}
+                  height={400}
+                  className="object-cover w-full hover:scale-105 transition-transform duration-500"
+                  priority
+                />
               </div>
             </div>
           </div>
@@ -347,27 +352,6 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </section>
       )}
-
-      {/* CTA Section - Registration Focus */}
-      <section className="py-20 bg-gradient-to-r from-emerald-600 to-emerald-700">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto text-center">
-            <Trophy className="h-16 w-16 text-yellow-400 mx-auto mb-6" />
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Çocuğunuzun Futbol Yolculuğu Burada Başlıyor
-            </h2>
-            <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
-              Profesyonel eğitim kadromuz ve modern tesislerimizle çocuğunuzun yeteneklerini keşfetmesine yardımcı oluyoruz.
-            </p>
-            <Link href={`/${locale}#contact`}>
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-6">
-                <GraduationCap className="mr-2 h-5 w-5" />
-                Hemen Kayıt Ol
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* Shop Preview Section - Secondary */}
       {products.length > 0 && (

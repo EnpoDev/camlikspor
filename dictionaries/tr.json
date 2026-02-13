@@ -743,7 +743,11 @@
       "durationLabel": "Süre (dk)",
       "generate": "Oluştur",
       "applyPlan": "Planı Uygula",
-      "applySuggestion": "Öneriyi Uygula"
+      "applySuggestion": "Öneriyi Uygula",
+      "teamStrengths": "Takım Güçlü Yönleri",
+      "teamWeaknesses": "Takım Zayıf Yönleri",
+      "strengthsPlaceholder": "Hızlı kanatçılar, güçlü orta saha...",
+      "weaknessesPlaceholder": "Zayıf hava savunması..."
     },
     "overview": {
       "title": "Antrenman Genel Bakış",

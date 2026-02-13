@@ -138,7 +138,11 @@ export async function getTrainingPlansForCalendar(
   return prisma.trainingPlan.findMany({
     where: {
       dealerId,
-      date: { gte: dateFrom, lte: dateTo },
+      date: {
+        not: null,
+        gte: dateFrom,
+        lte: dateTo,
+      },
     },
     select: {
       id: true,
