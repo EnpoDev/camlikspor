@@ -3,6 +3,9 @@ import { auth } from "@/lib/auth";
 import Anthropic from "@anthropic-ai/sdk";
 import { getGroupAiContext } from "@/lib/data/groups";
 
+export const maxDuration = 60;
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.dealerId) {
@@ -140,8 +143,9 @@ Rules:
     return NextResponse.json(result);
   } catch (error) {
     console.error("AI group coach error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Bilinmeyen hata";
     return NextResponse.json(
-      { message: "AI analiz yapilamadi" },
+      { message: `AI analiz yapilamadi: ${errorMessage}` },
       { status: 500 }
     );
   }
