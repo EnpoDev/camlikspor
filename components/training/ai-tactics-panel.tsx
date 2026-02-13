@@ -63,13 +63,15 @@ export function AiTacticsPanel({ locale, dictionary, onApply }: AiTacticsPanelPr
       });
 
       if (!response.ok) {
-        throw new Error("AI tactic suggestion failed");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || "AI tactic suggestion failed");
       }
 
       const data = await response.json();
       setSuggestion(data);
-    } catch {
-      setError(dictionary.ai.error || "AI could not generate a response");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "";
+      setError(msg || dictionary.ai.error || "AI could not generate a response");
     } finally {
       setIsLoading(false);
     }

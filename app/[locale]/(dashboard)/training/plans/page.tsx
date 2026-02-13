@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Clock, Target } from "lucide-react";
 import { getTrainingPlans } from "@/lib/data/training";
+import { TrainingPlanActions } from "@/components/training/training-plan-actions";
 import Link from "next/link";
 
 interface PlansPageProps {
@@ -85,23 +86,32 @@ export default async function TrainingPlansPage({ params, searchParams }: PlansP
         <>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {plans.map((plan) => (
-              <Link key={plan.id} href={`/${locale}/training/plans/${plan.id}`}>
-                <Card className="hover:shadow-md transition-shadow h-full">
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-base line-clamp-1">{plan.title}</CardTitle>
+              <Card key={plan.id} className="hover:shadow-md transition-shadow h-full">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <Link href={`/${locale}/training/plans/${plan.id}`} className="flex-1 min-w-0">
+                      <CardTitle className="text-base line-clamp-1 hover:underline">{plan.title}</CardTitle>
+                    </Link>
+                    <div className="flex items-center gap-1 shrink-0">
                       <Badge variant={STATUS_VARIANTS[plan.status] || "secondary"}>
                         {statuses[plan.status] || plan.status}
                       </Badge>
+                      <TrainingPlanActions
+                        planId={plan.id}
+                        planTitle={plan.title}
+                        locale={locale}
+                      />
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Link href={`/${locale}/training/plans/${plan.id}`}>
                     {plan.description && (
                       <p className="text-sm text-muted-foreground line-clamp-2">
                         {plan.description}
                       </p>
                     )}
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mt-2">
                       {plan.focusArea && (
                         <Badge variant="outline" className="text-xs">
                           {focusAreas[plan.focusArea] || plan.focusArea}
@@ -121,9 +131,9 @@ export default async function TrainingPlansPage({ params, searchParams }: PlansP
                         <Badge variant="secondary" className="text-[10px]">AI</Badge>
                       )}
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                  </Link>
+                </CardContent>
+              </Card>
             ))}
           </div>
 

@@ -130,6 +130,30 @@ export async function getTrainingSessions(
   });
 }
 
+export async function getTrainingPlansForCalendar(
+  dealerId: string,
+  dateFrom: Date,
+  dateTo: Date
+) {
+  return prisma.trainingPlan.findMany({
+    where: {
+      dealerId,
+      date: { gte: dateFrom, lte: dateTo },
+    },
+    select: {
+      id: true,
+      title: true,
+      date: true,
+      focusArea: true,
+      duration: true,
+      status: true,
+      difficulty: true,
+      _count: { select: { sessions: true } },
+    },
+    orderBy: { date: "asc" },
+  });
+}
+
 export async function getTrainingStats(dealerId: string) {
   const [totalPlans, activePlans, totalSessions, totalBoards] = await Promise.all([
     prisma.trainingPlan.count({ where: { dealerId } }),
