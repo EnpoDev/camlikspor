@@ -127,16 +127,16 @@ export default async function HomePage({ params }: HomePageProps) {
         {/* Grid Pattern Overlay */}
         <div className="absolute inset-0 z-20 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
-        <div className="container mx-auto px-4 relative z-30">
+        <div className="container mx-auto px-6 md:px-4 relative z-30">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
-              <Trophy className="h-4 w-4 text-yellow-400" />
-              <span className="text-white/90 text-sm font-medium">Profesyonel Futbol Eğitimi ve Ekipmanları</span>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-3 md:px-4 py-1.5 md:py-2 mb-6 md:mb-8">
+              <Trophy className="h-3 w-3 md:h-4 md:w-4 text-yellow-400 shrink-0" />
+              <span className="text-white/90 text-xs md:text-sm font-medium">Profesyonel Futbol Eğitimi ve Ekipmanları</span>
             </div>
 
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight px-2">
               {dealer.heroTitle || (
                 <>
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-yellow-400">{dealer.name}</span>
@@ -147,7 +147,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed px-4">
               {dealer.heroSubtitle || "Profesyonel eğitmenler eşliğinde, modern tesislerde çocuğunuzun futbol yeteneğini keşfedin!"}
             </p>
 
