@@ -99,11 +99,11 @@ export function Header({
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Language Switcher */}
+      <div className="flex items-center gap-2 md:gap-4">
+        {/* Language Switcher - Hidden on mobile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="hidden sm:flex">
               <Globe className="h-4 w-4" />
               <span className="sr-only">{dictionary.header.language}</span>
             </Button>
@@ -122,9 +122,9 @@ export function Header({
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-              <Avatar className="h-10 w-10">
-                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+            <Button variant="ghost" className="relative h-9 w-9 md:h-10 md:w-10 rounded-full">
+              <Avatar className="h-9 w-9 md:h-10 md:w-10">
+                <AvatarFallback className="text-xs md:text-sm">{getInitials(user.name)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
