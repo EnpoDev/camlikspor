@@ -15,16 +15,17 @@ import {
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
-interface CashRegisterPageProps {
-  params: Promise<{ locale: string }>;
-}
-
-export default function CashRegisterPage({ params }: CashRegisterPageProps) {
+export default function CashRegisterPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleAddTransaction = () => {
-    toast.info("İşlem ekleme formu yakında eklenecek");
+    toast.success("İşlem ekleme formu yakında eklenecek");
     setIsSheetOpen(false);
+  };
+
+  const handleButtonClick = () => {
+    console.log("Button clicked!");
+    setIsSheetOpen(true);
   };
 
   return (
@@ -40,7 +41,10 @@ export default function CashRegisterPage({ params }: CashRegisterPageProps) {
         </div>
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-            <Button className="w-full sm:w-auto">
+            <Button
+              className="w-full sm:w-auto relative z-10"
+              onClick={handleButtonClick}
+            >
               <Plus className="mr-2 h-4 w-4" />
               İşlem Ekle
             </Button>
