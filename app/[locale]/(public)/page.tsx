@@ -101,15 +101,15 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Football Club Focus */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-slate-950">
-        {/* Animated Gradient Background - Fallback for mobile and until video loads */}
-        <div className="absolute inset-0">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900">
+        {/* Animated Gradient Background - Always visible */}
+        <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-emerald-800 to-slate-900 animate-gradient" />
           <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-emerald-900/50 to-emerald-700 opacity-60 animate-gradient-reverse" />
         </div>
 
         {/* Video Background - Only on desktop, lazy loaded */}
-        <div className="hidden lg:block absolute inset-0">
+        <div className="hidden lg:block absolute inset-0 z-10">
           <video
             autoPlay
             loop
@@ -124,17 +124,17 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-emerald-900/70" />
         </div>
 
-        {/* Animated Background Elements - Visible on mobile */}
-        <div className="absolute inset-0 overflow-hidden lg:opacity-0">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden z-10 lg:hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl animate-pulse" />
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-700" />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600/25 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         {/* Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        <div className="absolute inset-0 z-20 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-30">
           <div className="max-w-4xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
