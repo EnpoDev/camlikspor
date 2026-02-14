@@ -4,13 +4,14 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetFooter,
+} from "@/components/ui/sheet";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -19,11 +20,11 @@ interface CashRegisterPageProps {
 }
 
 export default function CashRegisterPage({ params }: CashRegisterPageProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleAddTransaction = () => {
     toast.info("İşlem ekleme formu yakında eklenecek");
-    setIsDialogOpen(false);
+    setIsSheetOpen(false);
   };
 
   return (
@@ -37,35 +38,35 @@ export default function CashRegisterPage({ params }: CashRegisterPageProps) {
             Tüm Şubeler
           </p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
             <Button className="w-full sm:w-auto">
               <Plus className="mr-2 h-4 w-4" />
               İşlem Ekle
             </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Yeni İşlem Ekle</DialogTitle>
-              <DialogDescription>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-full sm:max-w-md">
+            <SheetHeader>
+              <SheetTitle>Yeni İşlem Ekle</SheetTitle>
+              <SheetDescription>
                 Kasa işlemi eklemek için formu doldurun.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="py-4">
+              </SheetDescription>
+            </SheetHeader>
+            <div className="py-6">
               <p className="text-center text-muted-foreground">
                 İşlem ekleme formu yakında eklenecek...
               </p>
             </div>
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+            <SheetFooter className="flex flex-col sm:flex-row gap-2">
+              <Button variant="outline" onClick={() => setIsSheetOpen(false)} className="w-full sm:w-auto">
                 İptal
               </Button>
-              <Button onClick={handleAddTransaction}>
+              <Button onClick={handleAddTransaction} className="w-full sm:w-auto">
                 Kaydet
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
