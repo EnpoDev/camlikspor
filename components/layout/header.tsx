@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, User, Globe, Menu, KeyRound } from "lucide-react";
 import { i18n, localeNames, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar } from "./sidebar";
 import { UserRole } from "@/lib/types";
 
@@ -72,6 +72,9 @@ export function Header({
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64 overflow-hidden">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Navigation Menu</SheetTitle>
+          </SheetHeader>
           <Sidebar
             locale={locale}
             userRole={userRole}

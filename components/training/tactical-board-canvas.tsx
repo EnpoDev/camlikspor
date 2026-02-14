@@ -315,6 +315,19 @@ export function TacticalBoardCanvas({
     };
   };
 
+  const getTouchPos = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { x: 0, y: 0 };
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = 800 / rect.width;
+    const scaleY = 540 / rect.height;
+    const touch = e.touches[0] || e.changedTouches[0];
+    return {
+      x: (touch.clientX - rect.left) * scaleX,
+      y: (touch.clientY - rect.top) * scaleY,
+    };
+  };
+
   const findPlayer = (x: number, y: number) => {
     for (let i = 0; i < players.length; i++) {
       const p = players[i];
@@ -387,6 +400,80 @@ export function TacticalBoardCanvas({
   };
 
   const handleMouseUp = () => {
+    if (draggedPlayer) {
+      setDraggedPlayer(null);
+    } else if (isDrawing && currentDrawing.length >= 4) {
+      const newDrawing: DrawingLine = {
+        id: Date.now().toString(),
+        points: currentDrawing,
+        type: currentTool as "arrow" | "line" | "freeDraw",
+        color: "#ffff00",
+      };
+      setDrawings((prev) => [...prev, newDrawing]);
+    }
+    setIsDrawing(false);
+    setCurrentDrawing([]);
+    setStartPoint(null);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+
+    if (currentTool === "select") {
+      const player = findPlayer(pos.x, pos.y);
+      if (player) {
+        setDraggedPlayer(player);
+      }
+    } else if (currentTool === "eraser") {
+      const threshold = 20;
+      setDrawings((prev) =>
+        prev.filter((d) => {
+          for (let i = 0; i < d.points.length; i += 2) {
+            if (Math.sqrt((d.points[i] - pos.x) ** 2 + (d.points[i + 1] - pos.y) ** 2) < threshold) {
+              return false;
+            }
+          }
+          return true;
+        })
+      );
+    } else {
+      setIsDrawing(true);
+      setStartPoint(pos);
+      setCurrentDrawing([pos.x, pos.y]);
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
+    const pos = getTouchPos(e);
+
+    if (draggedPlayer) {
+      const { team, index } = draggedPlayer;
+      if (team === "home") {
+        setPlayers((prev) => {
+          const updated = [...prev];
+          updated[index] = { ...updated[index], x: pos.x, y: pos.y };
+          return updated;
+        });
+      } else {
+        setAwayPlayers((prev) => {
+          const updated = [...prev];
+          updated[index] = { ...updated[index], x: pos.x, y: pos.y };
+          return updated;
+        });
+      }
+    } else if (isDrawing) {
+      if (currentTool === "freeDraw") {
+        setCurrentDrawing((prev) => [...prev, pos.x, pos.y]);
+      } else if (startPoint) {
+        setCurrentDrawing([startPoint.x, startPoint.y, pos.x, pos.y]);
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
     if (draggedPlayer) {
       setDraggedPlayer(null);
     } else if (isDrawing && currentDrawing.length >= 4) {
@@ -513,11 +600,14 @@ export function TacticalBoardCanvas({
           width={800}
           height={540}
           className="w-full cursor-crosshair"
-          style={{ aspectRatio: "800/540" }}
+          style={{ aspectRatio: "800/540", touchAction: "none" }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         />
       </div>
 
