@@ -162,7 +162,7 @@ export function Sidebar({
   return (
     <aside className={cn(
       "flex flex-col w-64 border-sidebar-border bg-sidebar text-sidebar-foreground",
-      isMobile ? "border-0" : "hidden lg:flex border-r"
+      isMobile ? "h-full border-0" : "hidden lg:flex border-r"
     )}>
       <div className="p-4 border-b border-sidebar-border">
         <Link href={`/${locale}/dashboard`} className="flex items-center gap-3">

@@ -71,7 +71,7 @@ export function Header({
             <span className="sr-only">Toggle menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64">
+        <SheetContent side="left" className="p-0 w-64 overflow-hidden">
           <Sidebar
             locale={locale}
             userRole={userRole}
