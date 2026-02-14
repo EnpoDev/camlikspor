@@ -65,6 +65,7 @@ interface SidebarProps {
   userRole: UserRole;
   userPermissions: string[];
   dictionary: Dictionary["sidebar"];
+  isMobile?: boolean;
 }
 
 function SidebarItem({
@@ -153,12 +154,16 @@ export function Sidebar({
   userRole,
   userPermissions,
   dictionary,
+  isMobile = false,
 }: SidebarProps) {
   const pathname = usePathname();
   const menuItems = getAccessibleMenuItems(userPermissions, userRole);
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+    <aside className={cn(
+      "flex flex-col w-64 border-sidebar-border bg-sidebar text-sidebar-foreground",
+      isMobile ? "border-0" : "hidden lg:flex border-r"
+    )}>
       <div className="p-4 border-b border-sidebar-border">
         <Link href={`/${locale}/dashboard`} className="flex items-center gap-3">
           <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white">

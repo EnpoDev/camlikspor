@@ -77,6 +77,7 @@ export function Header({
             userRole={userRole}
             userPermissions={userPermissions}
             dictionary={dictionary.sidebar}
+            isMobile={true}
           />
         </SheetContent>
       </Sheet>
