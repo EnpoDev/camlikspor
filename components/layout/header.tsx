@@ -63,10 +63,10 @@ export function Header({
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center gap-2 md:gap-4 border-b bg-background px-3 md:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden">
+          <Button variant="outline" size="icon" className="lg:hidden shrink-0">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
@@ -82,8 +82,8 @@ export function Header({
         </SheetContent>
       </Sheet>
 
-      <div className="flex-1 flex items-center gap-3">
-        <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-white border">
+      <div className="flex-1 flex items-center gap-2 md:gap-3 min-w-0">
+        <div className="relative h-8 w-8 md:h-10 md:w-10 shrink-0 rounded-full bg-white border">
           <Image
             src="/logo.png"
             alt="Çamlık Spor"
@@ -93,17 +93,17 @@ export function Header({
           />
         </div>
         {user.dealerName && (
-          <span className="text-sm font-medium text-foreground">
+          <span className="text-xs md:text-sm font-medium text-foreground truncate hidden sm:block">
             {user.dealerName}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-4">
-        {/* Language Switcher */}
+      <div className="flex items-center gap-1 md:gap-4 shrink-0">
+        {/* Language Switcher - Hidden on mobile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="hidden md:flex shrink-0">
               <Globe className="h-4 w-4" />
               <span className="sr-only">{dictionary.header.language}</span>
             </Button>
@@ -122,9 +122,9 @@ export function Header({
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full shrink-0 p-0">
               <Avatar className="h-10 w-10">
-                <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                <AvatarFallback className="text-sm bg-primary/10">{getInitials(user.name)}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
