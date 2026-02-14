@@ -108,27 +108,20 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="absolute inset-0 bg-gradient-to-tr from-slate-900 via-emerald-900/50 to-emerald-700 opacity-60 animate-gradient-reverse" />
         </div>
 
-        {/* Video Background - Only on desktop, lazy loaded */}
-        <div className="hidden lg:block absolute inset-0 z-10">
+        {/* Video Background - Mobile and Desktop */}
+        <div className="absolute inset-0 z-10">
           <video
             autoPlay
             loop
             muted
             playsInline
-            preload="none"
+            preload="metadata"
             className="absolute inset-0 w-full h-full object-cover blur-sm"
           >
             <source src="/videos/hero-bg.mp4" type="video/mp4" />
           </video>
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-emerald-900/70" />
-        </div>
-
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden z-10 lg:hidden">
-          <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-700" />
-          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-emerald-600/25 rounded-full blur-3xl animate-pulse delay-1000" />
         </div>
 
         {/* Grid Pattern Overlay */}
