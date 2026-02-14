@@ -280,7 +280,7 @@ export function PublicHeader({
         {/* Mobile Navigation */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isMobileMenuOpen ? "max-h-96 border-t" : "max-h-0"
+            isMobileMenuOpen ? "max-h-[32rem] border-t" : "max-h-0"
           }`}
         >
           <nav className="container mx-auto px-4 py-4 space-y-1">
@@ -298,6 +298,31 @@ export function PublicHeader({
                 </Link>
               );
             })}
+
+            {/* Mobile Links */}
+            <div className="pt-4 mt-4 border-t space-y-2">
+              <Link
+                href={`/${locale}/login`}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <User className="h-5 w-5" />
+                Giriş Yap / Kayıt Ol
+              </Link>
+              <Link
+                href={`${basePath}/favorites`}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <Heart className="h-5 w-5" />
+                Favorilerim
+                {totalFavorites > 0 && (
+                  <Badge className="ml-auto h-5 px-2 bg-red-500 hover:bg-red-500 text-[10px]">
+                    {totalFavorites}
+                  </Badge>
+                )}
+              </Link>
+            </div>
 
             {/* Mobile Contact Info */}
             <div className="pt-4 mt-4 border-t space-y-3">
