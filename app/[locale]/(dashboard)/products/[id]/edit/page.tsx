@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { getProductById, getCategories } from "@/lib/data/products";
-import { ProductForm } from "../../components/product-form";
+import { ProductForm } from "../../components/product-form-lazy";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
