@@ -22,12 +22,16 @@ export function ContactSection({
   contactAddress,
   dictionary,
 }: ContactSectionProps) {
+  // Hardcoded contact information
+  const hardcodedPhone = "0532 241 24 31";
+  const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
+
   const contactItems = [
     {
       icon: Phone,
       label: dictionary.phoneLabel,
-      value: contactPhone,
-      href: contactPhone ? `tel:${contactPhone}` : undefined,
+      value: hardcodedPhone,
+      href: `tel:${hardcodedPhone}`,
     },
     {
       icon: Mail,
@@ -38,10 +42,8 @@ export function ContactSection({
     {
       icon: MapPin,
       label: dictionary.addressLabel,
-      value: contactAddress,
-      href: contactAddress
-        ? `https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`
-        : undefined,
+      value: hardcodedAddress,
+      href: `https://maps.google.com/?q=${encodeURIComponent(hardcodedAddress)}`,
     },
     {
       icon: Clock,
@@ -97,16 +99,14 @@ export function ContactSection({
         </div>
 
         {/* Map Embed (optional - placeholder) */}
-        {contactAddress && (
-          <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
-            <div className="aspect-video w-full bg-muted flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <MapPin className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Harita icin Google Maps entegrasyonu eklenebilir</p>
-              </div>
+        <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
+          <div className="aspect-video w-full bg-muted flex items-center justify-center">
+            <div className="text-center text-muted-foreground">
+              <MapPin className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Harita icin Google Maps entegrasyonu eklenebilir</p>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
