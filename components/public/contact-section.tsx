@@ -24,6 +24,7 @@ export function ContactSection({
 }: ContactSectionProps) {
   // Hardcoded contact information
   const hardcodedPhone = "0532 241 24 31";
+  const hardcodedEmail = "info@camliksk.com";
   const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
 
   const contactItems = [
@@ -36,8 +37,8 @@ export function ContactSection({
     {
       icon: Mail,
       label: dictionary.emailLabel,
-      value: contactEmail,
-      href: contactEmail ? `mailto:${contactEmail}` : undefined,
+      value: hardcodedEmail,
+      href: `mailto:${hardcodedEmail}`,
     },
     {
       icon: MapPin,

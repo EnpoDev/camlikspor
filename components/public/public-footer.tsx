@@ -52,6 +52,7 @@ export function PublicFooter({
 }: PublicFooterProps) {
   // Hardcoded contact information
   const hardcodedPhone = "0532 241 24 31";
+  const hardcodedEmail = "info@camliksk.com";
   const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
 
   // Build paths based on whether we're using root paths or dealer-specific paths
@@ -199,22 +200,20 @@ export function PublicFooter({
                     </div>
                   </a>
                 </li>
-                {contactEmail && (
-                  <li>
-                    <a
-                      href={`mailto:${contactEmail}`}
-                      className="group flex items-start gap-3 text-sm"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                        <Mail className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <span className="text-slate-400 text-xs block">E-posta</span>
-                        <span className="text-white font-medium">{contactEmail}</span>
-                      </div>
-                    </a>
-                  </li>
-                )}
+                <li>
+                  <a
+                    href={`mailto:${hardcodedEmail}`}
+                    className="group flex items-start gap-3 text-sm"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
+                      <Mail className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-xs block">E-posta</span>
+                      <span className="text-white font-medium">{hardcodedEmail}</span>
+                    </div>
+                  </a>
+                </li>
                 <li>
                   <a
                     href={`https://maps.google.com/?q=${encodeURIComponent(hardcodedAddress)}`}
