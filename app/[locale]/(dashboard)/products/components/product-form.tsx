@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { useFormLoading } from "@/lib/hooks/use-form-loading";
 import {
   Select,
   SelectContent,
@@ -124,6 +125,9 @@ export function ProductForm({
     },
     initialState
   );
+
+  // Show global loading overlay when form is submitting
+  useFormLoading(isPending);
 
   const addVariant = () => {
     setVariants([...variants, { size: "", color: "", stock: 0, sku: "" }]);

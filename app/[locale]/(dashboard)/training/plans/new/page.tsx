@@ -1,7 +1,7 @@
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { TrainingPlanForm } from "@/components/forms/training-plan-form";
-import { AiTrainingGenerator } from "@/components/training/ai-training-generator";
+import { AiTrainingGenerator } from "@/components/training/ai-training-generator-lazy";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
