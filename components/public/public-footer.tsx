@@ -50,6 +50,10 @@ export function PublicFooter({
   dictionary,
   useRootPaths = false,
 }: PublicFooterProps) {
+  // Hardcoded contact information
+  const hardcodedPhone = "0532 241 24 31";
+  const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
+
   // Build paths based on whether we're using root paths or dealer-specific paths
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 
@@ -67,7 +71,7 @@ export function PublicFooter({
   ];
 
   const hasSocialLinks = socialFacebook || socialInstagram || socialTwitter || socialYoutube;
-  const hasContactInfo = contactPhone || contactEmail || contactAddress;
+  const hasContactInfo = true; // Always show contact info
 
   return (
     <footer className="bg-slate-900 text-white">
@@ -181,22 +185,20 @@ export function PublicFooter({
             <h3 className="text-lg font-semibold">İletişim</h3>
             {hasContactInfo && (
               <ul className="space-y-4">
-                {contactPhone && (
-                  <li>
-                    <a
-                      href={`tel:${contactPhone}`}
-                      className="group flex items-start gap-3 text-sm"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                        <Phone className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <span className="text-slate-400 text-xs block">Telefon</span>
-                        <span className="text-white font-medium">{contactPhone}</span>
-                      </div>
-                    </a>
-                  </li>
-                )}
+                <li>
+                  <a
+                    href={`tel:${hardcodedPhone}`}
+                    className="group flex items-start gap-3 text-sm"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
+                      <Phone className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-xs block">Telefon</span>
+                      <span className="text-white font-medium">{hardcodedPhone}</span>
+                    </div>
+                  </a>
+                </li>
                 {contactEmail && (
                   <li>
                     <a
@@ -213,24 +215,22 @@ export function PublicFooter({
                     </a>
                   </li>
                 )}
-                {contactAddress && (
-                  <li>
-                    <a
-                      href={`https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-start gap-3 text-sm"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                        <MapPin className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <span className="text-slate-400 text-xs block">Adres</span>
-                        <span className="text-white">{contactAddress}</span>
-                      </div>
-                    </a>
-                  </li>
-                )}
+                <li>
+                  <a
+                    href={`https://maps.google.com/?q=${encodeURIComponent(hardcodedAddress)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-3 text-sm"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
+                      <MapPin className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-xs block">Adres</span>
+                      <span className="text-white">{hardcodedAddress}</span>
+                    </div>
+                  </a>
+                </li>
               </ul>
             )}
 
