@@ -4,6 +4,12 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Prevent seeding in production environment
+  if (process.env.NODE_ENV === "production" || process.env.DISABLE_SEED === "true") {
+    console.log("Seeding skipped in production environment");
+    return;
+  }
+
   console.log("Seeding database...");
 
   // Create SuperAdmin user
