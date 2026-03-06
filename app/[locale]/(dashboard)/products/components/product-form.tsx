@@ -254,7 +254,7 @@ export function ProductForm({
                 <SelectTrigger>
                   <SelectValue placeholder="Kategori secin" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" sideOffset={4}>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.name}
@@ -422,7 +422,7 @@ export function ProductForm({
                     <SelectTrigger>
                       <SelectValue placeholder="Beden" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent position="popper" sideOffset={4}>
                       {SIZES.map((size) => (
                         <SelectItem key={size} value={size}>
                           {size}
