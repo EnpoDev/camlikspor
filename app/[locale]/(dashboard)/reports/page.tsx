@@ -17,10 +17,6 @@ import {
   CheckCircle,
   ArrowUpRight,
   ArrowDownRight,
-  BarChart3,
-  Gift,
-  Package,
-  Wallet,
 } from "lucide-react";
 import {
   getFinancialSummary,
@@ -77,48 +73,6 @@ export default async function ReportsPage({ params }: ReportsPageProps) {
       minimumFractionDigits: 0,
     }).format(amount);
   };
-
-  // Report type shortcuts
-  const reportTypes = [
-    {
-      title: dictionary.reports.general,
-      icon: BarChart3,
-      href: `/${locale}/reports/general`,
-      color: "text-blue-500",
-    },
-    {
-      title: dictionary.reports.attendance,
-      icon: Calendar,
-      href: `/${locale}/reports/attendance`,
-      color: "text-green-500",
-    },
-    {
-      title: dictionary.reports.studentsByPeriod,
-      icon: Users,
-      href: `/${locale}/reports/students`,
-      color: "text-purple-500",
-    },
-    {
-      title: dictionary.reports.materials,
-      icon: Package,
-      href: `/${locale}/reports/materials`,
-      color: "text-orange-500",
-    },
-    {
-      title: dictionary.reports.salaries,
-      icon: Wallet,
-      href: `/${locale}/reports/salaries`,
-      color: "text-red-500",
-    },
-    {
-      title: dictionary.reports.birthdays,
-      icon: Gift,
-      href: `/${locale}/reports/birthdays`,
-      color: "text-pink-500",
-    },
-  ];
-
-  type ReportType = (typeof reportTypes)[number];
 
   return (
     <div className="space-y-6">
@@ -420,25 +374,6 @@ export default async function ReportsPage({ params }: ReportsPageProps) {
           )}
         </CardContent>
       </Card>
-
-      {/* Quick Report Links */}
-      <div>
-        <h2 className="text-lg font-semibold mb-4">Detaylı Raporlar</h2>
-        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
-          {reportTypes.map((report: ReportType) => (
-            <Link key={report.title} href={report.href}>
-              <Card className="hover:bg-accent/50 transition-colors cursor-pointer h-full">
-                <CardContent className="flex flex-col items-center justify-center py-6">
-                  <report.icon className={`h-8 w-8 ${report.color} mb-2`} />
-                  <p className="text-sm font-medium text-center">
-                    {report.title}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
