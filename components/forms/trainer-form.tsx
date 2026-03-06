@@ -10,6 +10,7 @@ import { BankSelect } from "@/components/ui/bank-select";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useFormLoading } from "@/lib/hooks/use-form-loading";
 import {
   Select,
   SelectContent,
@@ -137,6 +138,9 @@ export function TrainerForm({
     boundUpdateAction,
     { errors: {}, message: "" }
   );
+
+  // Show global loading overlay when form is submitting
+  useFormLoading(isPending);
 
   const selectedBranchIds = trainer?.branches.map((b) => b.branch.id) || [];
 

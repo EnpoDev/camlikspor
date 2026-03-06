@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useFormLoading } from "@/lib/hooks/use-form-loading";
 import {
   Select,
   SelectContent,
@@ -161,6 +162,9 @@ export function StudentForm({
     boundUpdateAction,
     { errors: {}, message: "" }
   );
+
+  // Show global loading overlay when form is submitting
+  useFormLoading(isPending);
 
   useEffect(() => {
     if (state.success && state.messageKey) {
