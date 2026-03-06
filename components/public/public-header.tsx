@@ -49,6 +49,10 @@ export function PublicHeader({
   dictionary,
   useRootPaths = false,
 }: PublicHeaderProps) {
+  // Hardcoded contact information
+  const hardcodedPhone = "0532 241 24 31";
+  const hardcodedEmail = "info@camliksk.com";
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -83,24 +87,20 @@ export function PublicHeader({
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-6">
-              {contactPhone && (
-                <a
-                  href={`tel:${contactPhone}`}
-                  className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
-                >
-                  <Phone className="h-4 w-4" />
-                  <span>{contactPhone}</span>
-                </a>
-              )}
-              {contactEmail && (
-                <a
-                  href={`mailto:${contactEmail}`}
-                  className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
-                >
-                  <Mail className="h-4 w-4" />
-                  <span>{contactEmail}</span>
-                </a>
-              )}
+              <a
+                href={`tel:${hardcodedPhone}`}
+                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
+              >
+                <Phone className="h-4 w-4" />
+                <span>{hardcodedPhone}</span>
+              </a>
+              <a
+                href={`mailto:${hardcodedEmail}`}
+                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
+              >
+                <Mail className="h-4 w-4" />
+                <span>{hardcodedEmail}</span>
+              </a>
             </div>
             <div className="flex items-center gap-4">
               <span className="text-slate-400">Ücretsiz Kargo | Güvenli Ödeme</span>
@@ -326,24 +326,20 @@ export function PublicHeader({
 
             {/* Mobile Contact Info */}
             <div className="pt-4 mt-4 border-t space-y-3">
-              {contactPhone && (
-                <a
-                  href={`tel:${contactPhone}`}
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
-                >
-                  <Phone className="h-4 w-4" />
-                  {contactPhone}
-                </a>
-              )}
-              {contactEmail && (
-                <a
-                  href={`mailto:${contactEmail}`}
-                  className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
-                >
-                  <Mail className="h-4 w-4" />
-                  {contactEmail}
-                </a>
-              )}
+              <a
+                href={`tel:${hardcodedPhone}`}
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
+              >
+                <Phone className="h-4 w-4" />
+                {hardcodedPhone}
+              </a>
+              <a
+                href={`mailto:${hardcodedEmail}`}
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
+              >
+                <Mail className="h-4 w-4" />
+                {hardcodedEmail}
+              </a>
             </div>
           </nav>
         </div>
