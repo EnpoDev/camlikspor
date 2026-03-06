@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { getTacticalBoardById } from "@/lib/data/training";
-import { TacticalBoardCanvas } from "@/components/training/tactical-board-canvas";
+import { TacticalBoardCanvas } from "@/components/training/tactical-board-canvas-lazy";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
