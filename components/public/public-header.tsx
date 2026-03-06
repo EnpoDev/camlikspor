@@ -52,6 +52,7 @@ export function PublicHeader({
   // Hardcoded contact information
   const hardcodedPhone = "0532 241 24 31";
   const hardcodedEmail = "info@camliksk.com";
+  const hardcodedWhatsApp = "905322412431"; // International format for WhatsApp
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -93,6 +94,15 @@ export function PublicHeader({
               >
                 <Phone className="h-4 w-4" />
                 <span>{hardcodedPhone}</span>
+              </a>
+              <a
+                href={`https://wa.me/${hardcodedWhatsApp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-green-400 transition-colors"
+              >
+                <MessageCircle className="h-4 w-4" />
+                <span>WhatsApp</span>
               </a>
               <a
                 href={`mailto:${hardcodedEmail}`}
@@ -332,6 +342,15 @@ export function PublicHeader({
               >
                 <Phone className="h-4 w-4" />
                 {hardcodedPhone}
+              </a>
+              <a
+                href={`https://wa.me/${hardcodedWhatsApp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-green-600"
+              >
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
               </a>
               <a
                 href={`mailto:${hardcodedEmail}`}

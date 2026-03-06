@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ContactSectionProps {
@@ -26,6 +26,7 @@ export function ContactSection({
   const hardcodedPhone = "0532 241 24 31";
   const hardcodedEmail = "info@camliksk.com";
   const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
+  const hardcodedWhatsApp = "905322412431";
 
   const contactItems = [
     {
@@ -33,6 +34,12 @@ export function ContactSection({
       label: dictionary.phoneLabel,
       value: hardcodedPhone,
       href: `tel:${hardcodedPhone}`,
+    },
+    {
+      icon: MessageCircle,
+      label: "WhatsApp",
+      value: hardcodedPhone,
+      href: `https://wa.me/${hardcodedWhatsApp}`,
     },
     {
       icon: Mail,
@@ -85,8 +92,8 @@ export function ContactSection({
                 {item.href ? (
                   <a
                     href={item.href}
-                    target={item.icon === MapPin ? "_blank" : undefined}
-                    rel={item.icon === MapPin ? "noopener noreferrer" : undefined}
+                    target={item.icon === MapPin || item.icon === MessageCircle ? "_blank" : undefined}
+                    rel={item.icon === MapPin || item.icon === MessageCircle ? "noopener noreferrer" : undefined}
                     className="text-foreground hover:text-primary transition-colors"
                   >
                     {item.value}

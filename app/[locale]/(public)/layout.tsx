@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
+import { WhatsAppFloat } from "@/components/public/whatsapp-float";
 import { CartProvider } from "@/lib/contexts/cart-context";
 import { FavoritesProvider } from "@/lib/contexts/favorites-context";
 import { ThemeProvider } from "@/components/public/theme-provider";
@@ -87,6 +88,7 @@ export default async function PublicLayout({
             }}
             useRootPaths
           />
+          <WhatsAppFloat />
         </div>
       </ThemeProvider>
       </FavoritesProvider>

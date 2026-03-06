@@ -4,6 +4,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { PublicHeader } from "@/components/public/public-header";
 import { PublicFooter } from "@/components/public/public-footer";
+import { WhatsAppFloat } from "@/components/public/whatsapp-float";
 import { CartProvider } from "@/lib/contexts/cart-context";
 
 interface PublicLayoutProps {
@@ -94,6 +95,7 @@ export default async function PublicLayout({
             followUs: publicDict.followUs || "Bizi Takip Edin",
           }}
         />
+        <WhatsAppFloat />
       </div>
     </CartProvider>
   );
