@@ -13,6 +13,7 @@ import {
   CreditCard,
   HeadphonesIcon,
   ChevronRight,
+  MessageCircle,
 } from "lucide-react";
 
 interface PublicFooterProps {
@@ -54,6 +55,7 @@ export function PublicFooter({
   const hardcodedPhone = "0532 241 24 31";
   const hardcodedEmail = "info@camliksk.com";
   const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
+  const hardcodedWhatsApp = "905322412431"; // International format for WhatsApp
 
   // Build paths based on whether we're using root paths or dealer-specific paths
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
@@ -196,6 +198,22 @@ export function PublicFooter({
                     </div>
                     <div>
                       <span className="text-slate-400 text-xs block">Telefon</span>
+                      <span className="text-white font-medium">{hardcodedPhone}</span>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`https://wa.me/${hardcodedWhatsApp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-start gap-3 text-sm"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
+                      <MessageCircle className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-xs block">WhatsApp</span>
                       <span className="text-white font-medium">{hardcodedPhone}</span>
                     </div>
                   </a>

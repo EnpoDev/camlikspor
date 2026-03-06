@@ -254,7 +254,13 @@ export function ProductForm({
                 <SelectTrigger>
                   <SelectValue placeholder="Kategori secin" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent
+                  position="popper"
+                  sideOffset={4}
+                  align="start"
+                  onCloseAutoFocus={(e) => e.preventDefault()}
+                  onOpenAutoFocus={(e) => e.preventDefault()}
+                >
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.name}
@@ -422,7 +428,13 @@ export function ProductForm({
                     <SelectTrigger>
                       <SelectValue placeholder="Beden" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent
+                      position="popper"
+                      sideOffset={4}
+                      align="start"
+                      onCloseAutoFocus={(e) => e.preventDefault()}
+                      onOpenAutoFocus={(e) => e.preventDefault()}
+                    >
                       {SIZES.map((size) => (
                         <SelectItem key={size} value={size}>
                           {size}
