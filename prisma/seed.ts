@@ -11,7 +11,11 @@ async function main() {
   }
 
   // Prevent seeding in production environment
-  if (process.env.NODE_ENV === "production") {
+  const isProduction =
+    process.env.NODE_ENV === "production" ||
+    process.env.APP_ENV === "production";
+
+  if (isProduction) {
     console.log("Seeding not allowed in production environment");
     return;
   }
