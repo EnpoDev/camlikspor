@@ -4,9 +4,15 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Only run seed when explicitly requested
+  if (process.env.RUN_SEED !== "true") {
+    console.log("Seeding skipped. Set RUN_SEED=true to run seed.");
+    return;
+  }
+
   // Prevent seeding in production environment
-  if (process.env.NODE_ENV === "production" || process.env.DISABLE_SEED === "true") {
-    console.log("Seeding skipped in production environment");
+  if (process.env.NODE_ENV === "production") {
+    console.log("Seeding not allowed in production environment");
     return;
   }
 
