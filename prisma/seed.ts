@@ -39,8 +39,8 @@ async function main() {
       contactPhone: "0532 241 24 31",
       contactEmail: "info@camlikspor.com",
       contactAddress: "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul",
-      socialFacebook: "https://facebook.com/camlikspor",
-      socialInstagram: "https://instagram.com/camlikspor",
+      socialFacebook: "#",
+      socialInstagram: "https://www.instagram.com/umraniyecamliksporkulubu/",
       features: JSON.stringify([
         "Profesyonel Eğitmenler",
         "Modern Tesisler",
@@ -62,8 +62,8 @@ async function main() {
       contactPhone: "0532 241 24 31",
       contactEmail: "info@camlikspor.com",
       contactAddress: "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul",
-      socialFacebook: "https://facebook.com/camlikspor",
-      socialInstagram: "https://instagram.com/camlikspor",
+      socialFacebook: "#",
+      socialInstagram: "https://www.instagram.com/umraniyecamliksporkulubu/",
       features: JSON.stringify([
         "Profesyonel Eğitmenler",
         "Modern Tesisler",
