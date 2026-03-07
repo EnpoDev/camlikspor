@@ -6,19 +6,16 @@ const prisma = new PrismaClient();
 async function main() {
   // SEEDING COMPLETELY DISABLED
   // To enable, manually set RUN_SEED=true environment variable
-  console.log("❌ Seeding is disabled. To enable, set RUN_SEED=true");
-  process.exit(0);
-
-  // Only run seed when explicitly requested
   if (process.env.RUN_SEED !== "true") {
-    console.log("Seeding skipped. Set RUN_SEED=true to run seed.");
+    console.log("❌ Seeding is disabled. To enable, set RUN_SEED=true");
     return;
   }
 
   // Prevent seeding in production environment
   const isProduction =
     process.env.NODE_ENV === "production" ||
-    process.env.APP_ENV === "production";
+    process.env.APP_ENV === "production" ||
+    process.env.DISABLE_SEED === "true";
 
   if (isProduction) {
     console.log("Seeding not allowed in production environment");
