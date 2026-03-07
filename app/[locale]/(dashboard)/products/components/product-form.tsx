@@ -259,7 +259,6 @@ export function ProductForm({
                   sideOffset={4}
                   align="start"
                   onCloseAutoFocus={(e) => e.preventDefault()}
-                  onOpenAutoFocus={(e) => e.preventDefault()}
                 >
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
@@ -433,7 +432,6 @@ export function ProductForm({
                       sideOffset={4}
                       align="start"
                       onCloseAutoFocus={(e) => e.preventDefault()}
-                      onOpenAutoFocus={(e) => e.preventDefault()}
                     >
                       {SIZES.map((size) => (
                         <SelectItem key={size} value={size}>
