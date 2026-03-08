@@ -116,7 +116,7 @@ export default async function BlogDashboardPage({
                         </Button>
                       </Link>
                     )}
-                    <Link href={`/${locale}/blog/${post.id}/edit`}>
+                    <Link href={`/${locale}/blog/edit/${post.id}`}>
                       <Button variant="ghost" size="icon">
                         <Pencil className="h-4 w-4" />
                       </Button>

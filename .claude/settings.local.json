@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npx next build:*)",
+      "Bash(curl:*)",
+      "Bash(taskkill:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(node -e:*)",
+      "Bash(npx tsx:*)",
+      "Bash(node:*)",
+      "Bash(timeout:*)",
+      "Bash(ping:*)",
+      "Bash(npx prisma db seed:*)",
+      "Bash(npm install:*)",
+      "Bash(npx playwright install:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(npm run build:*)",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(git -C \"C:\\\\Users\\\\Administrator\\\\Projeler\\\\camlikspor\" diff)",
+      "Bash(git -C \"C:\\\\Users\\\\Administrator\\\\Projeler\\\\camlikspor\" log --oneline -5)",
+      "Bash(git status:*)",
+      "Bash(npx eslint .)",
+      "Bash(sqlite3:*)",
+      "Bash(python:*)",
+      "Bash(dir:*)",
+      "Bash(where:*)",
+      "Bash(copy \"C:\\\\Users\\\\Administrator\\\\Downloads\\\\WhatsApp Video 2026-02-13 at 18.38.45.mp4\" \"public\\\\videos\\\\hero-bg.mp4\")",
+      "Bash(npx prisma db execute:*)",
+      "Bash(netstat:*)"
+    ]
+  }
+}
