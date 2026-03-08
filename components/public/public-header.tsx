@@ -68,7 +68,8 @@ export function PublicHeader({
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 
   // Blog always uses dealer-specific path to avoid dashboard conflict
-  const blogPath = `/${locale}/${dealerSlug}/blog`;
+  // Use dealerSlug if available, otherwise use 'camlikspor' as default
+  const blogPath = dealerSlug ? `/${locale}/${dealerSlug}/blog` : `/${locale}/camlikspor/blog`;
 
   const navLinks = [
     { href: basePath, label: "Ana Sayfa", icon: Store },
