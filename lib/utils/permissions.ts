@@ -93,6 +93,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.TACTICAL_BOARD_CREATE,
     Permission.TACTICAL_BOARD_EDIT,
     Permission.TACTICAL_BOARD_DELETE,
+    // Blog
+    Permission.BLOG_VIEW,
+    Permission.BLOG_CREATE,
+    Permission.BLOG_EDIT,
+    Permission.BLOG_DELETE,
   ],
   [UserRole.TRAINER]: [
     Permission.ATTENDANCE_VIEW,
@@ -283,6 +288,12 @@ export const MENU_ITEMS: MenuItem[] = [
     labelKey: "sidebar.commissions",
     href: "/commissions",
     permission: Permission.COMMISSIONS_VIEW,
+  },
+  {
+    key: "blog",
+    labelKey: "sidebar.blog",
+    href: "/blog",
+    permission: Permission.BLOG_VIEW,
   },
 ];
 

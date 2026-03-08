@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
+import { DeleteBlogButton } from "./components/delete-blog-button";
 
 interface BlogDashboardPageProps {
   params: Promise<{ locale: string }>;
@@ -120,6 +121,7 @@ export default async function BlogDashboardPage({
                         <Pencil className="h-4 w-4" />
                       </Button>
                     </Link>
+                    <DeleteBlogButton postId={post.id} postTitle={post.title} />
                   </div>
                 </div>
               </CardHeader>
