@@ -27,6 +27,7 @@ import {
   BookOpen,
   Target,
   Calendar,
+  Newspaper,
 } from "lucide-react";
 import { UserRole } from "@/lib/types";
 import {
@@ -58,6 +59,7 @@ const iconMap: Record<string, React.ElementType> = {
   "training-plans": BookOpen,
   "tactical-board": Target,
   "training-calendar": Calendar,
+  blog: Newspaper,
 };
 
 interface SidebarProps {
