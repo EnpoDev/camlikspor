@@ -67,10 +67,13 @@ export function PublicHeader({
   // Build paths based on whether we're using root paths or dealer-specific paths
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 
+  // Blog always uses dealer-specific path to avoid dashboard conflict
+  const blogPath = `/${locale}/${dealerSlug}/blog`;
+
   const navLinks = [
     { href: basePath, label: "Ana Sayfa", icon: Store },
     { href: `${basePath}/shop`, label: "Mağaza", icon: ShoppingBag },
-    { href: `${basePath}/blog`, label: "Blog", icon: BookOpen },
+    { href: blogPath, label: "Blog", icon: BookOpen },
     { href: `${basePath}#contact`, label: "İletişim", icon: MessageCircle },
   ];
 
