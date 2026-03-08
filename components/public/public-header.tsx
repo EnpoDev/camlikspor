@@ -70,6 +70,7 @@ export function PublicHeader({
   const navLinks = [
     { href: basePath, label: "Ana Sayfa", icon: Store },
     { href: `${basePath}/shop`, label: "Mağaza", icon: ShoppingBag },
+    { href: `${basePath}/blog`, label: "Blog", icon: BookOpen },
     { href: `${basePath}#contact`, label: "İletişim", icon: MessageCircle },
   ];
 
