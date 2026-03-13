@@ -44,6 +44,12 @@ async function seedLegalDocuments() {
       fileUrl: `/tr/camlikspor/legal/on-kayit-sozlesmesi`,
       sortOrder: 5,
     },
+    {
+      title: "Sporcu Sözleşmesi",
+      slug: "sporcu-sozlesmesi",
+      fileUrl: `https://drive.google.com/file/d/1j2AaMlzYq-dmUysuls8hy-Rs82Yb0_JV/view?usp=sharing`,
+      sortOrder: 6,
+    },
   ];
 
   for (const doc of documents) {
