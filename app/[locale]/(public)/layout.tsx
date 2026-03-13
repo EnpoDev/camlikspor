@@ -66,9 +66,14 @@ export default async function PublicLayout({
         fileUrl: true,
       },
     });
+    console.log(`[PUBLIC LAYOUT] Dealer: ${dealer.slug} (${dealer.id})`);
+    console.log(`[PUBLIC LAYOUT] Legal Documents Found: ${legalDocuments.length}`);
+    legalDocuments.forEach((doc) => {
+      console.log(`  - ${doc.title} (${doc.slug})`);
+    });
   } catch (error) {
     // LegalDocument model not generated yet
-    console.log("LegalDocument model not available yet");
+    console.log("LegalDocument model not available yet", error);
   }
 
   return (
