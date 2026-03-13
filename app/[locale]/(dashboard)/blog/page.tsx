@@ -30,6 +30,20 @@ export default async function BlogDashboardPage({
     redirect(`/${locale}/login`);
   }
 
+  // Fetch dealer info to get the slug for public blog URLs
+  const dealer = await prisma.dealer.findUnique({
+    where: {
+      id: session.user.dealerId,
+    },
+    select: {
+      slug: true,
+    },
+  });
+
+  if (!dealer) {
+    redirect(`/${locale}/login`);
+  }
+
   const posts = await prisma.blogPost.findMany({
     where: {
       dealerId: session.user.dealerId,
@@ -108,7 +122,7 @@ export default async function BlogDashboardPage({
                   <div className="flex items-center gap-2">
                     {post.isPublished && (
                       <Link
-                        href={`/${locale}/blog/${post.slug}`}
+                        href={`/${locale}/${dealer.slug}/blog/${post.slug}`}
                         target="_blank"
                       >
                         <Button variant="ghost" size="icon">

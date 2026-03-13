@@ -11,11 +11,16 @@ import {
   AlertCircle,
   Gift,
   UserPlus,
+  Images,
+  ArrowRight,
 } from "lucide-react";
 import { getDashboardStats, type DashboardStats } from "@/lib/data/dashboard";
 import { format } from "date-fns";
 import { tr, enUS, es } from "date-fns/locale";
-import { UserRole } from "@/lib/types";
+import { UserRole, Permission } from "@/lib/types";
+import { hasPermission } from "@/lib/utils/permissions";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface DashboardPageProps {
   params: Promise<{ locale: string }>;
@@ -41,6 +46,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     ? null
     : session?.user?.dealerId;
   const stats = await getDashboardStats(dealerId);
+
+  // Check permissions for quick actions
+  const userPermissions = session?.user?.permissions || [];
+  const canManageHeroSlides = hasPermission(userPermissions, Permission.HERO_SLIDES_VIEW);
 
   const statCards = [
     {
@@ -96,6 +105,27 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           </Card>
         ))}
       </div>
+
+      {/* Quick Actions */}
+      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50 dark:border-blue-900 dark:from-blue-950 dark:to-indigo-950">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Images className="h-5 w-5 text-blue-600" />
+            Ana Sayfa Slider Yönetimi
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Ana sayfadaki slider görsellerini ve metinlerini düzenleyin
+          </p>
+          <Link href={`/${locale}/hero-slides`}>
+            <Button className="bg-blue-600 hover:bg-blue-700">
+              Düzenle
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
 
       {/* Alert for pending payments */}
       {stats.pendingPayments > 0 && (

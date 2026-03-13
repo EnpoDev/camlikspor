@@ -33,7 +33,8 @@
       "Bash(where:*)",
       "Bash(copy \"C:\\\\Users\\\\Administrator\\\\Downloads\\\\WhatsApp Video 2026-02-13 at 18.38.45.mp4\" \"public\\\\videos\\\\hero-bg.mp4\")",
       "Bash(npx prisma db execute:*)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash('C:\\\\Users\\\\Administrator\\\\Projeler\\\\camlikspor\\\\app\\\\[locale]\\\\\\(dashboard\\)\\\\slider-test\\\\page.tsx' << 'EOF'\nexport default function SliderTestPage\\(\\) {\n  return \\(\n    <div className=\"p-8\">\n      <h1 className=\"text-3xl font-bold mb-4\">Slider Test Page</h1>\n      <p className=\"text-lg\">✅ This route is working!</p>\n    </div>\n  \\);\n}\nEOF)"
     ]
   }
 }

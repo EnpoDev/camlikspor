@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { useFormLoading } from "@/lib/hooks/use-form-loading";
 import {
   Select,
   SelectContent,
@@ -125,9 +124,6 @@ export function ProductForm({
     },
     initialState
   );
-
-  // Show global loading overlay when form is submitting
-  useFormLoading(isPending);
 
   const addVariant = () => {
     setVariants([...variants, { size: "", color: "", stock: 0, sku: "" }]);
@@ -254,12 +250,7 @@ export function ProductForm({
                 <SelectTrigger>
                   <SelectValue placeholder="Kategori secin" />
                 </SelectTrigger>
-                <SelectContent
-                  position="popper"
-                  sideOffset={4}
-                  align="start"
-                  onCloseAutoFocus={(e) => e.preventDefault()}
-                >
+                <SelectContent>
                   {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
                       {cat.name}
@@ -427,12 +418,7 @@ export function ProductForm({
                     <SelectTrigger>
                       <SelectValue placeholder="Beden" />
                     </SelectTrigger>
-                    <SelectContent
-                      position="popper"
-                      sideOffset={4}
-                      align="start"
-                      onCloseAutoFocus={(e) => e.preventDefault()}
-                    >
+                    <SelectContent>
                       {SIZES.map((size) => (
                         <SelectItem key={size} value={size}>
                           {size}

@@ -61,7 +61,7 @@ export default async function NewUserPage({ params, searchParams }: NewUserPageP
             {dictionary.users.addUser}
           </h1>
           <p className="text-muted-foreground">
-            Yeni kullanici hesabi olusturun
+            Yeni kullanıcı hesabı oluşturun
           </p>
         </div>
       </div>

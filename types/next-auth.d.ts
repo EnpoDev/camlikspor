@@ -12,6 +12,7 @@ declare module "next-auth" {
       dealerSlug: string | null;
       permissions: string[];
       isSubDealer: boolean;
+      mustChangePassword?: boolean;
     } & DefaultSession["user"];
   }
 
@@ -22,6 +23,7 @@ declare module "next-auth" {
     dealerSlug: string | null;
     permissions: string[];
     isSubDealer: boolean;
+    mustChangePassword?: boolean;
   }
 }
 
@@ -34,5 +36,6 @@ declare module "next-auth/jwt" {
     dealerSlug: string | null;
     permissions: string[];
     isSubDealer: boolean;
+    mustChangePassword?: boolean;
   }
 }

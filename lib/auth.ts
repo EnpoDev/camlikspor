@@ -13,6 +13,11 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
+const parentLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   callbacks: {
@@ -45,6 +50,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     Credentials({
+      id: "credentials",
+      name: "Admin Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
@@ -99,6 +106,55 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           dealerSlug: user.dealer?.slug || null,
           permissions: effectivePermissions,
           isSubDealer,
+        };
+      },
+    }),
+    Credentials({
+      id: "parent-credentials",
+      name: "Parent Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const parsed = parentLoginSchema.safeParse(credentials);
+        if (!parsed.success) return null;
+
+        const parent = await prisma.parent.findUnique({
+          where: { email: parsed.data.email },
+          include: {
+            dealer: true,
+          },
+        });
+
+        if (!parent || !parent.isActive) return null;
+
+        const passwordMatch = await bcrypt.compare(
+          parsed.data.password,
+          parent.passwordHash
+        );
+        if (!passwordMatch) return null;
+
+        // Update last login
+        await prisma.parent.update({
+          where: { id: parent.id },
+          data: { lastLoginAt: new Date() },
+        });
+
+        // Parent users have limited permissions
+        const parentPermissions: string[] = [];
+
+        return {
+          id: parent.id,
+          email: parent.email,
+          name: parent.name,
+          role: "PARENT" as UserRole,
+          dealerId: parent.dealerId,
+          dealerName: parent.dealer?.name || null,
+          dealerSlug: parent.dealer?.slug || null,
+          permissions: parentPermissions,
+          isSubDealer: false,
+          mustChangePassword: parent.mustChangePassword,
         };
       },
     }),

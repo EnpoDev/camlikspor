@@ -18,9 +18,14 @@ import {
   Store,
   MessageCircle,
   BookOpen,
+  Info,
+  CreditCard,
+  UserPlus,
+  Image as ImageIcon,
+  Globe,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "@/lib/contexts/cart-context";
 import { useFavorites } from "@/lib/contexts/favorites-context";
 
@@ -32,10 +37,20 @@ interface PublicHeaderProps {
   contactPhone?: string | null;
   contactEmail?: string | null;
   dictionary: {
+    home: string;
+    about: string;
     shop: string;
     gallery: string;
     contact: string;
+    blog: string;
+    payments: string;
+    registration: string;
     cart: string;
+    favorites: string;
+    login: string;
+    search: string;
+    searchPlaceholder: string;
+    selectLanguage: string;
   };
   useRootPaths?: boolean;
 }
@@ -59,85 +74,89 @@ export function PublicHeader({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const { totalItems } = useCart();
   const { totalFavorites } = useFavorites();
+
+  const languages = [
+    { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "es", name: "Español", flag: "🇪🇸" },
+  ];
+
+  const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0];
+
+  const changeLanguage = (newLocale: string) => {
+    const newPath = pathname?.replace(`/${locale}`, `/${newLocale}`) || `/${newLocale}`;
+    router.push(newPath);
+    setIsLanguageMenuOpen(false);
+  };
+
+  // Show cart only on shop pages
+  const isShopPage = pathname?.includes("/shop") || pathname?.includes("/cart");
 
   // Build paths based on whether we're using root paths or dealer-specific paths
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 
-  // Blog always uses dealer-specific path to avoid dashboard conflict
-  // Use dealerSlug if available, otherwise use 'camlikspor' as default
-  const blogPath = dealerSlug ? `/${locale}/${dealerSlug}/blog` : `/${locale}/camlikspor/blog`;
+  // Blog always points to main dealer (camlikspor)
+  const blogPath = `/${locale}/camlikspor/blog`;
 
   const navLinks = [
-    { href: basePath, label: "Ana Sayfa", icon: Store },
-    { href: `${basePath}/shop`, label: "Mağaza", icon: ShoppingBag },
-    { href: blogPath, label: "Blog", icon: BookOpen },
-    { href: `${basePath}#contact`, label: "İletişim", icon: MessageCircle },
+    { id: "home", href: basePath, label: dictionary.home, icon: Store },
+    { id: "about", href: `${basePath}#about`, label: dictionary.about, icon: Info },
+    { id: "gallery", href: `${basePath}/gallery`, label: dictionary.gallery, icon: ImageIcon },
+    { id: "shop", href: `${basePath}/shop`, label: dictionary.shop, icon: ShoppingBag },
+    { id: "blog", href: blogPath, label: dictionary.blog, icon: BookOpen },
+    { id: "payments", href: `/${locale}/aidat-sorgulama`, label: dictionary.payments, icon: CreditCard },
+    { id: "registration", href: `${basePath}#contact`, label: dictionary.registration, icon: UserPlus },
+    { id: "contact", href: `${basePath}#contact`, label: dictionary.contact, icon: MessageCircle },
   ];
 
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 100);
     };
+
+    // Initial check
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close language menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isLanguageMenuOpen && !target.closest('.language-menu-container')) {
+        setIsLanguageMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isLanguageMenuOpen]);
+
   return (
     <>
-      {/* Top Bar */}
-      <div className="hidden md:block bg-slate-900 text-white py-2">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-6">
-              <a
-                href={`tel:${hardcodedPhone}`}
-                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
-              >
-                <Phone className="h-4 w-4" />
-                <span>{hardcodedPhone}</span>
-              </a>
-              <a
-                href={`https://wa.me/${hardcodedWhatsApp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-green-400 transition-colors"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span>WhatsApp</span>
-              </a>
-              <a
-                href={`mailto:${hardcodedEmail}`}
-                className="flex items-center gap-2 hover:text-emerald-400 transition-colors"
-              >
-                <Mail className="h-4 w-4" />
-                <span>{hardcodedEmail}</span>
-              </a>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-slate-400">Ücretsiz Kargo | Güvenli Ödeme</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Header */}
       <header
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={`sticky top-0 z-50 w-full transition-all duration-500 ${
           isScrolled
             ? "bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-lg"
-            : "bg-white dark:bg-slate-900"
+            : "!bg-transparent"
         }`}
       >
-        <div className="container mx-auto px-4">
-          <div className="flex h-20 items-center justify-between">
+        <div className="w-full px-4">
+          <div className="flex h-[100px] items-center justify-between">
             {/* Logo */}
-            <Link href={basePath} className="flex items-center gap-3 group">
-              <div className="relative w-16 h-16 flex-shrink-0 rounded-full bg-white shadow-md group-hover:shadow-lg transition-shadow overflow-hidden">
+            <Link href={basePath} className="flex items-center gap-3 group -ml-2">
+              <div className={`relative w-16 h-16 flex-shrink-0 rounded-full bg-white transition-all duration-500 overflow-hidden ${
+                isScrolled ? "shadow-md group-hover:shadow-lg" : "shadow-xl"
+              }`}>
                 <Image
                   src={dealerLogo || "/logo.png"}
                   alt={dealerName}
@@ -149,7 +168,6 @@ export function PublicHeader({
                 <span className="font-bold text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">
                   {dealerName}
                 </span>
-                <p className="text-xs text-slate-500">Resmi Mağaza</p>
               </div>
             </Link>
 
@@ -159,7 +177,7 @@ export function PublicHeader({
                 const Icon = link.icon;
                 return (
                   <Link
-                    key={link.href}
+                    key={link.id}
                     href={link.href}
                     className="group relative px-4 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                   >
@@ -175,50 +193,84 @@ export function PublicHeader({
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
-              {/* Search Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="hidden md:flex h-10 w-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
-                onClick={() => {
-                  setIsSearchOpen(!isSearchOpen);
-                  setTimeout(() => searchInputRef.current?.focus(), 100);
-                }}
-              >
-                <Search className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              </Button>
-
-              {/* Wishlist */}
-              <Link href={`${basePath}/favorites`}>
+              {/* Language Switcher */}
+              <div className="relative language-menu-container">
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="relative hidden md:flex h-10 w-10 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 group"
+                  className="hidden md:flex h-10 w-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+                  onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
                 >
-                  <Heart className={`h-5 w-5 transition-colors ${totalFavorites > 0 ? "fill-red-500 text-red-500" : "text-slate-600 dark:text-slate-400 group-hover:text-red-500"}`} />
-                  {totalFavorites > 0 && (
-                    <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500 hover:bg-red-500 text-[10px] font-bold animate-in zoom-in duration-200">
-                      {totalFavorites > 9 ? "9+" : totalFavorites}
-                    </Badge>
-                  )}
+                  <Globe className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                 </Button>
-              </Link>
+                {isLanguageMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => changeLanguage(lang.code)}
+                        className={`w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${
+                          lang.code === locale ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400" : "text-slate-700 dark:text-slate-300"
+                        }`}
+                      >
+                        <span className="text-xl">{lang.flag}</span>
+                        <span className="text-sm font-medium">{lang.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-              {/* Cart */}
-              <Link href={`${basePath}/cart`}>
+              {/* Search Button - Only show on shop pages */}
+              {isShopPage && (
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="relative h-10 w-10 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group"
+                  className="hidden md:flex h-10 w-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"
+                  onClick={() => {
+                    setIsSearchOpen(!isSearchOpen);
+                    setTimeout(() => searchInputRef.current?.focus(), 100);
+                  }}
                 >
-                  <ShoppingCart className="h-5 w-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 transition-colors" />
-                  {totalItems > 0 && (
-                    <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-emerald-600 hover:bg-emerald-600 text-[10px] font-bold animate-in zoom-in duration-200">
-                      {totalItems > 9 ? "9+" : totalItems}
-                    </Badge>
-                  )}
+                  <Search className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                 </Button>
-              </Link>
+              )}
+
+              {/* Wishlist - Only show on shop pages */}
+              {isShopPage && (
+                <Link href={`${basePath}/favorites`}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative hidden md:flex h-10 w-10 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 group"
+                  >
+                    <Heart className={`h-5 w-5 transition-colors ${totalFavorites > 0 ? "fill-red-500 text-red-500" : "text-slate-600 dark:text-slate-400 group-hover:text-red-500"}`} />
+                    {totalFavorites > 0 && (
+                      <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-red-500 hover:bg-red-500 text-[10px] font-bold animate-in zoom-in duration-200">
+                        {totalFavorites > 9 ? "9+" : totalFavorites}
+                      </Badge>
+                    )}
+                  </Button>
+                </Link>
+              )}
+
+              {/* Cart - Only show on shop pages */}
+              {isShopPage && (
+                <Link href={`${basePath}/cart`}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative h-10 w-10 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group"
+                  >
+                    <ShoppingCart className="h-5 w-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                    {totalItems > 0 && (
+                      <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-emerald-600 hover:bg-emerald-600 text-[10px] font-bold animate-in zoom-in duration-200">
+                        {totalItems > 9 ? "9+" : totalItems}
+                      </Badge>
+                    )}
+                  </Button>
+                </Link>
+              )}
 
               {/* User Account */}
               <Link href={`/${locale}/login`}>
@@ -273,12 +325,12 @@ export function PublicHeader({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Ürün ara..."
+                  placeholder={dictionary.searchPlaceholder}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border-0 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
               <Button type="submit" size="sm" className="bg-emerald-600 hover:bg-emerald-700">
-                Ara
+                {dictionary.search}
               </Button>
               <Button
                 type="button"
@@ -304,7 +356,7 @@ export function PublicHeader({
               const Icon = link.icon;
               return (
                 <Link
-                  key={link.href}
+                  key={link.id}
                   href={link.href}
                   className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -317,13 +369,34 @@ export function PublicHeader({
 
             {/* Mobile Links */}
             <div className="pt-4 mt-4 border-t space-y-2">
+              {/* Language Switcher Mobile */}
+              <div className="px-4 py-2">
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2">{dictionary.selectLanguage}</p>
+                <div className="flex gap-2">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => changeLanguage(lang.code)}
+                      className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
+                        lang.code === locale
+                          ? "bg-emerald-600 text-white"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
+                      }`}
+                    >
+                      <span>{lang.flag}</span>
+                      <span className="text-xs">{lang.code.toUpperCase()}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <Link
                 href={`/${locale}/login`}
                 className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <User className="h-5 w-5" />
-                Giriş Yap / Kayıt Ol
+                {dictionary.login}
               </Link>
               <Link
                 href={`${basePath}/favorites`}
@@ -331,7 +404,7 @@ export function PublicHeader({
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <Heart className="h-5 w-5" />
-                Favorilerim
+                {dictionary.favorites}
                 {totalFavorites > 0 && (
                   <Badge className="ml-auto h-5 px-2 bg-red-500 hover:bg-red-500 text-[10px]">
                     {totalFavorites}

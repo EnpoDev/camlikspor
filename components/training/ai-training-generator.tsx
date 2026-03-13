@@ -71,7 +71,18 @@ export function AiTrainingGenerator({
         throw new Error(errorData.message || "AI plan oluşturulamadı");
       }
 
-      const plan = await response.json();
+      let plan;
+      try {
+        plan = await response.json();
+      } catch (parseError) {
+        console.error("JSON parse error:", parseError);
+        throw new Error(`Yanıt işlenemedi: ${parseError instanceof Error ? parseError.message : "Bilinmeyen hata"}`);
+      }
+
+      if (!plan || !plan.exercises || !Array.isArray(plan.exercises)) {
+        throw new Error("Geçersiz plan formatı alındı");
+      }
+
       setGeneratedPlan(plan);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";

@@ -124,7 +124,7 @@ export default async function LandingPage({ params }: LandingPageProps) {
           title: publicDict.features?.title || "Neden Bizi Tercih Etmelisiniz?",
           subtitle:
             publicDict.features?.subtitle ||
-            "Profesyonel egitim kadromuz ve modern tesislerimizle farki yasayin.",
+            "Profesyonel eğitim kadromuz ve modern tesislerimizle farkı yaşayın.",
         }}
       />
 

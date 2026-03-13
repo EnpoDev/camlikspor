@@ -57,13 +57,17 @@ Generate a training plan in this exact JSON format:
   ]
 }
 
-Rules:
+CRITICAL RULES:
 - Include 5-8 exercises that fill the total duration
 - Start with warm-up, end with cool-down
 - Each exercise should have clear description
 - Equipment should be realistic (cones, balls, bibs, goals, ladders, etc.)
 - Make the plan progressive in intensity
-- Return ONLY valid JSON, no markdown or additional text`;
+- Return ONLY valid JSON, no markdown or additional text
+- DO NOT use quotes (") inside description or name fields - use single quotes (') if needed
+- DO NOT use newline characters inside strings
+- Ensure all strings are properly formatted for JSON
+- Keep descriptions concise and in a single line`;
 
     const client = new Anthropic({ apiKey });
 
@@ -82,10 +86,34 @@ Rules:
     }
 
     let jsonText = textContent.text.trim();
+
+    // Remove markdown code blocks if present
     if (jsonText.startsWith("```")) {
       jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, "").replace(/\n?```\s*$/, "");
     }
-    const plan = JSON.parse(jsonText);
+
+    // Try to parse JSON with better error handling
+    let plan;
+    try {
+      plan = JSON.parse(jsonText);
+    } catch (parseError) {
+      // If JSON parsing fails, try to fix common issues
+      console.error("Initial JSON parse failed:", parseError);
+      console.error("Raw JSON text:", jsonText.substring(0, 500));
+
+      // Try to extract JSON from the response if it's wrapped in other text
+      const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          plan = JSON.parse(jsonMatch[0]);
+        } catch (secondError) {
+          throw new Error(`JSON parsing failed: ${parseError instanceof Error ? parseError.message : "Unknown error"}`);
+        }
+      } else {
+        throw new Error(`No valid JSON found in response: ${parseError instanceof Error ? parseError.message : "Unknown error"}`);
+      }
+    }
+
     return NextResponse.json(plan);
   } catch (error) {
     console.error("AI training generation error:", error);

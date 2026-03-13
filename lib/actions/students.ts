@@ -10,6 +10,7 @@ import {
   turkishPhoneOptionalSchema,
   tcKimlikOptionalSchema,
 } from "@/lib/utils/validation";
+import { createOrLinkParent } from "@/lib/actions/parents";
 
 const studentSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -99,7 +100,7 @@ export async function createStudentAction(
   try {
     const studentNumber = await generateStudentNumber(session.user.dealerId);
 
-    await prisma.student.create({
+    const student = await prisma.student.create({
       data: {
         dealerId: session.user.dealerId,
         studentNumber,
@@ -126,6 +127,31 @@ export async function createStudentAction(
         notes: validatedFields.data.notes || null,
       },
     });
+
+    // Create or link parent account if email is provided
+    if (validatedFields.data.parentEmail) {
+      try {
+        const parentResult = await createOrLinkParent({
+          dealerId: session.user.dealerId,
+          studentId: student.id,
+          parentName: validatedFields.data.parentName,
+          parentEmail: validatedFields.data.parentEmail,
+          parentPhone: validatedFields.data.parentPhone,
+          parentTcKimlik: validatedFields.data.parentTcKimlik,
+        });
+
+        // Log temporary password if a new parent was created
+        if (parentResult.temporaryPassword) {
+          console.log(`[PARENT ACCOUNT CREATED] Email: ${validatedFields.data.parentEmail}, Temporary Password: ${parentResult.temporaryPassword}`);
+          // TODO: Send email or SMS notification to parent with login credentials
+        } else {
+          console.log(`[PARENT LINKED] Student linked to existing parent: ${validatedFields.data.parentEmail}`);
+        }
+      } catch (parentError) {
+        console.error("Parent creation/linking error:", parentError);
+        // Don't fail student creation if parent linking fails
+      }
+    }
 
     revalidatePath("/[locale]/students");
     return { messageKey: "studentCreated", success: true };
