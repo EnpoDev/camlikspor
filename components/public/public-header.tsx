@@ -29,6 +29,14 @@ import { useRouter, usePathname } from "next/navigation";
 import { useCart } from "@/lib/contexts/cart-context";
 import { useFavorites } from "@/lib/contexts/favorites-context";
 
+interface NavLink {
+  id: string;
+  href: string;
+  label: string;
+  icon: any;
+  children?: { id: string; href: string; label: string }[];
+}
+
 interface PublicHeaderProps {
   dealerSlug: string;
   dealerName: string;
@@ -45,6 +53,11 @@ interface PublicHeaderProps {
     blog: string;
     payments: string;
     registration: string;
+    training: string;
+    maleFootball: string;
+    femaleFootball: string;
+    futsal: string;
+    esports: string;
     cart: string;
     favorites: string;
     login: string;
@@ -75,6 +88,7 @@ export function PublicHeader({
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+  const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -104,11 +118,23 @@ export function PublicHeader({
   // Blog always points to main dealer (camlikspor)
   const blogPath = `/${locale}/camlikspor/blog`;
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { id: "home", href: basePath, label: dictionary.home, icon: Store },
     { id: "about", href: `${basePath}#about`, label: dictionary.about, icon: Info },
     { id: "gallery", href: `${basePath}/gallery`, label: dictionary.gallery, icon: ImageIcon },
     { id: "shop", href: `${basePath}/shop`, label: dictionary.shop, icon: ShoppingBag },
+    {
+      id: "training",
+      href: "#",
+      label: dictionary.training,
+      icon: BookOpen,
+      children: [
+        { id: "male-football", href: `${basePath}/training/male-football`, label: dictionary.maleFootball },
+        { id: "female-football", href: `${basePath}/training/female-football`, label: dictionary.femaleFootball },
+        { id: "futsal", href: `${basePath}/training/futsal`, label: dictionary.futsal },
+        { id: "esports", href: `${basePath}/training/esports`, label: dictionary.esports },
+      ],
+    },
     { id: "blog", href: blogPath, label: dictionary.blog, icon: BookOpen },
     { id: "payments", href: `/${locale}/aidat-sorgulama`, label: dictionary.payments, icon: CreditCard },
     { id: "registration", href: `${basePath}#contact`, label: dictionary.registration, icon: UserPlus },
@@ -175,6 +201,35 @@ export function PublicHeader({
             <nav className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => {
                 const Icon = link.icon;
+
+                // If link has children, render dropdown
+                if (link.children && link.children.length > 0) {
+                  return (
+                    <div key={link.id} className="relative group/dropdown">
+                      <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                        <Icon className="h-4 w-4" />
+                        {link.label}
+                        <ChevronDown className="h-3 w-3 transition-transform group-hover/dropdown:rotate-180" />
+                      </button>
+                      {/* Dropdown Menu */}
+                      <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-200 z-50">
+                        <div className="py-2">
+                          {link.children.map((child) => (
+                            <Link
+                              key={child.id}
+                              href={child.href}
+                              className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                // Regular link without children
                 return (
                   <Link
                     key={link.id}
@@ -348,12 +403,56 @@ export function PublicHeader({
         {/* Mobile Navigation */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-300 ${
-            isMobileMenuOpen ? "max-h-[32rem] border-t" : "max-h-0"
+            isMobileMenuOpen ? "max-h-[48rem] border-t" : "max-h-0"
           }`}
         >
           <nav className="container mx-auto px-4 py-4 space-y-1">
             {navLinks.map((link) => {
               const Icon = link.icon;
+
+              // If link has children, render accordion
+              if (link.children && link.children.length > 0) {
+                const isOpen = openMobileSubmenu === link.id;
+                return (
+                  <div key={link.id}>
+                    <button
+                      onClick={() => setOpenMobileSubmenu(isOpen ? null : link.id)}
+                      className="w-full flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                    >
+                      <span className="flex items-center gap-3">
+                        <Icon className="h-5 w-5" />
+                        {link.label}
+                      </span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {/* Submenu */}
+                    <div
+                      className={`overflow-hidden transition-all duration-200 ${
+                        isOpen ? "max-h-96" : "max-h-0"
+                      }`}
+                    >
+                      <div className="ml-8 mt-1 space-y-1">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.id}
+                            href={child.href}
+                            className="block rounded-lg px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // Regular link without children
               return (
                 <Link
                   key={link.id}

@@ -156,7 +156,10 @@
     "notSelected": "No seleccionado",
     "male": "Masculino",
     "female": "Femenino",
-    "update": "Actualizar"
+    "update": "Actualizar",
+    "termsAcceptanceLabel": "He leído y acepto el acuerdo de preinscripción",
+    "termsAcceptanceLinkText": "Acuerdo de preinscripción",
+    "termsAcceptanceLink": "/es/camlikspor/legal/acuerdo-de-preinscripcion"
   },
   "students": {
     "title": "Estudiantes",
@@ -508,6 +511,11 @@
     "blog": "Noticias",
     "payments": "Consulta de Pagos",
     "registration": "Pre-inscripcion",
+    "training": "Entrenamientos",
+    "maleFootball": "Fútbol Masculino",
+    "femaleFootball": "Fútbol Femenino",
+    "futsal": "Fútbol Sala",
+    "esports": "Deportes Electrónicos",
     "cart": "Carrito",
     "favorites": "Mis Favoritos",
     "login": "Iniciar Sesion / Registrarse",

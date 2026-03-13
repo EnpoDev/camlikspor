@@ -156,7 +156,10 @@
     "notSelected": "Not selected",
     "male": "Male",
     "female": "Female",
-    "update": "Update"
+    "update": "Update",
+    "termsAcceptanceLabel": "I have read and accept the pre-registration agreement",
+    "termsAcceptanceLinkText": "Pre-registration agreement",
+    "termsAcceptanceLink": "/en/camlikspor/legal/pre-registration-agreement"
   },
   "students": {
     "title": "Students",
@@ -508,6 +511,11 @@
     "blog": "News",
     "payments": "Payment Inquiry",
     "registration": "Pre-Registration",
+    "training": "Training",
+    "maleFootball": "Male Football",
+    "femaleFootball": "Female Football",
+    "futsal": "Futsal",
+    "esports": "E-Sports",
     "cart": "Cart",
     "favorites": "My Favorites",
     "login": "Login / Sign Up",

@@ -19,6 +19,11 @@ const preRegistrationSchema = z.object({
   branchInterest: z.string().optional(),
   notes: z.string().optional(),
   source: z.string().optional(),
+  termsAccepted: z
+    .string()
+    .refine((val) => val === "on", {
+      message: "Ön kayıt sözleşmesini kabul etmelisiniz",
+    }),
 });
 
 export type PreRegistrationFormState = {
@@ -28,6 +33,7 @@ export type PreRegistrationFormState = {
     parentName?: string[];
     parentPhone?: string[];
     parentEmail?: string[];
+    termsAccepted?: string[];
     _form?: string[];
   };
   success?: boolean;
@@ -67,6 +73,7 @@ export async function createPreRegistrationAction(
     branchInterest: formData.get("branchInterest"),
     notes: formData.get("notes"),
     source: formData.get("source"),
+    termsAccepted: formData.get("termsAccepted"),
   });
 
   if (!validatedFields.success) {
@@ -148,6 +155,7 @@ export async function updatePreRegistrationAction(
     branchInterest: formData.get("branchInterest"),
     notes: formData.get("notes"),
     source: formData.get("source"),
+    termsAccepted: formData.get("termsAccepted"),
   });
 
   if (!validatedFields.success) {
