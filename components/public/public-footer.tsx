@@ -21,7 +21,7 @@ interface LegalDocument {
   id: string;
   title: string;
   slug: string;
-  fileUrl: string;
+  fileUrl: string | null;
 }
 
 interface PublicFooterProps {
@@ -76,11 +76,13 @@ export function PublicFooter({
     { href: `${basePath}/shop`, label: "Mağaza" },
     { href: `${basePath}#contact`, label: "İletişim" },
     { href: `${basePath}/privacy`, label: dictionary.privacy || "Gizlilik Politikası" },
-    ...legalDocuments.map((doc) => ({
-      href: doc.fileUrl,
-      label: doc.title,
-      isExternal: true,
-    })),
+    ...legalDocuments
+      .filter((doc) => doc.fileUrl)
+      .map((doc) => ({
+        href: doc.fileUrl!,
+        label: doc.title,
+        isExternal: true,
+      })),
   ];
 
   const shopLinks = [
@@ -343,10 +345,10 @@ export function PublicFooter({
               >
                 Gizlilik Politikası
               </Link>
-              {legalDocuments.map((doc) => (
+              {legalDocuments.filter((doc) => doc.fileUrl).map((doc) => (
                 <a
                   key={doc.id}
-                  href={doc.fileUrl}
+                  href={doc.fileUrl!}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-slate-400 hover:text-white transition-colors flex items-center gap-1"
