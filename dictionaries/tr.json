@@ -156,7 +156,10 @@
     "notSelected": "Seçilmedi",
     "male": "Erkek",
     "female": "Kadın",
-    "update": "Güncelle"
+    "update": "Güncelle",
+    "termsAcceptanceLabel": "Ön kayıt sözleşmesini okudum ve kabul ediyorum",
+    "termsAcceptanceLinkText": "Ön kayıt sözleşmesi",
+    "termsAcceptanceLink": "/tr/camlikspor/legal/on-kayit-sozlesmesi"
   },
   "students": {
     "title": "Öğrenciler",
@@ -508,6 +511,11 @@
     "blog": "Haberler",
     "payments": "Aidat Sorgulama",
     "registration": "Ön Kayıt",
+    "training": "Eğitimler",
+    "maleFootball": "Erkek Futbol",
+    "femaleFootball": "Kız Futbol",
+    "futsal": "Futsal",
+    "esports": "E-Spor",
     "cart": "Sepet",
     "favorites": "Favorilerim",
     "login": "Giriş Yap / Kayıt Ol",

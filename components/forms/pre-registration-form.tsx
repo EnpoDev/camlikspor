@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -303,6 +304,32 @@ export function PreRegistrationForm({
           </div>
         </CardContent>
       </Card>
+
+      {/* Terms Acceptance Checkbox */}
+      {!isEdit && (
+        <div className="flex items-start space-x-3 rounded-lg border p-4 bg-slate-50 dark:bg-slate-900">
+          <Checkbox id="termsAccepted" name="termsAccepted" required className="mt-1" />
+          <div className="flex-1">
+            <Label
+              htmlFor="termsAccepted"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            >
+              {t.termsAcceptanceLabel as string}{" "}
+              <a
+                href={t.termsAcceptanceLink as string}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 hover:text-emerald-700 underline"
+              >
+                {t.termsAcceptanceLinkText as string}
+              </a>
+            </Label>
+            {state.errors?.termsAccepted && (
+              <p className="text-sm text-destructive mt-2">{state.errors.termsAccepted[0]}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="flex gap-4">
         <Button type="submit" disabled={isPending}>
