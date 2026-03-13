@@ -45,7 +45,12 @@ export default async function PublicLayout({
   };
 
   // Fetch legal documents
-  let legalDocuments = [];
+  let legalDocuments: Array<{
+    id: string;
+    title: string;
+    slug: string;
+    fileUrl: string | null;
+  }> = [];
   try {
     legalDocuments = await prisma.legalDocument.findMany({
       where: {
