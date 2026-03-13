@@ -45,12 +45,7 @@ export default async function PublicLayout({
   };
 
   // Fetch legal documents
-  let legalDocuments: Array<{
-    id: string;
-    title: string;
-    slug: string;
-    fileUrl: string | null;
-  }> = [];
+  let legalDocuments: Awaited<ReturnType<typeof prisma.legalDocument.findMany>> = [];
   try {
     legalDocuments = await prisma.legalDocument.findMany({
       where: {
