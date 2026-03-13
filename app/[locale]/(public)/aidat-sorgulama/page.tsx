@@ -274,15 +274,47 @@ export default function PaymentInquiryPage() {
           </CardContent>
         </Card>
 
+        {/* Payment Button for Pending Payments */}
+        {result && result.pendingPayments?.length > 0 && (
+          <Card className="mt-6 border-2 border-emerald-200 bg-emerald-50 dark:bg-emerald-950">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-100 mb-2">
+                    💳 Online Ödeme
+                  </h3>
+                  <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                    Bekleyen ödemelerinizi hemen online olarak yapabilirsiniz
+                  </p>
+                </div>
+                <Button className="bg-emerald-600 hover:bg-emerald-700">
+                  Online Ödeme Yap
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Info Cards */}
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
+        <div className="mt-8 grid md:grid-cols-3 gap-6">
           <Card className="border-blue-200 bg-blue-50 dark:bg-blue-950 dark:border-blue-900">
             <CardContent className="p-6">
               <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
                 💡 Nasıl Sorgularım?
               </h3>
               <p className="text-sm text-blue-700 dark:text-blue-300">
-                TC Kimlik Numaranızı veya kayıtlı telefon numaranızı yukarıdaki alana girerek ödeme bilgilerinizi görebilirsiniz.
+                TC Kimlik Numaranızı (11 haneli) veya kayıtlı telefon numaranızı (05XXXXXXXXX) girin.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-950 dark:border-emerald-900">
+            <CardContent className="p-6">
+              <h3 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-2">
+                🔒 Güvenli Sorgulama
+              </h3>
+              <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                Tüm bilgileriniz şifrelenmiş ve güvenli şekilde saklanmaktadır.
               </p>
             </CardContent>
           </Card>
@@ -290,15 +322,33 @@ export default function PaymentInquiryPage() {
           <Card className="border-amber-200 bg-amber-50 dark:bg-amber-950 dark:border-amber-900">
             <CardContent className="p-6">
               <h3 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
-                📞 Yardım
+                📞 Destek Hattı
               </h3>
               <p className="text-sm text-amber-700 dark:text-amber-300">
-                Sorularınız için bizimle iletişime geçebilirsiniz: <br />
-                <strong>0532 241 24 31</strong>
+                Sorularınız için:<br />
+                <strong className="text-base">0532 241 24 31</strong>
               </p>
             </CardContent>
           </Card>
         </div>
+
+        {/* Print Button */}
+        {result && (
+          <div className="mt-6 flex justify-center">
+            <Button
+              variant="outline"
+              onClick={() => window.print()}
+              className="gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+              Yazdır
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
