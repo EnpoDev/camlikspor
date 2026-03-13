@@ -70,12 +70,6 @@ export default function PaymentInquiryPage() {
 
         {/* Search Card */}
         <Card className="relative shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-t-lg">
-            <CardTitle className="leading-none font-semibold flex items-center gap-2 absolute top-0">
-              <Search className="h-5 w-5" />
-              Ödeme Bilgisi Sorgula
-            </CardTitle>
-          </CardHeader>
           <CardContent className="p-6">
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="space-y-2">
