@@ -63,6 +63,7 @@
     "accountDisabled": "Your account has been disabled"
   },
   "sidebar": {
+    "home": "Home",
     "dashboard": "Dashboard",
     "preRegistration": "Pre-registration",
     "students": "Students",
@@ -82,14 +83,16 @@
     "dealerPayments": "Dealer Payments",
     "subDealers": "Sub-Dealers",
     "commissions": "Commissions",
-    "blog": "Blog",
     "products": "Products",
     "orders": "Orders",
+    "blog": "News",
+    "heroSlides": "Hero Slider",
     "gallery": "Gallery",
     "training": "Training",
     "trainingPlans": "Training Plans",
     "tacticalBoard": "Tactical Board",
-    "trainingCalendar": "Training Calendar"
+    "trainingCalendar": "Training Calendar",
+    "legalDocuments": "Legal Documents"
   },
   "header": {
     "profile": "Profile",
@@ -319,6 +322,11 @@
       "totalDebt": "Total Debt",
       "dueDate": "Due Date",
       "paymentDate": "Payment Date",
+      "paidAt": "Payment Date",
+      "currentMonthDebt": "Due This Month",
+      "futurePayments": "Future Payments",
+      "futurePaymentsTotal": "Total Future Payments",
+      "noFuturePayments": "No future payments",
       "paymentType": "Payment Type",
       "paymentMethod": "Payment Method",
       "recordPayment": "Record Payment"
@@ -492,16 +500,31 @@
     "statusUpdated": "Status updated successfully"
   },
   "public": {
+    "home": "Home",
+    "about": "About Us",
     "shop": "Shop",
     "gallery": "Gallery",
     "contact": "Contact",
+    "blog": "News",
+    "payments": "Payment Inquiry",
+    "registration": "Pre-Registration",
     "cart": "Cart",
+    "favorites": "My Favorites",
+    "login": "Login / Sign Up",
+    "search": "Search",
+    "searchPlaceholder": "Search products...",
+    "selectLanguage": "Select Language",
     "allRightsReserved": "All rights reserved.",
     "quickLinks": "Quick Links",
     "followUs": "Follow Us",
+    "privacy": "Privacy Policy",
     "hero": {
       "shopCta": "Go to Shop",
-      "contactCta": "Contact"
+      "contactCta": "Contact",
+      "professionalTrainers": "Professional Trainers",
+      "modernFacilities": "Modern Facilities",
+      "flexibleSchedule": "Flexible Training Hours",
+      "allAges": "All Age Groups"
     },
     "features": {
       "title": "Why Choose Us?",
@@ -523,6 +546,63 @@
       "addressLabel": "Address",
       "hoursLabel": "Working Hours",
       "hours": "Monday - Saturday: 09:00 - 21:00"
+    },
+    "news": {
+      "title": "Latest News",
+      "subtitle": "Latest updates from our club",
+      "allNews": "All News",
+      "featured": "FEATURED"
+    },
+    "whatsapp": {
+      "tooltip": "Message us on WhatsApp",
+      "defaultMessage": "Hello, I would like to get information."
+    },
+    "homepage": {
+      "about": {
+        "badge": "About Us",
+        "title": "Training Tomorrow's Football Stars",
+        "description": "is a professional football school that provides the ideal environment for children to discover and develop their football talents.",
+        "feature1Title": "Licensed Coaches",
+        "feature1Desc": "UEFA licensed, experienced coaching staff",
+        "feature2Title": "Age-Specific Training",
+        "feature2Desc": "Training programs for different categories from ages 5-16",
+        "feature3Title": "Modern Infrastructure",
+        "feature3Desc": "Synthetic turf fields and professional training environment"
+      },
+      "features": {
+        "badge": "Our Features",
+        "title": "Why Choose Us?",
+        "subtitle": "The best starting point for your child's football journey",
+        "card1Title": "Professional Coaches",
+        "card1Desc": "UEFA licensed, experienced coaching staff",
+        "card2Title": "Modern Facilities",
+        "card2Desc": "State-of-the-art synthetic fields and training areas",
+        "card3Title": "Age Groups",
+        "card3Desc": "Special programs for ages 5-16",
+        "card4Title": "Flexible Hours",
+        "card4Desc": "Weekday and weekend training options"
+      },
+      "gallery": {
+        "badge": "Gallery",
+        "title": "Our Facilities and Activities",
+        "subtitle": "Moments from training sessions and tournaments"
+      },
+      "shop": {
+        "badge": "Shop",
+        "title": "Club Products",
+        "subtitle": "Jerseys and club merchandise",
+        "viewAll": "View All"
+      },
+      "contact": {
+        "badge": "Registration and Contact",
+        "title": "Contact Us",
+        "subtitle": "Get in touch for registration and inquiries",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "trainingHours": "Training Hours",
+        "schedule": "Mon-Sat 3:00PM-8:00PM"
+      }
     }
   },
   "products": {
@@ -604,6 +684,7 @@
     "domain": "Domain",
     "products": "Products",
     "orders": "Orders",
+    "blog": "News",
     "inheritProducts": "Product Inheritance",
     "canCreateProducts": "Can Create Products",
     "formTitle": "Sub-Dealer Information",
@@ -780,5 +861,38 @@
     "verificationPending": "Verification pending",
     "verificationSuccess": "Domain verified successfully",
     "verificationFailed": "Verification failed"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "introTitle": "Introduction",
+    "introText": "This privacy policy explains how your personal information is processed when you visit our website or use our services.",
+    "collectedInfoTitle": "Information We Collect",
+    "collectedInfoText": "When you use our services, we may collect the following information:",
+    "infoItem1": "Name, surname and contact information",
+    "infoItem2": "Email address and phone number",
+    "infoItem3": "Payment and billing information",
+    "infoItem4": "Usage data and preferences",
+    "usageTitle": "How We Use Information",
+    "usageText": "The collected information is used for the following purposes:",
+    "usageItem1": "To provide and improve our services",
+    "usageItem2": "To process orders and payments",
+    "usageItem3": "To provide customer support",
+    "usageItem4": "To fulfill legal obligations",
+    "securityTitle": "Information Security",
+    "securityText": "We use industry-standard security measures to protect your personal information. Your data is protected with SSL encryption.",
+    "cookiesTitle": "Cookies",
+    "cookiesText": "Our website uses cookies to improve user experience. You can manage cookies through your browser settings.",
+    "thirdPartyTitle": "Third Party Sharing",
+    "thirdPartyText": "Your personal information is not shared with third parties except as required by law. Our service providers process your data solely for service delivery purposes.",
+    "rightsTitle": "User Rights",
+    "rightsText": "You have the following rights regarding your personal data:",
+    "rightsItem1": "Right to access your data",
+    "rightsItem2": "Right to request correction of data",
+    "rightsItem3": "Right to request deletion of data",
+    "rightsItem4": "Right to object to data processing",
+    "contactTitle": "Contact",
+    "contactText": "For questions about our privacy policy, please contact us:",
+    "updateText": "This privacy policy was last updated on",
+    "updateText2": ""
   }
 }

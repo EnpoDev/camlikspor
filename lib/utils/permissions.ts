@@ -7,6 +7,19 @@ export const SUB_DEALER_RESTRICTED_PERMISSIONS: Permission[] = [
   Permission.SUB_DEALERS_EDIT,
   Permission.SUB_DEALERS_DELETE,
   Permission.COMMISSIONS_VIEW,
+  // Products - sub-dealers cannot manage products
+  Permission.PRODUCTS_VIEW,
+  Permission.PRODUCTS_CREATE,
+  Permission.PRODUCTS_EDIT,
+  Permission.PRODUCTS_DELETE,
+  // Orders - sub-dealers cannot manage orders
+  Permission.ORDERS_VIEW,
+  Permission.ORDERS_EDIT,
+  // Blog - sub-dealers cannot manage blog
+  Permission.BLOG_VIEW,
+  Permission.BLOG_CREATE,
+  Permission.BLOG_EDIT,
+  Permission.BLOG_DELETE,
 ];
 
 // Role-based default permissions
@@ -77,6 +90,16 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     // Orders
     Permission.ORDERS_VIEW,
     Permission.ORDERS_EDIT,
+    // Blog
+    Permission.BLOG_VIEW,
+    Permission.BLOG_CREATE,
+    Permission.BLOG_EDIT,
+    Permission.BLOG_DELETE,
+    // Hero Slides
+    Permission.HERO_SLIDES_VIEW,
+    Permission.HERO_SLIDES_CREATE,
+    Permission.HERO_SLIDES_EDIT,
+    Permission.HERO_SLIDES_DELETE,
     // Sub-dealers
     Permission.SUB_DEALERS_VIEW,
     Permission.SUB_DEALERS_CREATE,
@@ -93,11 +116,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.TACTICAL_BOARD_CREATE,
     Permission.TACTICAL_BOARD_EDIT,
     Permission.TACTICAL_BOARD_DELETE,
-    // Blog
-    Permission.BLOG_VIEW,
-    Permission.BLOG_CREATE,
-    Permission.BLOG_EDIT,
-    Permission.BLOG_DELETE,
   ],
   [UserRole.TRAINER]: [
     Permission.ATTENDANCE_VIEW,
@@ -108,6 +126,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.TRAINING_CREATE,
     Permission.TACTICAL_BOARD_VIEW,
     Permission.TACTICAL_BOARD_CREATE,
+  ],
+  [UserRole.PARENT]: [
+    // Parents have no admin permissions - they only access their own parent panel
   ],
 };
 
@@ -148,6 +169,11 @@ export interface MenuItem {
 
 // Menu items for DEALER_ADMIN and TRAINER
 export const MENU_ITEMS: MenuItem[] = [
+  {
+    key: "home",
+    labelKey: "sidebar.home",
+    href: "/",
+  },
   {
     key: "dashboard",
     labelKey: "sidebar.dashboard",
@@ -264,6 +290,14 @@ export const MENU_ITEMS: MenuItem[] = [
     labelKey: "sidebar.settings",
     href: "/settings",
     permission: Permission.SETTINGS_VIEW,
+    children: [
+      {
+        key: "legal-documents",
+        labelKey: "sidebar.legalDocuments",
+        href: "/settings/legal-documents",
+        permission: Permission.SETTINGS_EDIT,
+      },
+    ],
   },
   {
     key: "products",
@@ -278,6 +312,18 @@ export const MENU_ITEMS: MenuItem[] = [
     permission: Permission.ORDERS_VIEW,
   },
   {
+    key: "blog",
+    labelKey: "sidebar.blog",
+    href: "/blog",
+    permission: Permission.BLOG_VIEW,
+  },
+  {
+    key: "hero-slides",
+    labelKey: "sidebar.heroSlides",
+    href: "/hero-slides",
+    permission: Permission.HERO_SLIDES_VIEW,
+  },
+  {
     key: "sub-dealers",
     labelKey: "sidebar.subDealers",
     href: "/sub-dealers",
@@ -289,16 +335,15 @@ export const MENU_ITEMS: MenuItem[] = [
     href: "/commissions",
     permission: Permission.COMMISSIONS_VIEW,
   },
-  {
-    key: "blog",
-    labelKey: "sidebar.blog",
-    href: "/blog",
-    permission: Permission.BLOG_VIEW,
-  },
 ];
 
 // Menu items for SUPER_ADMIN (only dealer management)
 export const SUPER_ADMIN_MENU_ITEMS: MenuItem[] = [
+  {
+    key: "home",
+    labelKey: "sidebar.home",
+    href: "/",
+  },
   {
     key: "dashboard",
     labelKey: "sidebar.dashboard",

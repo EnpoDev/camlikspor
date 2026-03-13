@@ -43,54 +43,88 @@ export default async function PublicLayout({
     followUs: "Bizi Takip Edin",
   };
 
+  // Fetch legal documents
+  let legalDocuments = [];
+  try {
+    legalDocuments = await prisma.legalDocument.findMany({
+      where: {
+        dealerId: dealer.id,
+        isActive: true,
+      },
+      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        fileUrl: true,
+      },
+    });
+  } catch (error) {
+    // LegalDocument model not generated yet
+    console.log("LegalDocument model not available yet");
+  }
+
   return (
     <CartProvider>
       <FavoritesProvider>
-      <ThemeProvider
-        customSettings={dealer.themeSettings}
-        layoutSettings={dealer.layoutSettings}
-        customCss={dealer.customCss}
-      >
-        <div className="flex min-h-screen flex-col">
-          <PublicHeader
-            dealerSlug=""
-            dealerName={dealer.name}
-            dealerLogo={dealer.logo}
-            locale={locale}
-            contactPhone={dealer.contactPhone}
-            contactEmail={dealer.contactEmail}
-            dictionary={{
-              shop: publicDict.shop || "Magaza",
-              gallery: publicDict.gallery || "Galeri",
-              contact: publicDict.contact || "Iletisim",
-              cart: publicDict.cart || "Sepet",
-            }}
-            useRootPaths
-          />
-          <main className="flex-1">{children}</main>
-          <PublicFooter
-            dealerSlug=""
-            dealerName={dealer.name}
-            locale={locale}
-            contactPhone={dealer.contactPhone}
-            contactEmail={dealer.contactEmail}
-            contactAddress={dealer.contactAddress}
-            socialFacebook={dealer.socialFacebook}
-            socialInstagram={dealer.socialInstagram}
-            socialTwitter={dealer.socialTwitter}
-            socialYoutube={dealer.socialYoutube}
-            dictionary={{
-              shop: publicDict.shop || "Magaza",
-              contact: publicDict.contact || "Iletisim",
-              allRightsReserved: publicDict.allRightsReserved || "Tum haklari saklidir.",
-              quickLinks: publicDict.quickLinks || "Hizli Baglantilar",
-              followUs: publicDict.followUs || "Bizi Takip Edin",
-            }}
-            useRootPaths
-          />
-          <WhatsAppFloat />
-        </div>
-      </ThemeProvider>
+        <ThemeProvider
+          customSettings={dealer.themeSettings}
+          layoutSettings={dealer.layoutSettings}
+          customCss={dealer.customCss}
+        >
+          <div className="flex min-h-screen flex-col">
+            <PublicHeader
+              dealerSlug=""
+              dealerName={dealer.name}
+              dealerLogo={dealer.logo}
+              locale={locale}
+              contactPhone={dealer.contactPhone}
+              contactEmail={dealer.contactEmail}
+              dictionary={{
+                home: publicDict.home || "Ana Sayfa",
+                about: publicDict.about || "Hakkımızda",
+                shop: publicDict.shop || "Mağaza",
+                gallery: publicDict.gallery || "Galeri",
+                contact: publicDict.contact || "İletişim",
+                blog: publicDict.blog || "Blog",
+                payments: publicDict.payments || "Aidat Sorgulama",
+                registration: publicDict.registration || "Ön Kayıt",
+                cart: publicDict.cart || "Sepet",
+                favorites: publicDict.favorites || "Favorilerim",
+                login: publicDict.login || "Giriş Yap / Kayıt Ol",
+                search: publicDict.search || "Ara",
+                searchPlaceholder: publicDict.searchPlaceholder || "Ürün ara...",
+                selectLanguage: publicDict.selectLanguage || "Dil Seçin",
+              }}
+              useRootPaths
+            />
+            <main className="flex-1">{children}</main>
+            <PublicFooter
+              dealerSlug=""
+              dealerName={dealer.name}
+              locale={locale}
+              contactPhone={dealer.contactPhone}
+              contactEmail={dealer.contactEmail}
+              contactAddress={dealer.contactAddress}
+              socialFacebook={dealer.socialFacebook}
+              socialInstagram={dealer.socialInstagram}
+              socialTwitter={dealer.socialTwitter}
+              socialYoutube={dealer.socialYoutube}
+              legalDocuments={legalDocuments}
+              dictionary={{
+                shop: publicDict.shop || "Magaza",
+                contact: publicDict.contact || "Iletisim",
+                allRightsReserved:
+                  publicDict.allRightsReserved || "Tum haklari saklidir.",
+                quickLinks: publicDict.quickLinks || "Hizli Baglantilar",
+                followUs: publicDict.followUs || "Bizi Takip Edin",
+                privacy: publicDict.privacy || "Gizlilik Politikası",
+              }}
+              useRootPaths
+            />
+            <WhatsAppFloat />
+          </div>
+        </ThemeProvider>
       </FavoritesProvider>
     </CartProvider>
   );

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   Home,
+  LayoutDashboard,
   UserPlus,
   Users,
   Dumbbell,
@@ -28,6 +29,7 @@ import {
   Target,
   Calendar,
   Newspaper,
+  Images,
 } from "lucide-react";
 import { UserRole } from "@/lib/types";
 import {
@@ -38,7 +40,8 @@ import { useState } from "react";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 
 const iconMap: Record<string, React.ElementType> = {
-  dashboard: Home,
+  home: Home,
+  dashboard: LayoutDashboard,
   "pre-registration": UserPlus,
   students: Users,
   trainers: Dumbbell,
@@ -49,17 +52,19 @@ const iconMap: Record<string, React.ElementType> = {
   sms: MessageSquare,
   users: UserCog,
   settings: Settings,
+  "legal-documents": FileText,
   dealers: Building2,
   "dealer-payments": Banknote,
   products: Package,
   orders: ShoppingCart,
+  blog: Newspaper,
+  "hero-slides": Images,
   "sub-dealers": Store,
   commissions: Coins,
   training: ClipboardList,
   "training-plans": BookOpen,
   "tactical-board": Target,
   "training-calendar": Calendar,
-  blog: Newspaper,
 };
 
 interface SidebarProps {
@@ -164,9 +169,9 @@ export function Sidebar({
   return (
     <aside className={cn(
       "flex flex-col w-64 border-sidebar-border bg-sidebar text-sidebar-foreground",
-      isMobile ? "h-full border-0" : "hidden lg:flex border-r"
+      isMobile ? "h-full border-0" : "hidden lg:flex border-r h-screen"
     )}>
-      <div className="p-4 border-b border-sidebar-border">
+      <div className="p-4 border-b border-sidebar-border flex-shrink-0">
         <Link href={`/${locale}/dashboard`} className="flex items-center gap-3">
           <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white">
             <Image
