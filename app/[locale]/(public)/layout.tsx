@@ -8,6 +8,7 @@ import { CartProvider } from "@/lib/contexts/cart-context";
 import { FavoritesProvider } from "@/lib/contexts/favorites-context";
 import { ThemeProvider } from "@/components/public/theme-provider";
 import { getPublicDealer } from "@/lib/utils/get-public-dealer";
+import { prisma } from "@/lib/prisma";
 
 interface PublicLayoutProps {
   children: React.ReactNode;
