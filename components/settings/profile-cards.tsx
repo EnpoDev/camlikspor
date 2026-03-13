@@ -96,13 +96,13 @@ export function ProfileCards({ user }: ProfileCardsProps) {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || "Profil guncellenemedi");
+        throw new Error(error.message || "Profil güncellenemedi");
       }
 
       setDisplayName(name.trim());
       setDisplayPhone(phone.trim());
       setIsEditing(false);
-      toast.success("Profil basariyla guncellendi");
+      toast.success("Profil başarıyla güncellendi");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Bir hata olustu");
     } finally {

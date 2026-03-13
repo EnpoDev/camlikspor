@@ -54,7 +54,7 @@ export default function CheckoutPage() {
     e.preventDefault();
 
     if (!formData.customerName || !formData.customerEmail || !formData.customerPhone) {
-      toast.error("Lutfen zorunlu alanlari doldurun");
+      toast.error("Lütfen zorunlu alanları doldurun");
       return;
     }
 

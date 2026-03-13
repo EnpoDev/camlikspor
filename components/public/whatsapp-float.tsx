@@ -44,15 +44,33 @@ export function WhatsAppFloat() {
 
         {/* Button */}
         <div className="relative">
-          {/* Pulse animation rings */}
-          <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-75" />
-          <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-50" />
+          {/* Slow subtle pulse animation */}
+          <div
+            className="absolute inset-0 rounded-full opacity-30"
+            style={{
+              backgroundColor: '#10b981',
+              animation: 'slow-pulse 4s ease-in-out infinite'
+            }}
+          />
 
           {/* Main button */}
-          <div className="relative w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group-hover:scale-110">
+          <div className="relative w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group-hover:scale-110 hover:brightness-110" style={{ backgroundColor: '#10b981' }}>
             <WhatsAppIcon className="h-7 w-7 text-white" />
           </div>
         </div>
+
+        <style jsx>{`
+          @keyframes slow-pulse {
+            0%, 100% {
+              opacity: 0.3;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 0.15;
+              transform: scale(1.05);
+            }
+          }
+        `}</style>
       </div>
     </a>
   );

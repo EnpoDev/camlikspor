@@ -63,6 +63,7 @@
     "accountDisabled": "Tu cuenta ha sido desactivada"
   },
   "sidebar": {
+    "home": "Inicio",
     "dashboard": "Panel",
     "preRegistration": "Pre-inscripcion",
     "students": "Estudiantes",
@@ -84,11 +85,14 @@
     "commissions": "Comisiones",
     "products": "Productos",
     "orders": "Pedidos",
+    "blog": "Noticias",
+    "heroSlides": "Slider Principal",
     "gallery": "Galeria",
     "training": "Entrenamiento",
     "trainingPlans": "Planes de Entrenamiento",
     "tacticalBoard": "Pizarra Tactica",
-    "trainingCalendar": "Calendario de Entrenamiento"
+    "trainingCalendar": "Calendario de Entrenamiento",
+    "legalDocuments": "Documentos Legales"
   },
   "header": {
     "profile": "Perfil",
@@ -318,6 +322,11 @@
       "totalDebt": "Deuda Total",
       "dueDate": "Fecha de Vencimiento",
       "paymentDate": "Fecha de Pago",
+      "paidAt": "Fecha de Pago",
+      "currentMonthDebt": "Vence Este Mes",
+      "futurePayments": "Pagos Futuros",
+      "futurePaymentsTotal": "Total de Pagos Futuros",
+      "noFuturePayments": "Sin pagos futuros",
       "paymentType": "Tipo de Pago",
       "paymentMethod": "Metodo de Pago",
       "recordPayment": "Registrar Pago"
@@ -491,16 +500,31 @@
     "statusUpdated": "Estado actualizado exitosamente"
   },
   "public": {
+    "home": "Inicio",
+    "about": "Sobre Nosotros",
     "shop": "Tienda",
     "gallery": "Galeria",
     "contact": "Contacto",
+    "blog": "Noticias",
+    "payments": "Consulta de Pagos",
+    "registration": "Pre-inscripcion",
     "cart": "Carrito",
+    "favorites": "Mis Favoritos",
+    "login": "Iniciar Sesion / Registrarse",
+    "search": "Buscar",
+    "searchPlaceholder": "Buscar productos...",
+    "selectLanguage": "Seleccionar Idioma",
     "allRightsReserved": "Todos los derechos reservados.",
     "quickLinks": "Enlaces Rapidos",
     "followUs": "Siguenos",
+    "privacy": "Política de Privacidad",
     "hero": {
       "shopCta": "Ir a la Tienda",
-      "contactCta": "Contacto"
+      "contactCta": "Contacto",
+      "professionalTrainers": "Entrenadores Profesionales",
+      "modernFacilities": "Instalaciones Modernas",
+      "flexibleSchedule": "Horarios de Entrenamiento Flexibles",
+      "allAges": "Todos los Grupos de Edad"
     },
     "features": {
       "title": "Por que Elegirnos?",
@@ -522,6 +546,63 @@
       "addressLabel": "Direccion",
       "hoursLabel": "Horario de Atencion",
       "hours": "Lunes - Sabado: 09:00 - 21:00"
+    },
+    "news": {
+      "title": "Ultimas Noticias",
+      "subtitle": "Ultimas actualizaciones de nuestro club",
+      "allNews": "Todas las Noticias",
+      "featured": "DESTACADO"
+    },
+    "whatsapp": {
+      "tooltip": "Escribenos en WhatsApp",
+      "defaultMessage": "Hola, me gustaria obtener informacion."
+    },
+    "homepage": {
+      "about": {
+        "badge": "Sobre Nosotros",
+        "title": "Formando las Estrellas del Futbol del Manana",
+        "description": "es una escuela de futbol profesional que proporciona el entorno ideal para que los ninos descubran y desarrollen sus talentos futbolisticos.",
+        "feature1Title": "Entrenadores Certificados",
+        "feature1Desc": "Personal de entrenamiento con licencia UEFA y experiencia",
+        "feature2Title": "Entrenamiento Especifico por Edad",
+        "feature2Desc": "Programas de entrenamiento para diferentes categorias de 5-16 anos",
+        "feature3Title": "Infraestructura Moderna",
+        "feature3Desc": "Campos de cesped sintetico y entorno de entrenamiento profesional"
+      },
+      "features": {
+        "badge": "Nuestras Caracteristicas",
+        "title": "Por que Elegirnos?",
+        "subtitle": "El mejor punto de partida para el viaje futbolistico de su hijo",
+        "card1Title": "Entrenadores Profesionales",
+        "card1Desc": "Personal de entrenamiento con licencia UEFA y experiencia",
+        "card2Title": "Instalaciones Modernas",
+        "card2Desc": "Campos sinteticos de ultima generacion y areas de entrenamiento",
+        "card3Title": "Grupos de Edad",
+        "card3Desc": "Programas especiales para edades 5-16",
+        "card4Title": "Horarios Flexibles",
+        "card4Desc": "Opciones de entrenamiento entre semana y fines de semana"
+      },
+      "gallery": {
+        "badge": "Galeria",
+        "title": "Nuestras Instalaciones y Actividades",
+        "subtitle": "Momentos de sesiones de entrenamiento y torneos"
+      },
+      "shop": {
+        "badge": "Tienda",
+        "title": "Productos del Club",
+        "subtitle": "Camisetas y articulos del club",
+        "viewAll": "Ver Todo"
+      },
+      "contact": {
+        "badge": "Registro y Contacto",
+        "title": "Contactenos",
+        "subtitle": "Pongase en contacto para registro y consultas",
+        "phone": "Telefono",
+        "email": "Correo Electronico",
+        "address": "Direccion",
+        "trainingHours": "Horario de Entrenamiento",
+        "schedule": "Lun-Sab 3:00PM-8:00PM"
+      }
     }
   },
   "products": {
@@ -603,6 +684,7 @@
     "domain": "Dominio",
     "products": "Productos",
     "orders": "Pedidos",
+    "blog": "Noticias",
     "inheritProducts": "Herencia de Productos",
     "canCreateProducts": "Puede Crear Productos",
     "formTitle": "Informacion del Sub-Distribuidor",
@@ -779,5 +861,38 @@
     "verificationPending": "Verificacion pendiente",
     "verificationSuccess": "Dominio verificado exitosamente",
     "verificationFailed": "Verificacion fallida"
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "introTitle": "Introducción",
+    "introText": "Esta política de privacidad explica cómo se procesa su información personal cuando visita nuestro sitio web o utiliza nuestros servicios.",
+    "collectedInfoTitle": "Información que Recopilamos",
+    "collectedInfoText": "Cuando utiliza nuestros servicios, podemos recopilar la siguiente información:",
+    "infoItem1": "Nombre, apellido e información de contacto",
+    "infoItem2": "Dirección de correo electrónico y número de teléfono",
+    "infoItem3": "Información de pago y facturación",
+    "infoItem4": "Datos de uso y preferencias",
+    "usageTitle": "Cómo Usamos la Información",
+    "usageText": "La información recopilada se utiliza para los siguientes propósitos:",
+    "usageItem1": "Proporcionar y mejorar nuestros servicios",
+    "usageItem2": "Procesar pedidos y pagos",
+    "usageItem3": "Proporcionar soporte al cliente",
+    "usageItem4": "Cumplir con las obligaciones legales",
+    "securityTitle": "Seguridad de la Información",
+    "securityText": "Utilizamos medidas de seguridad estándar de la industria para proteger su información personal. Sus datos están protegidos con cifrado SSL.",
+    "cookiesTitle": "Cookies",
+    "cookiesText": "Nuestro sitio web utiliza cookies para mejorar la experiencia del usuario. Puede administrar las cookies a través de la configuración de su navegador.",
+    "thirdPartyTitle": "Compartir con Terceros",
+    "thirdPartyText": "Su información personal no se comparte con terceros, excepto según lo requiera la ley. Nuestros proveedores de servicios procesan sus datos únicamente con fines de prestación de servicios.",
+    "rightsTitle": "Derechos del Usuario",
+    "rightsText": "Tiene los siguientes derechos con respecto a sus datos personales:",
+    "rightsItem1": "Derecho a acceder a sus datos",
+    "rightsItem2": "Derecho a solicitar la corrección de datos",
+    "rightsItem3": "Derecho a solicitar la eliminación de datos",
+    "rightsItem4": "Derecho a oponerse al procesamiento de datos",
+    "contactTitle": "Contacto",
+    "contactText": "Para preguntas sobre nuestra política de privacidad, contáctenos:",
+    "updateText": "Esta política de privacidad se actualizó por última vez el",
+    "updateText2": ""
   }
 }

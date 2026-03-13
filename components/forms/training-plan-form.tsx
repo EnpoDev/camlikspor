@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useFormLoading } from "@/lib/hooks/use-form-loading";
 import {
   Select,
   SelectContent,
@@ -47,9 +46,6 @@ export function TrainingPlanForm({ plan, dictionary }: TrainingPlanFormProps) {
     ? updateTrainingPlanAction.bind(null, plan.id)
     : createTrainingPlanAction;
   const [state, formAction, isPending] = useActionState(boundAction, initialState);
-
-  // Show global loading overlay when form is submitting
-  useFormLoading(isPending);
 
   const focusAreas = (dictionary.plans.focusAreas || {}) as Record<string, string>;
   const difficulties = (dictionary.plans.difficulties || {}) as Record<string, string>;

@@ -3,6 +3,7 @@ export const UserRole = {
   SUPER_ADMIN: "SUPER_ADMIN",
   DEALER_ADMIN: "DEALER_ADMIN",
   TRAINER: "TRAINER",
+  PARENT: "PARENT",
 } as const;
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole];
@@ -78,6 +79,18 @@ export const Permission = {
   // Orders
   ORDERS_VIEW: "ORDERS_VIEW",
   ORDERS_EDIT: "ORDERS_EDIT",
+
+  // Blog
+  BLOG_VIEW: "BLOG_VIEW",
+  BLOG_CREATE: "BLOG_CREATE",
+  BLOG_EDIT: "BLOG_EDIT",
+  BLOG_DELETE: "BLOG_DELETE",
+
+  // Hero Slides
+  HERO_SLIDES_VIEW: "HERO_SLIDES_VIEW",
+  HERO_SLIDES_CREATE: "HERO_SLIDES_CREATE",
+  HERO_SLIDES_EDIT: "HERO_SLIDES_EDIT",
+  HERO_SLIDES_DELETE: "HERO_SLIDES_DELETE",
 
   // Sub-dealers
   SUB_DEALERS_VIEW: "SUB_DEALERS_VIEW",

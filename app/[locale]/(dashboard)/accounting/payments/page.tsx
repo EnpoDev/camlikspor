@@ -55,12 +55,26 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
 
   type Payment = (typeof payments)[number];
 
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
   const stats = {
     pending: payments.filter((p: Payment) => p.status === "PENDING").length,
     completed: payments.filter((p: Payment) => p.status === "COMPLETED").length,
     overdue: payments.filter(
       (p: Payment) => p.status === "PENDING" && new Date(p.dueDate) < new Date()
     ).length,
+    currentMonthDebt: payments
+      .filter((p: Payment) => {
+        if (p.status !== "PENDING") return false;
+        const dueDate = new Date(p.dueDate);
+        return (
+          dueDate.getMonth() === currentMonth &&
+          dueDate.getFullYear() === currentYear
+        );
+      })
+      .reduce((sum: number, p: Payment) => sum + p.amount, 0),
     totalAmount: payments
       .filter((p: Payment) => p.status === "COMPLETED")
       .reduce((sum: number, p: Payment) => sum + p.amount, 0),
@@ -77,13 +91,25 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-5">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Bekleyen</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.pending}</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-orange-600">
+              Bu Ay Odenecek
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-orange-600">
+              {stats.currentMonthDebt.toLocaleString(locale)} TL
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -136,6 +162,7 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
                   </TableHead>
                   <TableHead>{dictionary.accounting.payments.amount}</TableHead>
                   <TableHead>{dictionary.accounting.payments.dueDate}</TableHead>
+                  <TableHead>Odeme Tarihi</TableHead>
                   <TableHead>{dictionary.common.status}</TableHead>
                 </TableRow>
               </TableHeader>
@@ -152,6 +179,13 @@ export default async function PaymentsPage({ params }: PaymentsPageProps) {
                       {format(payment.dueDate, "d MMM yyyy", {
                         locale: dateLocale,
                       })}
+                    </TableCell>
+                    <TableCell>
+                      {payment.paidAt
+                        ? format(payment.paidAt, "d MMM yyyy", {
+                            locale: dateLocale,
+                          })
+                        : "-"}
                     </TableCell>
                     <TableCell>
                       <Badge

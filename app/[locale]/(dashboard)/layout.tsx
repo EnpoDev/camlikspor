@@ -6,6 +6,7 @@ import { i18n } from "@/lib/i18n/config";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { UserRole } from "@/lib/types";
+import { DashboardOverflowController } from "@/components/layout/dashboard-overflow-controller";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -31,29 +32,32 @@ export default async function DashboardLayout({
   const dictionary = await getDictionary(locale);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar
-        locale={locale}
-        userRole={session.user.role as UserRole}
-        userPermissions={session.user.permissions || []}
-        dictionary={dictionary.sidebar}
-      />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header
+    <>
+      <DashboardOverflowController />
+      <div className="flex h-screen overflow-hidden">
+        <Sidebar
           locale={locale}
-          user={{
-            name: session.user.name,
-            email: session.user.email,
-            dealerName: session.user.dealerName,
-          }}
           userRole={session.user.role as UserRole}
           userPermissions={session.user.permissions || []}
-          dictionary={dictionary}
+          dictionary={dictionary.sidebar}
         />
-        <main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6">
-          {children}
-        </main>
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Header
+            locale={locale}
+            user={{
+              name: session.user.name,
+              email: session.user.email,
+              dealerName: session.user.dealerName,
+            }}
+            userRole={session.user.role as UserRole}
+            userPermissions={session.user.permissions || []}
+            dictionary={dictionary}
+          />
+          <main className="flex-1 overflow-y-auto bg-muted/40 p-4 md:p-6">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

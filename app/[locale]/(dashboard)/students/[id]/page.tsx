@@ -3,6 +3,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { UserRole } from "@/lib/types";
 import { getStudentById } from "@/lib/data/students";
+import { calculateStudentPaymentSummary } from "@/lib/utils/payment-calculations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,9 @@ export default async function StudentDetailPage({
   type Payment = (typeof student.payments)[number];
 
   const age = differenceInYears(new Date(), student.birthDate);
+
+  // Calculate payment summary
+  const paymentSummary = await calculateStudentPaymentSummary(id);
 
   return (
     <div className="space-y-6">
@@ -268,6 +272,29 @@ export default async function StudentDetailPage({
                 </div>
               )}
             </div>
+            <div className="border-t pt-4">
+              <p className="text-sm text-muted-foreground mb-3 font-semibold">Odeme Ozeti</p>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Bu Ay Odenecek</p>
+                  <p className="text-lg font-bold text-orange-600">
+                    {paymentSummary.currentMonthDebt.toLocaleString("tr-TR")} TL
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Toplam Borc</p>
+                  <p className="text-lg font-bold text-red-600">
+                    {paymentSummary.totalDebt.toLocaleString("tr-TR")} TL
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Gelecek Aidatlar</p>
+                  <p className="text-lg font-bold text-blue-600">
+                    {paymentSummary.futurePaymentsTotal.toLocaleString("tr-TR")} TL
+                  </p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -281,7 +308,8 @@ export default async function StudentDetailPage({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tarih</TableHead>
+                  <TableHead>Vade Tarihi</TableHead>
+                  <TableHead>Odeme Tarihi</TableHead>
                   <TableHead>Tur</TableHead>
                   <TableHead>Tutar</TableHead>
                   <TableHead>Durum</TableHead>
@@ -292,6 +320,11 @@ export default async function StudentDetailPage({
                   <TableRow key={payment.id}>
                     <TableCell>
                       {format(payment.dueDate, "d MMM yyyy", { locale: dateLocale })}
+                    </TableCell>
+                    <TableCell>
+                      {payment.paidAt
+                        ? format(payment.paidAt, "d MMM yyyy", { locale: dateLocale })
+                        : "-"}
                     </TableCell>
                     <TableCell>{payment.type}</TableCell>
                     <TableCell>

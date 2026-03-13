@@ -63,7 +63,8 @@
     "accountDisabled": "Hesabınız devre dışı bırakılmış"
   },
   "sidebar": {
-    "dashboard": "Anasayfa",
+    "home": "Ana Sayfa",
+    "dashboard": "Dashboard",
     "preRegistration": "Ön Kayıt",
     "students": "Öğrenciler",
     "trainers": "Antrenörler",
@@ -84,11 +85,14 @@
     "commissions": "Komisyonlar",
     "products": "Ürünler",
     "orders": "Siparişler",
+    "blog": "Haberler",
+    "heroSlides": "Ana Sayfa Slider",
     "gallery": "Galeri",
     "training": "Antrenman",
     "trainingPlans": "Antrenman Planları",
     "tacticalBoard": "Taktik Tahtası",
-    "trainingCalendar": "Antrenman Takvimi"
+    "trainingCalendar": "Antrenman Takvimi",
+    "legalDocuments": "Yasal Dökümanlar"
   },
   "header": {
     "profile": "Profil",
@@ -98,8 +102,8 @@
     "language": "Dil"
   },
   "dashboard": {
-    "title": "Anasayfa",
-    "welcome": "Hoşgeldiniz",
+    "title": "Ana Sayfa",
+    "welcome": "Hoş geldiniz",
     "totalStudents": "Toplam Öğrenci",
     "activeStudents": "Aktif Öğrenci",
     "totalTrainers": "Toplam Antrenör",
@@ -318,6 +322,11 @@
       "totalDebt": "Toplam Borç",
       "dueDate": "Ödenmesi Gereken Tarih",
       "paymentDate": "Ödeme Tarihi",
+      "paidAt": "Ödeme Tarihi",
+      "currentMonthDebt": "Bu Ay Ödenecek",
+      "futurePayments": "Gelecek Aidatlar",
+      "futurePaymentsTotal": "Gelecek Aidatlar Toplamı",
+      "noFuturePayments": "Gelecek aidat bulunmuyor",
       "paymentType": "Ödeme Tipi",
       "paymentMethod": "Ödeme Yöntemi",
       "recordPayment": "Ödeme Kaydet"
@@ -491,16 +500,31 @@
     "statusUpdated": "Durum başarıyla güncellendi"
   },
   "public": {
+    "home": "Ana Sayfa",
+    "about": "Hakkımızda",
     "shop": "Mağaza",
     "gallery": "Galeri",
     "contact": "İletişim",
+    "blog": "Haberler",
+    "payments": "Aidat Sorgulama",
+    "registration": "Ön Kayıt",
     "cart": "Sepet",
+    "favorites": "Favorilerim",
+    "login": "Giriş Yap / Kayıt Ol",
+    "search": "Ara",
+    "searchPlaceholder": "Ürün ara...",
+    "selectLanguage": "Dil Seçin",
     "allRightsReserved": "Tüm hakları saklıdır.",
     "quickLinks": "Hızlı Bağlantılar",
     "followUs": "Bizi Takip Edin",
+    "privacy": "Gizlilik Politikası",
     "hero": {
       "shopCta": "Mağazaya Git",
-      "contactCta": "İletişim"
+      "contactCta": "İletişim",
+      "professionalTrainers": "Profesyonel Eğitmenler",
+      "modernFacilities": "Modern Tesisler",
+      "flexibleSchedule": "Esnek Antrenman Saatleri",
+      "allAges": "Her Yaş Grubu"
     },
     "features": {
       "title": "Neden Bizi Tercih Etmelisiniz?",
@@ -522,6 +546,63 @@
       "addressLabel": "Adres",
       "hoursLabel": "Çalışma Saatleri",
       "hours": "Pazartesi - Cumartesi: 09:00 - 21:00"
+    },
+    "news": {
+      "title": "Son Haberler",
+      "subtitle": "Kulübümüzden en güncel haberler",
+      "allNews": "Tüm Haberler",
+      "featured": "ÖNE ÇIKAN"
+    },
+    "whatsapp": {
+      "tooltip": "WhatsApp'tan yazın",
+      "defaultMessage": "Merhaba, bilgi almak istiyorum."
+    },
+    "homepage": {
+      "about": {
+        "badge": "Hakkımızda",
+        "title": "Geleceğin Futbolcularını Yetiştiriyoruz",
+        "description": "çocukların futbol yeteneklerini keşfetmeleri ve geliştirmeleri için ideal ortamı sunan profesyonel bir futbol okuludur.",
+        "feature1Title": "Lisanslı Eğitmenler",
+        "feature1Desc": "UEFA lisanslı, deneyimli antrenör kadromuz",
+        "feature2Title": "Yaş Gruplarına Özel Eğitim",
+        "feature2Desc": "5-16 yaş arası farklı kategorilerde eğitim programları",
+        "feature3Title": "Modern Altyapı",
+        "feature3Desc": "Sentetik çim sahalar ve profesyonel eğitim ortamı"
+      },
+      "features": {
+        "badge": "Özelliklerimiz",
+        "title": "Neden Bizi Tercih Etmelisiniz?",
+        "subtitle": "Çocuğunuzun futbol yolculuğu için en iyi başlangıç noktası",
+        "card1Title": "Profesyonel Eğitmenler",
+        "card1Desc": "UEFA lisanslı, deneyimli antrenör kadromuz",
+        "card2Title": "Modern Tesisler",
+        "card2Desc": "Son teknoloji sentetik sahalar ve eğitim alanları",
+        "card3Title": "Yaş Grupları",
+        "card3Desc": "5-16 yaş arası kategorilere özel programlar",
+        "card4Title": "Esnek Saatler",
+        "card4Desc": "Hafta içi ve hafta sonu antrenman seçenekleri"
+      },
+      "gallery": {
+        "badge": "Galeri",
+        "title": "Tesislerimiz ve Etkinliklerimiz",
+        "subtitle": "Antrenmanlardan ve turnuvalardan kareler"
+      },
+      "shop": {
+        "badge": "Mağaza",
+        "title": "Kulüp Ürünleri",
+        "subtitle": "Forma ve kulüp malzemelerimiz",
+        "viewAll": "Tümünü Gör"
+      },
+      "contact": {
+        "badge": "Kayıt ve İletişim",
+        "title": "Bize Ulaşın",
+        "subtitle": "Kayıt ve sorularınız için bizimle iletişime geçin",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "address": "Adres",
+        "trainingHours": "Antrenman Saatleri",
+        "schedule": "Pzt-Cmt 15:00-20:00"
+      }
     }
   },
   "products": {
@@ -779,5 +860,38 @@
     "verificationPending": "Doğrulama bekleniyor",
     "verificationSuccess": "Domain başarıyla doğrulandı",
     "verificationFailed": "Doğrulama başarısız"
+  },
+  "privacy": {
+    "title": "Gizlilik Politikası",
+    "introTitle": "Giriş",
+    "introText": "Bu gizlilik politikası, web sitemizi ziyaret ettiğinizde veya hizmetlerimizi kullandığınızda toplanan kişisel bilgilerinizin nasıl işlendiğini açıklamaktadır.",
+    "collectedInfoTitle": "Toplanan Bilgiler",
+    "collectedInfoText": "Hizmetlerimizi kullandığınızda aşağıdaki bilgileri toplayabiliriz:",
+    "infoItem1": "Ad, soyad ve iletişim bilgileri",
+    "infoItem2": "E-posta adresi ve telefon numarası",
+    "infoItem3": "Ödeme ve fatura bilgileri",
+    "infoItem4": "Kullanım verileri ve tercihler",
+    "usageTitle": "Bilgilerin Kullanımı",
+    "usageText": "Toplanan bilgiler aşağıdaki amaçlarla kullanılır:",
+    "usageItem1": "Hizmetlerimizi sağlamak ve geliştirmek",
+    "usageItem2": "Sipariş ve ödemeleri işlemek",
+    "usageItem3": "Müşteri desteği sağlamak",
+    "usageItem4": "Yasal yükümlülükleri yerine getirmek",
+    "securityTitle": "Bilgi Güvenliği",
+    "securityText": "Kişisel bilgilerinizin güvenliğini sağlamak için endüstri standartlarında güvenlik önlemleri kullanıyoruz. Verileriniz SSL şifrelemesi ile korunmaktadır.",
+    "cookiesTitle": "Çerezler",
+    "cookiesText": "Web sitemiz, kullanıcı deneyimini iyileştirmek için çerezler kullanır. Tarayıcı ayarlarınızdan çerezleri yönetebilirsiniz.",
+    "thirdPartyTitle": "Üçüncü Taraf Paylaşımı",
+    "thirdPartyText": "Kişisel bilgileriniz, yasal gereklilikler dışında üçüncü taraflarla paylaşılmaz. Hizmet sağlayıcılarımız verilerinizi yalnızca hizmet sunumu amacıyla işler.",
+    "rightsTitle": "Kullanıcı Hakları",
+    "rightsText": "Kişisel verilerinizle ilgili aşağıdaki haklara sahipsiniz:",
+    "rightsItem1": "Verilerinize erişim hakkı",
+    "rightsItem2": "Verilerin düzeltilmesini talep etme hakkı",
+    "rightsItem3": "Verilerin silinmesini talep etme hakkı",
+    "rightsItem4": "Veri işlemeye itiraz etme hakkı",
+    "contactTitle": "İletişim",
+    "contactText": "Gizlilik politikamız hakkında sorularınız için bizimle iletişime geçebilirsiniz:",
+    "updateText": "Bu gizlilik politikası son olarak",
+    "updateText2": "tarihinde güncellenmiştir."
   }
 }

@@ -14,7 +14,15 @@ import {
   HeadphonesIcon,
   ChevronRight,
   MessageCircle,
+  FileText,
 } from "lucide-react";
+
+interface LegalDocument {
+  id: string;
+  title: string;
+  slug: string;
+  fileUrl: string;
+}
 
 interface PublicFooterProps {
   dealerSlug: string;
@@ -27,12 +35,14 @@ interface PublicFooterProps {
   socialInstagram?: string | null;
   socialTwitter?: string | null;
   socialYoutube?: string | null;
+  legalDocuments?: LegalDocument[];
   dictionary: {
     shop: string;
     contact: string;
     allRightsReserved: string;
     quickLinks: string;
     followUs: string;
+    privacy?: string;
   };
   useRootPaths?: boolean;
 }
@@ -48,6 +58,7 @@ export function PublicFooter({
   socialInstagram,
   socialTwitter,
   socialYoutube,
+  legalDocuments = [],
   dictionary,
   useRootPaths = false,
 }: PublicFooterProps) {
@@ -63,7 +74,13 @@ export function PublicFooter({
   const quickLinks = [
     { href: basePath, label: "Ana Sayfa" },
     { href: `${basePath}/shop`, label: "Mağaza" },
-{ href: `${basePath}#contact`, label: "İletişim" },
+    { href: `${basePath}#contact`, label: "İletişim" },
+    { href: `${basePath}/privacy`, label: dictionary.privacy || "Gizlilik Politikası" },
+    ...legalDocuments.map((doc) => ({
+      href: doc.fileUrl,
+      label: doc.title,
+      isExternal: true,
+    })),
   ];
 
   const shopLinks = [
@@ -153,13 +170,25 @@ export function PublicFooter({
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
-                  >
-                    <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
-                    {link.label}
-                  </Link>
+                  {"isExternal" in link && link.isExternal ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                    >
+                      <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                    >
+                      <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -302,6 +331,34 @@ export function PublicFooter({
           </div>
         </div>
       </div>
+
+      {/* Legal Documents Section */}
+      {legalDocuments.length > 0 && (
+        <div className="border-t border-slate-800">
+          <div className="container mx-auto px-4 py-6">
+            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+              <Link
+                href={`${basePath}/privacy`}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                Gizlilik Politikası
+              </Link>
+              {legalDocuments.map((doc) => (
+                <a
+                  key={doc.id}
+                  href={doc.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  {doc.title}
+                  <FileText className="h-3 w-3" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Bar */}
       <div className="border-t border-slate-800">

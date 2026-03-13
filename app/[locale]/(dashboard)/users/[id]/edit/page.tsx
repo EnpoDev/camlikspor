@@ -79,7 +79,7 @@ export default async function EditUserPage({ params }: EditUserPageProps) {
             {dictionary.common.edit}: {user.name}
           </h1>
           <p className="text-muted-foreground">
-            Kullanici bilgilerini guncelleyin
+            Kullanıcı bilgilerini güncelleyin
           </p>
         </div>
       </div>

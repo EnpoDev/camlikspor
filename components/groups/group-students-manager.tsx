@@ -83,9 +83,9 @@ export function GroupStudentsManager({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Users className="h-5 w-5" />
-          Ogrenciler ({selectedIds.size})
+          Öğrenciler ({selectedIds.size})
         </CardTitle>
-        <CardDescription>Gruba ogrenci atayin</CardDescription>
+        <CardDescription>Gruba öğrenci atayın</CardDescription>
       </CardHeader>
       <CardContent>
         <form action={formAction}>
@@ -95,14 +95,14 @@ export function GroupStudentsManager({
           ))}
           {allStudents.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Henuz ogrenci bulunmuyor.
+              Henüz öğrenci bulunmuyor.
             </p>
           ) : (
             <>
             <div className="relative mb-4">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Ogrenci ara..."
+                placeholder="Öğrenci ara..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-9"
@@ -111,7 +111,7 @@ export function GroupStudentsManager({
             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 max-h-80 overflow-y-auto">
               {filteredStudents.length === 0 ? (
                 <p className="text-sm text-muted-foreground col-span-full">
-                  Aramayla eslesen ogrenci bulunamadi.
+                  Aramayla eşleşen öğrenci bulunamadı.
                 </p>
               ) : filteredStudents.map((student) => (
                 <div key={student.id} className="flex items-center space-x-2">
