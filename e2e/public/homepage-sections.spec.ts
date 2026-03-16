@@ -58,7 +58,6 @@ test.describe('Homepage sections — /tr', () => {
     test('shows slide indicator dots', async ({ page }) => {
       // At least 2 indicator dots (2 DB slides)
       const dots = page.locator('[aria-label^="Go to slide"]');
-      await expect(dots).toHaveCount({ min: 2 } as Parameters<typeof expect>[0] extends never ? never : Parameters<typeof expect>[0]);
       const count = await dots.count();
       expect(count).toBeGreaterThanOrEqual(2);
     });

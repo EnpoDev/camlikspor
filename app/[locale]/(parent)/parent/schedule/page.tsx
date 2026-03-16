@@ -6,13 +6,13 @@ import { StudentSelector } from "@/components/parent/StudentSelector";
 import { Users, Calendar } from "lucide-react";
 
 const DAYS_OF_WEEK = [
-  { value: "MONDAY", label: "Pazartesi" },
-  { value: "TUESDAY", label: "Salı" },
-  { value: "WEDNESDAY", label: "Çarşamba" },
-  { value: "THURSDAY", label: "Perşembe" },
-  { value: "FRIDAY", label: "Cuma" },
-  { value: "SATURDAY", label: "Cumartesi" },
-  { value: "SUNDAY", label: "Pazar" },
+  { value: 1, label: "Pazartesi" },
+  { value: 2, label: "Salı" },
+  { value: 3, label: "Çarşamba" },
+  { value: 4, label: "Perşembe" },
+  { value: 5, label: "Cuma" },
+  { value: 6, label: "Cumartesi" },
+  { value: 0, label: "Pazar" },
 ];
 
 export default async function ParentSchedulePage({
@@ -45,7 +45,7 @@ export default async function ParentSchedulePage({
   const schedulesByDay = DAYS_OF_WEEK.reduce((acc, day) => {
     acc[day.value] = allSchedules.filter((s) => s.dayOfWeek === day.value);
     return acc;
-  }, {} as Record<string, typeof allSchedules>);
+  }, {} as Record<number, typeof allSchedules>);
 
   return (
     <div className="space-y-6">

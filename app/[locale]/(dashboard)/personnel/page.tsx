@@ -117,7 +117,7 @@ export default async function PersonnelPage({ params }: PersonnelPageProps) {
                         : '-'}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={person.isActive ? "success" : "secondary"}>
+                      <Badge variant={person.isActive ? "default" : "secondary"}>
                         {person.isActive ? dictionary.common.active : dictionary.common.inactive}
                       </Badge>
                     </TableCell>

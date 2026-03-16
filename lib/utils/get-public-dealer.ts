@@ -163,6 +163,7 @@ export async function getPublicDealer(): Promise<PublicDealer | null> {
         showSponsorsSection: true,
         showShopPreviewSection: true,
         showPreRegSection: true,
+        aboutText: true,
       },
     });
   }

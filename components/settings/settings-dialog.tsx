@@ -26,6 +26,7 @@ export interface SettingsField {
   label: string;
   type: SettingsFieldType;
   required?: boolean;
+  defaultValue?: string;
   min?: number;
   max?: number;
   step?: number;

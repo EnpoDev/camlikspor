@@ -44,9 +44,9 @@ const metricLabels: Record<string, string> = {
 };
 
 function getScoreBadge(score: number) {
-  if (score >= 8) return <Badge variant="success">{score}/10</Badge>;
-  if (score >= 6) return <Badge variant="default">{score}/10</Badge>;
-  if (score >= 4) return <Badge variant="warning">{score}/10</Badge>;
+  if (score >= 8) return <Badge variant="default">{score}/10</Badge>;
+  if (score >= 6) return <Badge variant="secondary">{score}/10</Badge>;
+  if (score >= 4) return <Badge variant="outline">{score}/10</Badge>;
   return <Badge variant="destructive">{score}/10</Badge>;
 }
 
