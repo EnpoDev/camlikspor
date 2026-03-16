@@ -228,23 +228,24 @@ export default async function AboutPage({ params }: AboutPageProps) {
             Yolculuğumuz
           </h2>
         </div>
-        <div className="max-w-3xl">
-          <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-[19px] top-2 bottom-2 w-0.5 bg-primary/20" />
-
-            <div className="space-y-8">
+        {/* Horizontal scrollable timeline */}
+        <div className="relative">
+          <div className="overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
+            <div className="flex items-start gap-0 min-w-max">
               {timeline.map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                  <div className="flex-shrink-0 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-110 transition-transform">
-                      <CheckCircle2 className="h-5 w-5 text-white" />
-                    </div>
+                <div key={i} className="flex flex-col items-center relative group" style={{ width: '200px' }}>
+                  {/* Year bubble */}
+                  <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-110 transition-transform z-10">
+                    <span className="text-white font-black text-sm">{item.year}</span>
                   </div>
-                  <div className="pb-2">
-                    <span className="text-sm font-bold text-primary uppercase tracking-widest">{item.year}</span>
-                    <h3 className="text-lg font-bold text-slate-900 mt-1">{item.title}</h3>
-                    <p className="text-slate-600 text-sm mt-1">{item.description}</p>
+                  {/* Connector line */}
+                  {i < timeline.length - 1 && (
+                    <div className="absolute top-7 left-[calc(50%+28px)] w-[calc(200px-56px)] h-0.5 bg-primary/20" />
+                  )}
+                  {/* Content */}
+                  <div className="mt-4 text-center px-2">
+                    <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
+                    <p className="text-slate-600 text-xs mt-1 leading-relaxed">{item.description}</p>
                   </div>
                 </div>
               ))}
