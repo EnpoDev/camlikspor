@@ -58,7 +58,7 @@ export function ShopPriceFilter({
   return (
     <div>
       <div className="flex items-center gap-2 mb-4 pb-3 border-b">
-        <Filter className="h-5 w-5 text-emerald-600" />
+        <Filter className="h-5 w-5 text-primary" />
         <h2 className="font-bold text-lg">Fiyat Aralığı</h2>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">

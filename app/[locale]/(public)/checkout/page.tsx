@@ -40,6 +40,8 @@ export default function CheckoutPage() {
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [dealerSlug, setDealerSlug] = useState<string | null>(null);
 
+  const [agreementAccepted, setAgreementAccepted] = useState(false);
+
   const [formData, setFormData] = useState({
     customerName: "",
     customerEmail: "",
@@ -84,6 +86,11 @@ export default function CheckoutPage() {
 
     if (!formData.customerName || !formData.customerEmail || !formData.customerPhone) {
       toast.error("Lütfen zorunlu alanları doldurun");
+      return;
+    }
+
+    if (!agreementAccepted) {
+      toast.error("Mesafeli satış sözleşmesini onaylamanız gerekmektedir");
       return;
     }
 
@@ -155,14 +162,14 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 max-w-xl mx-auto">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-sm font-medium hidden sm:inline">Sepet</span>
             </div>
-            <div className="flex-1 h-1 bg-emerald-600 rounded" />
+            <div className="flex-1 h-1 bg-primary rounded" />
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <span className="text-white font-bold text-sm">2</span>
               </div>
               <span className="text-sm font-medium hidden sm:inline">Ödeme</span>
@@ -187,8 +194,8 @@ export default function CheckoutPage() {
               <Card className="border-0 shadow-xl">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
-                      <User className="h-5 w-5 text-emerald-600" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                      <User className="h-5 w-5 text-primary" />
                     </div>
                     Müşteri Bilgileri
                   </CardTitle>
@@ -244,8 +251,8 @@ export default function CheckoutPage() {
               <Card className="border-0 shadow-xl">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
-                      <MapPin className="h-5 w-5 text-emerald-600" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                      <MapPin className="h-5 w-5 text-primary" />
                     </div>
                     Teslimat Adresi
                   </CardTitle>
@@ -308,7 +315,7 @@ export default function CheckoutPage() {
                 <Card className="border-0 shadow-xl">
                   <CardHeader className="pb-4">
                     <CardTitle className="flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5 text-emerald-600" />
+                      <ShoppingBag className="h-5 w-5 text-primary" />
                       Sipariş Özeti
                     </CardTitle>
                   </CardHeader>
@@ -352,7 +359,7 @@ export default function CheckoutPage() {
                                 x{item.quantity}
                               </Badge>
                             </div>
-                            <p className="font-semibold text-emerald-600 mt-1">
+                            <p className="font-semibold text-primary mt-1">
                               {formatPrice(item.price * item.quantity)}
                             </p>
                           </div>
@@ -369,7 +376,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Kargo</span>
-                        <span className="text-emerald-600 font-medium">Ücretsiz</span>
+                        <span className="text-primary font-medium">Ücretsiz</span>
                       </div>
                     </div>
 
@@ -377,14 +384,35 @@ export default function CheckoutPage() {
 
                     <div className="flex justify-between text-lg">
                       <span className="font-bold">Toplam</span>
-                      <span className="font-bold text-emerald-600">{formatPrice(totalPrice)}</span>
+                      <span className="font-bold text-primary">{formatPrice(totalPrice)}</span>
+                    </div>
+
+                    {/* Agreement Checkbox */}
+                    <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+                      <input
+                        type="checkbox"
+                        id="agreement"
+                        checked={agreementAccepted}
+                        onChange={(e) => setAgreementAccepted(e.target.checked)}
+                        className="mt-1 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                      <label htmlFor="agreement" className="text-xs text-muted-foreground cursor-pointer leading-relaxed">
+                        <Link href={`/${locale}/legal/mesafeli-satis-sozlesmesi`} target="_blank" className="text-primary hover:underline font-medium">
+                          Mesafeli Satış Sözleşmesi
+                        </Link>
+                        {`'ni ve `}
+                        <Link href={`/${locale}/legal/iade-ve-iptal-politikasi`} target="_blank" className="text-primary hover:underline font-medium">
+                          İade ve İptal Politikası
+                        </Link>
+                        {`'nı okudum, onaylıyorum.`}
+                      </label>
                     </div>
 
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 text-lg py-6"
-                      disabled={isSubmitting || !dealerSlug}
+                      className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
+                      disabled={isSubmitting || !dealerSlug || !agreementAccepted}
                     >
                       {isSubmitting ? (
                         <>
@@ -405,7 +433,7 @@ export default function CheckoutPage() {
                     </Button>
 
                     <p className="text-xs text-center text-muted-foreground">
-                      Siparişi tamamlayarak satış koşullarını kabul etmiş olursunuz.
+                      Siparişi tamamlayarak mesafeli satış sözleşmesini kabul etmiş olursunuz.
                     </p>
                   </CardContent>
                 </Card>
@@ -414,11 +442,11 @@ export default function CheckoutPage() {
                 <Card className="border-0 shadow-lg">
                   <CardContent className="p-4 space-y-3">
                     <div className="flex items-center gap-3 text-sm">
-                      <Shield className="h-5 w-5 text-emerald-600" />
+                      <Shield className="h-5 w-5 text-primary" />
                       <span>256-bit SSL ile güvenli ödeme</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">
-                      <Truck className="h-5 w-5 text-emerald-600" />
+                      <Truck className="h-5 w-5 text-primary" />
                       <span>2-3 iş günü içinde teslimat</span>
                     </div>
                     <div className="flex items-center gap-3 text-sm">

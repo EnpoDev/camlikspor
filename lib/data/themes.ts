@@ -170,6 +170,8 @@ export function getDefaultLayoutSettings(): LayoutSettings {
     showGallery: true,
     showShopPreview: true,
     showContact: true,
+    showMatchesSection: true,
+    showSponsorsSection: true,
   };
 }
 

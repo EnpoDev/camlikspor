@@ -120,7 +120,7 @@ export function PublicHeader({
 
   const navLinks: NavLink[] = [
     { id: "home", href: basePath, label: dictionary.home, icon: Store },
-    { id: "about", href: `${basePath}#about`, label: dictionary.about, icon: Info },
+    { id: "about", href: `${basePath}/about`, label: dictionary.about, icon: Info },
     { id: "gallery", href: `${basePath}/gallery`, label: dictionary.gallery, icon: ImageIcon },
     { id: "shop", href: `${basePath}/shop`, label: dictionary.shop, icon: ShoppingBag },
     {
@@ -137,8 +137,7 @@ export function PublicHeader({
     },
     { id: "blog", href: blogPath, label: dictionary.blog, icon: BookOpen },
     { id: "payments", href: `/${locale}/aidat-sorgulama`, label: dictionary.payments, icon: CreditCard },
-    { id: "registration", href: `${basePath}#contact`, label: dictionary.registration, icon: UserPlus },
-    { id: "contact", href: `${basePath}#contact`, label: dictionary.contact, icon: MessageCircle },
+    { id: "contact", href: `${basePath}/contact`, label: dictionary.contact, icon: MessageCircle },
   ];
 
   // Handle scroll effect
@@ -177,11 +176,11 @@ export function PublicHeader({
         }`}
       >
         <div className="w-full px-4">
-          <div className="flex h-[100px] items-center justify-between">
+          <div className="flex h-[80px] md:h-[80px] items-center justify-between">
             {/* Logo */}
             <Link href={basePath} className="flex items-center gap-3 group -ml-2">
-              <div className={`relative w-16 h-16 flex-shrink-0 rounded-full bg-white transition-all duration-500 overflow-hidden ${
-                isScrolled ? "shadow-md group-hover:shadow-lg" : "shadow-xl"
+              <div className={`relative w-[50px] h-[50px] flex-shrink-0 rounded-full bg-white transition-all duration-500 overflow-hidden ${
+                isScrolled ? "shadow-md group-hover:shadow-lg" : "shadow-lg"
               }`}>
                 <Image
                   src={dealerLogo || "/logo.png"}
@@ -190,15 +189,15 @@ export function PublicHeader({
                   className="object-contain"
                 />
               </div>
-              <div className="hidden sm:block">
-                <span className="font-bold text-xl text-slate-900 dark:text-white group-hover:text-emerald-600 transition-colors">
+              <div className="hidden xl:block">
+                <span className="font-bold text-lg text-slate-900 dark:text-white group-hover:text-primary transition-colors">
                   {dealerName}
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1" aria-label="Ana navigasyon">
               {navLinks.map((link) => {
                 const Icon = link.icon;
 
@@ -206,19 +205,26 @@ export function PublicHeader({
                 if (link.children && link.children.length > 0) {
                   return (
                     <div key={link.id} className="relative group/dropdown">
-                      <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                        <Icon className="h-4 w-4" />
+                      <button
+                        className="flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
                         {link.label}
-                        <ChevronDown className="h-3 w-3 transition-transform group-hover/dropdown:rotate-180" />
+                        <ChevronDown className="h-3 w-3 transition-transform group-hover/dropdown:rotate-180" aria-hidden="true" />
                       </button>
                       {/* Dropdown Menu */}
-                      <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-200 z-50">
+                      <div
+                        className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 opacity-0 invisible group-hover/dropdown:opacity-100 group-hover/dropdown:visible transition-all duration-200 z-50"
+                        role="menu"
+                      >
                         <div className="py-2">
                           {link.children.map((child) => (
                             <Link
                               key={child.id}
                               href={child.href}
-                              className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                              role="menuitem"
+                              className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary dark:hover:text-primary transition-colors"
                             >
                               {child.label}
                             </Link>
@@ -234,13 +240,12 @@ export function PublicHeader({
                   <Link
                     key={link.id}
                     href={link.href}
-                    className="group relative px-4 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                    className="group relative px-2.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                   >
                     <span className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
                       {link.label}
                     </span>
-                    <span className="absolute inset-x-4 -bottom-0.5 h-0.5 bg-emerald-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                    <span className="absolute inset-x-2.5 -bottom-0.5 h-0.5 bg-secondary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" aria-hidden="true" />
                   </Link>
                 );
               })}
@@ -248,6 +253,22 @@ export function PublicHeader({
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
+              {/* Phone Number - Desktop */}
+              <a
+                href={`tel:${hardcodedPhone}`}
+                className="hidden xl:flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 hover:text-primary transition-colors mr-1"
+              >
+                <Phone className="h-4 w-4" />
+                <span className="font-medium">{hardcodedPhone}</span>
+              </a>
+
+              {/* CTA Button - On Kayit */}
+              <Link href={`${basePath}/on-kayit`} className="hidden md:block">
+                <Button className="bg-secondary text-secondary-foreground font-bold rounded-full px-6 py-2.5 hover:bg-secondary/90 transition-all">
+                  {dictionary.registration}
+                </Button>
+              </Link>
+
               {/* Language Switcher */}
               <div className="relative language-menu-container">
                 <Button
@@ -265,7 +286,7 @@ export function PublicHeader({
                         key={lang.code}
                         onClick={() => changeLanguage(lang.code)}
                         className={`w-full px-4 py-2 text-left flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ${
-                          lang.code === locale ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400" : "text-slate-700 dark:text-slate-300"
+                          lang.code === locale ? "bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary" : "text-slate-700 dark:text-slate-300"
                         }`}
                       >
                         <span className="text-xl">{lang.flag}</span>
@@ -315,11 +336,11 @@ export function PublicHeader({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="relative h-10 w-10 rounded-full hover:bg-emerald-50 dark:hover:bg-emerald-900/20 group"
+                    className="relative h-10 w-10 rounded-full hover:bg-primary/10 dark:hover:bg-primary/20 group"
                   >
-                    <ShoppingCart className="h-5 w-5 text-slate-600 dark:text-slate-400 group-hover:text-emerald-600 transition-colors" />
+                    <ShoppingCart className="h-5 w-5 text-slate-600 dark:text-slate-400 group-hover:text-primary transition-colors" />
                     {totalItems > 0 && (
-                      <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-emerald-600 hover:bg-emerald-600 text-[10px] font-bold animate-in zoom-in duration-200">
+                      <Badge className="absolute -right-1 -top-1 h-5 w-5 flex items-center justify-center p-0 bg-primary hover:bg-primary text-[10px] font-bold animate-in zoom-in duration-200">
                         {totalItems > 9 ? "9+" : totalItems}
                       </Badge>
                     )}
@@ -344,11 +365,14 @@ export function PublicHeader({
                 size="icon"
                 className="lg:hidden h-10 w-10 rounded-full"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation"
+                aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" />
+                  <X className="h-5 w-5" aria-hidden="true" />
                 ) : (
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 )}
               </Button>
             </div>
@@ -372,19 +396,25 @@ export function PublicHeader({
                 }
               }}
               className="flex items-center gap-2 max-w-xl mx-auto"
+              role="search"
+              aria-label="Mağaza araması"
             >
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <label htmlFor="header-search" className="sr-only">
+                  {dictionary.search}
+                </label>
                 <input
+                  id="header-search"
                   ref={searchInputRef}
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={dictionary.searchPlaceholder}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border-0 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 border-0 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              <Button type="submit" size="sm" className="bg-emerald-600 hover:bg-emerald-700">
+              <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90">
                 {dictionary.search}
               </Button>
               <Button
@@ -402,11 +432,12 @@ export function PublicHeader({
 
         {/* Mobile Navigation */}
         <div
+          id="mobile-navigation"
           className={`lg:hidden overflow-hidden transition-all duration-300 ${
             isMobileMenuOpen ? "max-h-[48rem] border-t" : "max-h-0"
           }`}
         >
-          <nav className="container mx-auto px-4 py-4 space-y-1">
+          <nav className="container mx-auto px-4 py-4 space-y-1" aria-label="Mobil navigasyon">
             {navLinks.map((link) => {
               const Icon = link.icon;
 
@@ -417,7 +448,7 @@ export function PublicHeader({
                   <div key={link.id}>
                     <button
                       onClick={() => setOpenMobileSubmenu(isOpen ? null : link.id)}
-                      className="w-full flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                      className="w-full flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
                     >
                       <span className="flex items-center gap-3">
                         <Icon className="h-5 w-5" />
@@ -440,7 +471,7 @@ export function PublicHeader({
                           <Link
                             key={child.id}
                             href={child.href}
-                            className="block rounded-lg px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                            className="block rounded-lg px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             {child.label}
@@ -457,7 +488,7 @@ export function PublicHeader({
                 <Link
                   key={link.id}
                   href={link.href}
-                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Icon className="h-5 w-5" />
@@ -478,7 +509,7 @@ export function PublicHeader({
                       onClick={() => changeLanguage(lang.code)}
                       className={`flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2 ${
                         lang.code === locale
-                          ? "bg-emerald-600 text-white"
+                          ? "bg-primary text-white"
                           : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                       }`}
                     >
@@ -491,7 +522,7 @@ export function PublicHeader({
 
               <Link
                 href={`/${locale}/login`}
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-600 transition-colors"
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <User className="h-5 w-5" />

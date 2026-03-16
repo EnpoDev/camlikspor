@@ -56,8 +56,8 @@ export default function PaymentInquiryPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
-              <CreditCard className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="p-3 bg-primary/10 dark:bg-primary/20 rounded-full">
+              <CreditCard className="h-8 w-8 text-primary dark:text-primary" />
             </div>
           </div>
           <h1 className="text-4xl font-bold mb-3 text-slate-900 dark:text-white">
@@ -84,7 +84,7 @@ export default function PaymentInquiryPage() {
                     className="flex-1"
                     disabled={isSearching}
                   />
-                  <Button type="submit" disabled={isSearching} className="bg-emerald-600 hover:bg-emerald-700">
+                  <Button type="submit" disabled={isSearching} className="bg-primary hover:bg-primary/90">
                     {isSearching ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -115,8 +115,8 @@ export default function PaymentInquiryPage() {
             {result && (
               <div className="mt-6 space-y-6">
                 {/* Student Name Header */}
-                <div className="p-4 bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 rounded-lg">
-                  <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-100">
+                <div className="p-4 bg-primary/5 dark:bg-primary/5 border border-primary/20 rounded-lg">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                     {result.studentName}
                   </h3>
                 </div>
@@ -150,10 +150,10 @@ export default function PaymentInquiryPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-950">
+                  <Card className="border-primary/20 bg-primary/5 dark:bg-primary/5">
                     <CardContent className="p-4">
-                      <p className="text-sm text-emerald-700 dark:text-emerald-300 mb-1">Toplam Ödenen</p>
-                      <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
+                      <p className="text-sm text-primary dark:text-primary mb-1">Toplam Ödenen</p>
+                      <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                         {result.totalPaid.toLocaleString("tr-TR")} ₺
                       </p>
                     </CardContent>
@@ -229,7 +229,7 @@ export default function PaymentInquiryPage() {
                   <Card>
                     <CardHeader>
                       <CardTitle className="flex items-center gap-2">
-                        <CheckCircle className="h-5 w-5 text-emerald-600" />
+                        <CheckCircle className="h-5 w-5 text-primary" />
                         Ödenen Ödemeler
                       </CardTitle>
                     </CardHeader>
@@ -270,18 +270,18 @@ export default function PaymentInquiryPage() {
 
         {/* Payment Button for Pending Payments */}
         {result && result.pendingPayments?.length > 0 && (
-          <Card className="mt-6 border-2 border-emerald-200 bg-emerald-50 dark:bg-emerald-950">
+          <Card className="mt-6 border-2 border-primary/20 bg-primary/5 dark:bg-primary/5">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-100 mb-2">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2">
                     💳 Online Ödeme
                   </h3>
-                  <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                  <p className="text-sm text-primary dark:text-primary">
                     Bekleyen ödemelerinizi hemen online olarak yapabilirsiniz
                   </p>
                 </div>
-                <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Button className="bg-primary hover:bg-primary/90">
                   Online Ödeme Yap
                 </Button>
               </div>
@@ -302,12 +302,12 @@ export default function PaymentInquiryPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-950 dark:border-emerald-900">
+          <Card className="border-primary/20 bg-primary/5 dark:bg-primary/5 dark:border-primary/20">
             <CardContent className="p-6">
-              <h3 className="font-semibold text-emerald-900 dark:text-emerald-100 mb-2">
+              <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-2">
                 🔒 Güvenli Sorgulama
               </h3>
-              <p className="text-sm text-emerald-700 dark:text-emerald-300">
+              <p className="text-sm text-primary dark:text-primary">
                 Tüm bilgileriniz şifrelenmiş ve güvenli şekilde saklanmaktadır.
               </p>
             </CardContent>

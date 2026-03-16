@@ -125,7 +125,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white py-12">
+      <div className="bg-gradient-to-r from-primary to-primary/90 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -152,14 +152,14 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
               {categories.length > 0 && (
                 <Card className="p-4 border-0 shadow-lg">
                   <div className="flex items-center gap-2 mb-4 pb-3 border-b">
-                    <SlidersHorizontal className="h-5 w-5 text-emerald-600" />
+                    <SlidersHorizontal className="h-5 w-5 text-primary" />
                     <h2 className="font-bold text-lg">Kategoriler</h2>
                   </div>
                   <div className="space-y-1">
                     <Link href={`/${locale}/shop`}>
                       <Button
                         variant={!categorySlug ? "default" : "ghost"}
-                        className={`w-full justify-between ${!categorySlug ? "bg-emerald-600 hover:bg-emerald-700" : ""}`}
+                        className={`w-full justify-between ${!categorySlug ? "bg-primary hover:bg-primary/90" : ""}`}
                       >
                         <span>Tüm Ürünler</span>
                         <Badge variant={!categorySlug ? "secondary" : "outline"} className="ml-2">
@@ -174,7 +174,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                       >
                         <Button
                           variant={categorySlug === cat.slug ? "default" : "ghost"}
-                          className={`w-full justify-between ${categorySlug === cat.slug ? "bg-emerald-600 hover:bg-emerald-700" : ""}`}
+                          className={`w-full justify-between ${categorySlug === cat.slug ? "bg-primary hover:bg-primary/90" : ""}`}
                         >
                           <span>{cat.name}</span>
                           <Badge
@@ -250,7 +250,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                           )}
 
                           {/* Category Badge */}
-                          <Badge className="absolute top-3 left-3 bg-emerald-600 hover:bg-emerald-600 shadow-lg">
+                          <Badge className="absolute top-3 left-3 bg-primary hover:bg-primary shadow-lg">
                             {product.category.name}
                           </Badge>
 
@@ -280,7 +280,7 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
 
                           {/* Quick Add Button */}
                           <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
-                            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 shadow-lg" disabled={isOutOfStock}>
+                            <Button className="w-full bg-primary hover:bg-primary/90 shadow-lg" disabled={isOutOfStock}>
                               <ShoppingBag className="mr-2 h-4 w-4" />
                               {isOutOfStock ? "Stokta Yok" : "Sepete Ekle"}
                             </Button>
@@ -291,15 +291,15 @@ export default async function ShopPage({ params, searchParams }: ShopPageProps) 
                           <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">
                             {product.category.name}
                           </p>
-                          <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
+                          <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-primary transition-colors">
                             {product.name}
                           </h3>
                           <div className="flex items-center justify-between">
-                            <p className="text-xl font-bold text-emerald-600">
+                            <p className="text-xl font-bold text-primary">
                               {formatPrice(product.price)}
                             </p>
                             {!isOutOfStock && (
-                              <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-200 bg-emerald-50">
+                              <Badge variant="outline" className="text-xs text-primary border-primary/20 bg-primary/5">
                                 Stokta
                               </Badge>
                             )}

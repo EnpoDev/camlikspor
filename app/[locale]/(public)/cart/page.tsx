@@ -60,7 +60,7 @@ export default function CartPage() {
                 Henüz sepetinize ürün eklemediniz. Hemen alışverişe başlayın!
               </p>
               <Link href={`/${locale}/shop`}>
-                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+                <Button size="lg" className="bg-primary hover:bg-primary/90">
                   <ShoppingBag className="mr-2 h-5 w-5" />
                   Alışverişe Başla
                 </Button>
@@ -92,7 +92,7 @@ export default function CartPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
               <ShoppingCart className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -145,7 +145,7 @@ export default function CartPage() {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-2xl font-bold text-emerald-600">
+                      <p className="text-2xl font-bold text-primary">
                         {formatPrice(item.price)}
                       </p>
                     </div>
@@ -220,7 +220,7 @@ export default function CartPage() {
               <Card className="border-0 shadow-xl">
                 <CardHeader className="pb-4">
                   <CardTitle className="flex items-center gap-2">
-                    <Tag className="h-5 w-5 text-emerald-600" />
+                    <Tag className="h-5 w-5 text-primary" />
                     Sipariş Özeti
                   </CardTitle>
                 </CardHeader>
@@ -231,18 +231,18 @@ export default function CartPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Kargo</span>
-                    <span className="font-medium text-emerald-600">Ücretsiz</span>
+                    <span className="font-medium text-primary">Ücretsiz</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between text-lg">
                     <span className="font-bold">Toplam</span>
-                    <span className="font-bold text-emerald-600">{formatPrice(totalPrice)}</span>
+                    <span className="font-bold text-primary">{formatPrice(totalPrice)}</span>
                   </div>
                 </CardContent>
                 <CardFooter className="flex-col gap-3">
                   <Button
                     size="lg"
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-lg py-6"
+                    className="w-full bg-primary hover:bg-primary/90 text-lg py-6"
                     onClick={() => router.push(`/${locale}/checkout`)}
                   >
                     <CreditCard className="mr-2 h-5 w-5" />
@@ -259,11 +259,11 @@ export default function CartPage() {
                 <CardContent className="p-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="flex items-center gap-2 text-sm">
-                      <Truck className="h-5 w-5 text-emerald-600" />
+                      <Truck className="h-5 w-5 text-primary" />
                       <span>Ücretsiz Kargo</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <Shield className="h-5 w-5 text-emerald-600" />
+                      <Shield className="h-5 w-5 text-primary" />
                       <span>Güvenli Ödeme</span>
                     </div>
                   </div>

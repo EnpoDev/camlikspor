@@ -46,25 +46,25 @@ export default async function CheckoutSuccessPage({
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-4 max-w-xl mx-auto">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-sm font-medium hidden sm:inline">
                 Sepet
               </span>
             </div>
-            <div className="flex-1 h-1 bg-emerald-600 rounded" />
+            <div className="flex-1 h-1 bg-primary rounded" />
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-sm font-medium hidden sm:inline">
                 Odeme
               </span>
             </div>
-            <div className="flex-1 h-1 bg-emerald-600 rounded" />
+            <div className="flex-1 h-1 bg-primary rounded" />
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-white" />
               </div>
               <span className="text-sm font-medium hidden sm:inline">
@@ -80,8 +80,8 @@ export default async function CheckoutSuccessPage({
         <div className="max-w-lg mx-auto text-center">
           <Card className="border-0 shadow-xl">
             <CardContent className="pt-10 pb-10 px-8 space-y-6">
-              <div className="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="h-10 w-10 text-emerald-600" />
+              <div className="w-20 h-20 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="h-10 w-10 text-primary" />
               </div>
 
               <div className="space-y-2">
@@ -104,7 +104,7 @@ export default async function CheckoutSuccessPage({
                 </div>
               )}
 
-              <div className="bg-emerald-50 dark:bg-emerald-950 rounded-xl p-4 text-sm text-emerald-800 dark:text-emerald-200 space-y-2">
+              <div className="bg-primary/5 dark:bg-primary/5 rounded-xl p-4 text-sm text-primary space-y-2">
                 <div className="flex items-start gap-2">
                   <Package className="h-4 w-4 mt-0.5 flex-shrink-0" />
                   <p>
@@ -123,7 +123,7 @@ export default async function CheckoutSuccessPage({
                   </Button>
                 </Link>
                 <Link href={`/${locale}`} className="flex-1">
-                  <Button className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700">
+                  <Button className="w-full gap-2 bg-primary hover:bg-primary/90">
                     Ana Sayfa
                     <ArrowRight className="h-4 w-4" />
                   </Button>

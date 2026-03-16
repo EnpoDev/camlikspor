@@ -43,8 +43,8 @@ export default async function PaymentInquiryPage({
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-emerald-100 dark:bg-emerald-900 rounded-full">
-              <CreditCard className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+            <div className="p-3 bg-primary/10 dark:bg-primary/20 rounded-full">
+              <CreditCard className="h-8 w-8 text-primary dark:text-primary" />
             </div>
           </div>
           <h1 className="text-4xl font-bold mb-3 text-slate-900 dark:text-white">
@@ -57,7 +57,7 @@ export default async function PaymentInquiryPage({
 
         {/* Search Card */}
         <Card className="shadow-xl border-0">
-          <CardHeader className="bg-gradient-to-r from-emerald-600 to-emerald-500 text-white rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-primary to-primary/90 text-white rounded-t-lg">
             <CardTitle className="flex items-center gap-2">
               <Search className="h-5 w-5" />
               Ödeme Bilgisi Sorgula

@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import { sendParentCredentialsSMS } from "@/lib/sms/send-parent-credentials";
 
 /**
  * Generates a random temporary password for parents
@@ -78,6 +79,11 @@ export async function createOrLinkParent({
       relation: "PARENT",
     },
   });
+
+  // Send SMS with temporary password
+  if (temporaryPassword && parentPhone) {
+    await sendParentCredentialsSMS(parentPhone, temporaryPassword);
+  }
 
   return { parent, temporaryPassword };
 }

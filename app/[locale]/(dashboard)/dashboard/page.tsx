@@ -56,8 +56,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       title: dictionary.dashboard.totalStudents,
       value: stats.totalStudents.toString(),
       icon: Users,
-      color: "text-emerald-600",
-      bgColor: "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800",
+      color: "text-primary",
+      bgColor: "bg-primary/5 dark:bg-primary/10 border-primary/20 dark:border-primary/20",
     },
     {
       title: dictionary.dashboard.totalTrainers,

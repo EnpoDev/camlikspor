@@ -29,6 +29,8 @@ const defaultLayout: LayoutSettings = {
   showGallery: true,
   showShopPreview: true,
   showContact: true,
+  showMatchesSection: true,
+  showSponsorsSection: true,
 };
 
 const ThemeContext = createContext<ThemeContextValue>({
@@ -82,6 +84,8 @@ export function ThemeProvider({
         showGallery: preset.showGallery,
         showShopPreview: preset.showShopPreview,
         showContact: preset.showContact,
+        showMatchesSection: preset.showMatchesSection,
+        showSponsorsSection: preset.showSponsorsSection,
       };
     }
 

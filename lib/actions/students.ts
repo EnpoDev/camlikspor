@@ -11,6 +11,7 @@ import {
   tcKimlikOptionalSchema,
 } from "@/lib/utils/validation";
 import { createOrLinkParent } from "@/lib/actions/parents";
+import { sendParentCredentialsSMS } from "@/lib/sms/send-parent-credentials";
 
 const studentSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -140,12 +141,12 @@ export async function createStudentAction(
           parentTcKimlik: validatedFields.data.parentTcKimlik,
         });
 
-        // Log temporary password if a new parent was created
+        // Send SMS if a new parent was created
         if (parentResult.temporaryPassword) {
-          console.log(`[PARENT ACCOUNT CREATED] Email: ${validatedFields.data.parentEmail}, Temporary Password: ${parentResult.temporaryPassword}`);
-          // TODO: Send email or SMS notification to parent with login credentials
-        } else {
-          console.log(`[PARENT LINKED] Student linked to existing parent: ${validatedFields.data.parentEmail}`);
+          await sendParentCredentialsSMS(
+            validatedFields.data.parentPhone,
+            parentResult.temporaryPassword
+          );
         }
       } catch (parentError) {
         console.error("Parent creation/linking error:", parentError);

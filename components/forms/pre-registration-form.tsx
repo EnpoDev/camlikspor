@@ -319,7 +319,7 @@ export function PreRegistrationForm({
                 href={t.termsAcceptanceLink as string}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-600 hover:text-emerald-700 underline"
+                className="text-primary hover:bg-primary/90 underline"
               >
                 {t.termsAcceptanceLinkText as string}
               </a>

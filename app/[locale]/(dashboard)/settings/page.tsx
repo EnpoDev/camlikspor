@@ -65,7 +65,7 @@ export default async function SettingsPage({ params }: SettingsPageProps) {
       title: dictionary.settings.studentDevelopment,
       icon: TrendingUp,
       href: `/${locale}/settings/development`,
-      color: "text-emerald-500",
+      color: "text-primary",
     },
     {
       title: dictionary.settings.personnel,

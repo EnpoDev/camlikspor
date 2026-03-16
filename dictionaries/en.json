@@ -92,7 +92,9 @@
     "trainingPlans": "Training Plans",
     "tacticalBoard": "Tactical Board",
     "trainingCalendar": "Training Calendar",
-    "legalDocuments": "Legal Documents"
+    "legalDocuments": "Legal Documents",
+    "matches": "Matches",
+    "sponsors": "Sponsors"
   },
   "header": {
     "profile": "Profile",

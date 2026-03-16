@@ -100,6 +100,16 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.HERO_SLIDES_CREATE,
     Permission.HERO_SLIDES_EDIT,
     Permission.HERO_SLIDES_DELETE,
+    // Matches
+    Permission.MATCHES_VIEW,
+    Permission.MATCHES_CREATE,
+    Permission.MATCHES_EDIT,
+    Permission.MATCHES_DELETE,
+    // Sponsors
+    Permission.SPONSORS_VIEW,
+    Permission.SPONSORS_CREATE,
+    Permission.SPONSORS_EDIT,
+    Permission.SPONSORS_DELETE,
     // Sub-dealers
     Permission.SUB_DEALERS_VIEW,
     Permission.SUB_DEALERS_CREATE,
@@ -116,6 +126,61 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.TACTICAL_BOARD_CREATE,
     Permission.TACTICAL_BOARD_EDIT,
     Permission.TACTICAL_BOARD_DELETE,
+    // Equipment/Materials
+    Permission.EQUIPMENT_VIEW,
+    Permission.EQUIPMENT_CREATE,
+    Permission.EQUIPMENT_EDIT,
+    Permission.EQUIPMENT_DELETE,
+    // Student Development
+    Permission.STUDENT_DEVELOPMENT_VIEW,
+    Permission.STUDENT_DEVELOPMENT_CREATE,
+    Permission.STUDENT_DEVELOPMENT_EDIT,
+    Permission.STUDENT_DEVELOPMENT_DELETE,
+    // Body Measurements
+    Permission.BODY_MEASUREMENTS_VIEW,
+    Permission.BODY_MEASUREMENTS_CREATE,
+    Permission.BODY_MEASUREMENTS_EDIT,
+    Permission.BODY_MEASUREMENTS_DELETE,
+    // Personnel
+    Permission.PERSONNEL_VIEW,
+    Permission.PERSONNEL_CREATE,
+    Permission.PERSONNEL_EDIT,
+    Permission.PERSONNEL_DELETE,
+    // Expense Items
+    Permission.EXPENSE_ITEMS_VIEW,
+    Permission.EXPENSE_ITEMS_CREATE,
+    Permission.EXPENSE_ITEMS_EDIT,
+    Permission.EXPENSE_ITEMS_DELETE,
+    // Expenses
+    Permission.EXPENSES_VIEW,
+    Permission.EXPENSES_CREATE,
+    Permission.EXPENSES_EDIT,
+    Permission.EXPENSES_DELETE,
+    // Income Items
+    Permission.INCOME_ITEMS_VIEW,
+    Permission.INCOME_ITEMS_CREATE,
+    Permission.INCOME_ITEMS_EDIT,
+    Permission.INCOME_ITEMS_DELETE,
+    // Incomes
+    Permission.INCOMES_VIEW,
+    Permission.INCOMES_CREATE,
+    Permission.INCOMES_EDIT,
+    Permission.INCOMES_DELETE,
+    // Task Definitions
+    Permission.TASK_DEFINITIONS_VIEW,
+    Permission.TASK_DEFINITIONS_CREATE,
+    Permission.TASK_DEFINITIONS_EDIT,
+    Permission.TASK_DEFINITIONS_DELETE,
+    // Other Payment Types
+    Permission.OTHER_PAYMENT_TYPES_VIEW,
+    Permission.OTHER_PAYMENT_TYPES_CREATE,
+    Permission.OTHER_PAYMENT_TYPES_EDIT,
+    Permission.OTHER_PAYMENT_TYPES_DELETE,
+    // Dues Types
+    Permission.DUES_TYPES_VIEW,
+    Permission.DUES_TYPES_CREATE,
+    Permission.DUES_TYPES_EDIT,
+    Permission.DUES_TYPES_DELETE,
   ],
   [UserRole.TRAINER]: [
     Permission.ATTENDANCE_VIEW,
@@ -265,6 +330,18 @@ export const MENU_ITEMS: MenuItem[] = [
         href: "/accounting/online-payments",
         permission: Permission.ACCOUNTING_ONLINE_PAYMENTS_VIEW,
       },
+      {
+        key: "incomes",
+        labelKey: "sidebar.incomes",
+        href: "/accounting/incomes",
+        permission: Permission.INCOMES_VIEW,
+      },
+      {
+        key: "expenses",
+        labelKey: "sidebar.expenses",
+        href: "/accounting/expenses",
+        permission: Permission.EXPENSES_VIEW,
+      },
     ],
   },
   {
@@ -292,6 +369,90 @@ export const MENU_ITEMS: MenuItem[] = [
     permission: Permission.SETTINGS_VIEW,
     children: [
       {
+        key: "periods",
+        labelKey: "sidebar.periods",
+        href: "/settings/periods",
+        permission: Permission.SETTINGS_VIEW,
+      },
+      {
+        key: "branches",
+        labelKey: "sidebar.branches",
+        href: "/settings/branches",
+        permission: Permission.SETTINGS_VIEW,
+      },
+      {
+        key: "locations",
+        labelKey: "sidebar.locations",
+        href: "/settings/locations",
+        permission: Permission.SETTINGS_VIEW,
+      },
+      {
+        key: "facilities",
+        labelKey: "sidebar.facilities",
+        href: "/settings/facilities",
+        permission: Permission.SETTINGS_VIEW,
+      },
+      {
+        key: "equipment",
+        labelKey: "sidebar.equipment",
+        href: "/settings/equipment",
+        permission: Permission.EQUIPMENT_VIEW,
+      },
+      {
+        key: "student-development",
+        labelKey: "sidebar.studentDevelopment",
+        href: "/settings/student-development",
+        permission: Permission.STUDENT_DEVELOPMENT_VIEW,
+      },
+      {
+        key: "body-measurements",
+        labelKey: "sidebar.bodyMeasurements",
+        href: "/settings/body-measurements",
+        permission: Permission.BODY_MEASUREMENTS_VIEW,
+      },
+      {
+        key: "personnel",
+        labelKey: "sidebar.personnel",
+        href: "/settings/personnel",
+        permission: Permission.PERSONNEL_VIEW,
+      },
+      {
+        key: "expense-items",
+        labelKey: "sidebar.expenseItems",
+        href: "/settings/expense-items",
+        permission: Permission.EXPENSE_ITEMS_VIEW,
+      },
+      {
+        key: "income-items",
+        labelKey: "sidebar.incomeItems",
+        href: "/settings/income-items",
+        permission: Permission.INCOME_ITEMS_VIEW,
+      },
+      {
+        key: "task-definitions",
+        labelKey: "sidebar.taskDefinitions",
+        href: "/settings/task-definitions",
+        permission: Permission.TASK_DEFINITIONS_VIEW,
+      },
+      {
+        key: "other-payment-types",
+        labelKey: "sidebar.otherPaymentTypes",
+        href: "/settings/other-payment-types",
+        permission: Permission.OTHER_PAYMENT_TYPES_VIEW,
+      },
+      {
+        key: "dues-types",
+        labelKey: "sidebar.duesTypes",
+        href: "/settings/dues-types",
+        permission: Permission.DUES_TYPES_VIEW,
+      },
+      {
+        key: "discounts",
+        labelKey: "sidebar.discounts",
+        href: "/settings/discounts",
+        permission: Permission.SETTINGS_VIEW,
+      },
+      {
         key: "legal-documents",
         labelKey: "sidebar.legalDocuments",
         href: "/settings/legal-documents",
@@ -310,6 +471,18 @@ export const MENU_ITEMS: MenuItem[] = [
     labelKey: "sidebar.orders",
     href: "/orders",
     permission: Permission.ORDERS_VIEW,
+  },
+  {
+    key: "matches",
+    labelKey: "sidebar.matches",
+    href: "/matches",
+    permission: Permission.MATCHES_VIEW,
+  },
+  {
+    key: "sponsors",
+    labelKey: "sidebar.sponsors",
+    href: "/sponsors",
+    permission: Permission.SPONSORS_VIEW,
   },
   {
     key: "blog",

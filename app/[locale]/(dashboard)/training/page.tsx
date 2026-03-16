@@ -28,8 +28,8 @@ export default async function TrainingPage({ params }: TrainingPageProps) {
       title: dictionary.training.overview.totalPlans,
       value: stats.totalPlans,
       icon: BookOpen,
-      color: "text-emerald-500",
-      bgColor: "bg-emerald-50 dark:bg-emerald-950/50",
+      color: "text-primary",
+      bgColor: "bg-primary/5 dark:bg-primary/10",
       href: `/${locale}/training/plans`,
     },
     {

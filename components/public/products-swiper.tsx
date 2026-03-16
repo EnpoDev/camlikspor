@@ -116,7 +116,7 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   )}
 
                   {/* Category Badge */}
-                  <Badge className="absolute top-3 left-3 bg-emerald-600 hover:bg-emerald-600 shadow-lg">
+                  <Badge className="absolute top-3 left-3 bg-primary hover:bg-primary shadow-lg">
                     {product.category.name}
                   </Badge>
 
@@ -143,7 +143,7 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   {/* Quick Add */}
                   <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                     <Button
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 shadow-lg"
+                      className="w-full bg-primary hover:bg-primary/90 shadow-lg"
                       onClick={(e) => e.preventDefault()}
                     >
                       <ShoppingBag className="mr-2 h-4 w-4" />
@@ -156,10 +156,10 @@ export function ProductsSwiper({ products, locale }: ProductsSwiperProps) {
                   <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">
                     {product.category.name}
                   </p>
-                  <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
+                  <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-primary transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-xl font-bold text-emerald-600">
+                  <p className="text-xl font-bold text-primary">
                     {formatPrice(product.price)}
                   </p>
                 </CardContent>

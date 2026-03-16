@@ -74,7 +74,7 @@ export function PublicFooter({
   const quickLinks = [
     { href: basePath, label: "Ana Sayfa" },
     { href: `${basePath}/shop`, label: "Mağaza" },
-    { href: `${basePath}#contact`, label: "İletişim" },
+    { href: `${basePath}/contact`, label: "İletişim" },
     { href: `${basePath}/privacy`, label: dictionary.privacy || "Gizlilik Politikası" },
     ...legalDocuments
       .filter((doc) => doc.fileUrl)
@@ -96,44 +96,44 @@ export function PublicFooter({
   const hasContactInfo = true; // Always show contact info
 
   return (
-    <footer className="bg-slate-900 text-white">
+    <footer className="bg-slate-900 text-white border-t border-slate-800">
       {/* Features Bar */}
       <div className="border-b border-slate-800">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center flex-shrink-0">
-                <Truck className="h-6 w-6 text-emerald-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                <Truck className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm">Ücretsiz Kargo</h4>
+                <h4 className="font-semibold text-sm text-white">Ücretsiz Kargo</h4>
                 <p className="text-xs text-slate-400">Tüm siparişlerde</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="h-6 w-6 text-emerald-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                <ShieldCheck className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm">Güvenli Ödeme</h4>
+                <h4 className="font-semibold text-sm text-white">Güvenli Ödeme</h4>
                 <p className="text-xs text-slate-400">256-bit SSL</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-600/20 flex items-center justify-center flex-shrink-0">
-                <CreditCard className="h-6 w-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                <CreditCard className="h-6 w-6 text-secondary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm">Taksit İmkanı</h4>
+                <h4 className="font-semibold text-sm text-white">Taksit İmkanı</h4>
                 <p className="text-xs text-slate-400">12 aya kadar</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-purple-600/20 flex items-center justify-center flex-shrink-0">
-                <HeadphonesIcon className="h-6 w-6 text-purple-400" />
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+                <HeadphonesIcon className="h-6 w-6 text-secondary" />
               </div>
               <div>
-                <h4 className="font-semibold text-sm">7/24 Destek</h4>
+                <h4 className="font-semibold text-sm text-white">7/24 Destek</h4>
                 <p className="text-xs text-slate-400">Her zaman yanınızda</p>
               </div>
             </div>
@@ -148,7 +148,7 @@ export function PublicFooter({
           <div className="lg:col-span-1 space-y-6">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white overflow-hidden">
+                <div className="relative h-12 w-12 flex-shrink-0 rounded-full bg-white/10 overflow-hidden border border-slate-700">
                   <Image
                     src="/logo.png"
                     alt={dealerName}
@@ -177,17 +177,17 @@ export function PublicFooter({
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-secondary transition-colors"
                     >
-                      <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="h-4 w-4 text-primary group-hover:translate-x-1 transition-transform" />
                       {link.label}
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                      className="group flex items-center gap-2 text-sm text-slate-400 hover:text-secondary transition-colors"
                     >
-                      <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="h-4 w-4 text-primary group-hover:translate-x-1 transition-transform" />
                       {link.label}
                     </Link>
                   )}
@@ -204,9 +204,9 @@ export function PublicFooter({
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                    className="group flex items-center gap-2 text-sm text-slate-400 hover:text-secondary transition-colors"
                   >
-                    <ChevronRight className="h-4 w-4 text-emerald-500 group-hover:translate-x-1 transition-transform" />
+                    <ChevronRight className="h-4 w-4 text-primary group-hover:translate-x-1 transition-transform" />
                     {link.label}
                   </Link>
                 </li>
@@ -224,11 +224,11 @@ export function PublicFooter({
                     href={`tel:${hardcodedPhone}`}
                     className="group flex items-start gap-3 text-sm"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                      <Phone className="h-4 w-4" />
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
+                      <Phone className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <span className="text-slate-400 text-xs block">Telefon</span>
+                      <span className="text-slate-500 text-xs block">Telefon</span>
                       <span className="text-white font-medium">{hardcodedPhone}</span>
                     </div>
                   </a>
@@ -241,10 +241,10 @@ export function PublicFooter({
                     className="group flex items-start gap-3 text-sm"
                   >
                     <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-green-600 transition-colors">
-                      <MessageCircle className="h-4 w-4" />
+                      <MessageCircle className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <span className="text-slate-400 text-xs block">WhatsApp</span>
+                      <span className="text-slate-500 text-xs block">WhatsApp</span>
                       <span className="text-white font-medium">{hardcodedPhone}</span>
                     </div>
                   </a>
@@ -254,11 +254,11 @@ export function PublicFooter({
                     href={`mailto:${hardcodedEmail}`}
                     className="group flex items-start gap-3 text-sm"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                      <Mail className="h-4 w-4" />
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
+                      <Mail className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <span className="text-slate-400 text-xs block">E-posta</span>
+                      <span className="text-slate-500 text-xs block">E-posta</span>
                       <span className="text-white font-medium">{hardcodedEmail}</span>
                     </div>
                   </a>
@@ -270,12 +270,12 @@ export function PublicFooter({
                     rel="noopener noreferrer"
                     className="group flex items-start gap-3 text-sm"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 transition-colors">
-                      <MapPin className="h-4 w-4" />
+                    <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
+                      <MapPin className="h-4 w-4 text-white" />
                     </div>
                     <div>
-                      <span className="text-slate-400 text-xs block">Adres</span>
-                      <span className="text-white">{hardcodedAddress}</span>
+                      <span className="text-slate-500 text-xs block">Adres</span>
+                      <span className="text-slate-400">{hardcodedAddress}</span>
                     </div>
                   </a>
                 </li>
@@ -292,9 +292,10 @@ export function PublicFooter({
                       href={socialFacebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-emerald-600 transition-colors"
+                      className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors"
+                      aria-label={`${dealerName} Facebook sayfası (yeni sekmede açılır)`}
                     >
-                      <Facebook className="h-5 w-5" />
+                      <Facebook className="h-6 w-6 text-white" aria-hidden="true" />
                     </a>
                   )}
                   {socialInstagram && (
@@ -303,8 +304,9 @@ export function PublicFooter({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-600 transition-all"
+                      aria-label={`${dealerName} Instagram sayfası (yeni sekmede açılır)`}
                     >
-                      <Instagram className="h-5 w-5" />
+                      <Instagram className="h-6 w-6 text-white" aria-hidden="true" />
                     </a>
                   )}
                   {socialTwitter && (
@@ -313,8 +315,9 @@ export function PublicFooter({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-sky-500 transition-colors"
+                      aria-label={`${dealerName} Twitter sayfası (yeni sekmede açılır)`}
                     >
-                      <Twitter className="h-5 w-5" />
+                      <Twitter className="h-6 w-6 text-white" aria-hidden="true" />
                     </a>
                   )}
                   {socialYoutube && (
@@ -323,8 +326,9 @@ export function PublicFooter({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center hover:bg-red-600 transition-colors"
+                      aria-label={`${dealerName} YouTube kanalı (yeni sekmede açılır)`}
                     >
-                      <Youtube className="h-5 w-5" />
+                      <Youtube className="h-6 w-6 text-white" aria-hidden="true" />
                     </a>
                   )}
                 </div>
@@ -335,63 +339,83 @@ export function PublicFooter({
       </div>
 
       {/* Legal Documents Section */}
-      {legalDocuments.length > 0 && (
-        <div className="border-t border-slate-800">
-          <div className="container mx-auto px-4 py-6">
-            <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-              <Link
-                href={`${basePath}/privacy`}
-                className="text-slate-400 hover:text-white transition-colors"
-              >
-                Gizlilik Politikası
-              </Link>
-              {legalDocuments.filter((doc) => doc.fileUrl).map((doc) => (
-                <a
-                  key={doc.id}
-                  href={doc.fileUrl!}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-400 hover:text-white transition-colors flex items-center gap-1"
-                >
-                  {doc.title}
-                  <FileText className="h-3 w-3" />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Bottom Bar */}
       <div className="border-t border-slate-800">
         <div className="container mx-auto px-4 py-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm">
+            <Link
+              href={`/${locale}/legal/mesafeli-satis-sozlesmesi`}
+              className="text-slate-400 hover:text-secondary transition-colors"
+            >
+              Mesafeli Satış Sözleşmesi
+            </Link>
+            <Link
+              href={`/${locale}/legal/iade-ve-iptal-politikasi`}
+              className="text-slate-400 hover:text-secondary transition-colors"
+            >
+              İade ve İptal Politikası
+            </Link>
+            <Link
+              href={`/${locale}/legal/gizlilik-politikasi`}
+              className="text-slate-400 hover:text-secondary transition-colors"
+            >
+              Gizlilik Politikası
+            </Link>
+            <Link
+              href={`/${locale}/legal/kvkk`}
+              className="text-slate-400 hover:text-secondary transition-colors"
+            >
+              K.V.K.K.
+            </Link>
+            <Link
+              href={`/${locale}/legal/kullanim-sartlari`}
+              className="text-slate-400 hover:text-secondary transition-colors"
+            >
+              Kullanım Şartları
+            </Link>
+            {legalDocuments.filter((doc) => doc.fileUrl).map((doc) => (
+              <a
+                key={doc.id}
+                href={doc.fileUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-400 hover:text-secondary transition-colors flex items-center gap-1"
+              >
+                {doc.title}
+                <FileText className="h-3 w-3" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-slate-800 bg-slate-950">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-1 text-sm text-slate-400">
+            <div className="flex items-center gap-1 text-sm text-slate-500">
               <span>&copy; {new Date().getFullYear()} {dealerName}.</span>
               <span>Tüm hakları saklıdır.</span>
             </div>
 
-            {/* Payment Icons */}
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-slate-500">Güvenli Ödeme:</span>
-              <div className="flex items-center gap-2">
-                <div className="px-3 py-1.5 bg-slate-800 rounded text-xs font-medium">
-                  VISA
-                </div>
-                <div className="px-3 py-1.5 bg-slate-800 rounded text-xs font-medium">
-                  MasterCard
-                </div>
-                <div className="px-3 py-1.5 bg-slate-800 rounded text-xs font-medium">
-                  Troy
-                </div>
-              </div>
+            {/* Payment - Garanti BBVA */}
+            <div className="flex flex-col items-center gap-2">
+              <Image
+                src="/garanti_logo.png"
+                alt="Garanti BBVA"
+                width={160}
+                height={40}
+                className="object-contain"
+              />
+              <p className="text-xs text-slate-400 text-center">
+                Güvenli ödeme hizmeti Garanti BBVA tarafından sağlanmaktadır.
+              </p>
             </div>
 
             <a
               href="https://cosmos.web.tr"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-slate-400 hover:text-white transition-colors"
+              className="text-sm text-slate-500 hover:text-secondary transition-colors"
             >
               Web Tasarım: <span className="font-semibold">COSMOS</span>
             </a>

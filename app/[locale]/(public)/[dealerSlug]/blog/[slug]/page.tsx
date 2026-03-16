@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <Link href={`/${locale}/${dealerSlug}/blog`}>
-            <Button variant="ghost" className="mb-8 hover:bg-emerald-50 dark:hover:bg-emerald-900/20">
+            <Button variant="ghost" className="mb-8 hover:bg-primary/5 dark:hover:bg-primary/20">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Blog'a Dön
             </Button>
@@ -79,9 +79,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               {/* Meta Info */}
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                 {post.publishedAt && (
-                  <div className="flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1.5 rounded-full">
-                    <Calendar className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-emerald-700 dark:text-emerald-300 font-medium">
+                  <div className="flex items-center gap-2 bg-primary/5 dark:bg-primary/20 px-3 py-1.5 rounded-full">
+                    <Calendar className="h-4 w-4 text-primary dark:text-primary" />
+                    <span className="text-primary dark:text-primary font-medium">
                       {format(new Date(post.publishedAt), "dd MMMM yyyy", {
                         locale: tr,
                       })}
@@ -97,28 +97,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
               {/* Excerpt */}
               {post.excerpt && (
-                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-light border-l-4 border-emerald-500 pl-6 py-2">
+                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-light border-l-4 border-primary pl-6 py-2">
                   {post.excerpt}
                 </p>
               )}
 
               {/* Divider */}
-              <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full mb-12" />
+              <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary/30 rounded-full mb-12" />
 
               {/* Content */}
               <div
                 className="prose prose-lg md:prose-xl dark:prose-invert max-w-none
                   prose-headings:font-bold prose-headings:tracking-tight
                   prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-slate-900 dark:prose-h2:text-white prose-h2:border-b prose-h2:border-slate-200 dark:prose-h2:border-slate-800 prose-h2:pb-3
-                  prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-emerald-600 dark:prose-h3:text-emerald-400
+                  prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-primary dark:prose-h3:text-primary
                   prose-p:text-slate-700 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6
-                  prose-a:text-emerald-600 dark:prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
+                  prose-a:text-primary dark:prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-a:font-medium
                   prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-semibold
                   prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
                   prose-li:text-slate-700 dark:prose-li:text-slate-300 prose-li:mb-2
                   prose-img:rounded-xl prose-img:shadow-lg
-                  prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-slate-600 dark:prose-blockquote:text-slate-400
-                  prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-emerald-600 dark:prose-code:text-emerald-400"
+                  prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-slate-600 dark:prose-blockquote:text-slate-400
+                  prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-primary dark:prose-code:text-primary"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </div>

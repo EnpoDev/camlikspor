@@ -39,16 +39,28 @@ async function seedLegalDocuments() {
       sortOrder: 4,
     },
     {
+      title: "Mesafeli Satış Sözleşmesi",
+      slug: "mesafeli-satis-sozlesmesi",
+      fileUrl: `/tr/camlikspor/legal/mesafeli-satis-sozlesmesi`,
+      sortOrder: 5,
+    },
+    {
+      title: "İade ve İptal Politikası",
+      slug: "iade-ve-iptal-politikasi",
+      fileUrl: `/tr/camlikspor/legal/iade-ve-iptal-politikasi`,
+      sortOrder: 6,
+    },
+    {
       title: "Ön Kayıt Sözleşmesi",
       slug: "on-kayit-sozlesmesi",
       fileUrl: `/tr/camlikspor/legal/on-kayit-sozlesmesi`,
-      sortOrder: 5,
+      sortOrder: 7,
     },
     {
       title: "Sporcu Sözleşmesi",
       slug: "sporcu-sozlesmesi",
       fileUrl: `https://drive.google.com/file/d/1j2AaMlzYq-dmUysuls8hy-Rs82Yb0_JV/view?usp=sharing`,
-      sortOrder: 6,
+      sortOrder: 8,
     },
   ];
 

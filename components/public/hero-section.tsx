@@ -32,13 +32,16 @@ export function HeroSection({
   const basePath = useRootPaths ? `/${locale}` : `/${locale}/${dealerSlug}`;
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section
+      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden"
+      aria-label={`${dealerName} ana sayfa`}
+    >
       {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0" aria-hidden="true">
         {heroImage ? (
           <Image
             src={backgroundImage}
-            alt={dealerName}
+            alt=""
             fill
             className="object-cover"
             priority
@@ -55,8 +58,8 @@ export function HeroSection({
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Logo/Badge */}
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm px-4 py-2 text-sm">
-            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-            Kayitlar Acik
+            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" aria-hidden="true" />
+            Kayıtlar Açık
           </div>
 
           {/* Title */}
@@ -71,15 +74,15 @@ export function HeroSection({
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-            <Link href={`${basePath}/shop`}>
+            <Link href={`${basePath}/shop`} aria-label={`${dictionary.shopCta} - ${dealerName} mağazası`}>
               <Button size="lg" className="text-lg px-8 py-6">
-                <ShoppingBag className="mr-2 h-5 w-5" />
+                <ShoppingBag className="mr-2 h-5 w-5" aria-hidden="true" />
                 {dictionary.shopCta}
               </Button>
             </Link>
-            <Link href={`${basePath}#contact`}>
+            <Link href={`${basePath}/contact`} aria-label={dictionary.contactCta}>
               <Button size="lg" variant="outline" className="text-lg px-8 py-6 bg-white/10 backdrop-blur-sm border-white/30 hover:bg-white/20">
-                <Phone className="mr-2 h-5 w-5" />
+                <Phone className="mr-2 h-5 w-5" aria-hidden="true" />
                 {dictionary.contactCta}
               </Button>
             </Link>
@@ -88,7 +91,7 @@ export function HeroSection({
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce" aria-hidden="true">
         <ChevronDown className="h-8 w-8 text-white/60" />
       </div>
     </section>

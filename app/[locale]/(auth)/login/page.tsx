@@ -68,12 +68,12 @@ function LoginForm({ params }: LoginPageProps) {
   return (
     <div className="min-h-screen w-full flex">
       {/* Left Side - Decorative */}
-      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-emerald-600 via-emerald-700 to-slate-900 overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 relative bg-gradient-to-br from-primary via-primary/80 to-slate-900 overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-20 w-72 h-72 bg-emerald-500/30 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute top-20 left-20 w-72 h-72 bg-primary/30 rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-emerald-400/20 rounded-full blur-3xl animate-pulse delay-500" />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse delay-500" />
         </div>
 
         {/* Grid Pattern */}
@@ -88,21 +88,21 @@ function LoginForm({ params }: LoginPageProps) {
           </div>
 
           <h1 className="text-4xl font-bold mb-4 text-center">Futbol Okullari</h1>
-          <p className="text-emerald-100/80 text-lg text-center max-w-md mb-12">
+          <p className="text-white/80 text-lg text-center max-w-md mb-12">
             Profesyonel futbol okulu yonetim sistemi ile ogrencilerinizi, antrenmanlarinizi ve tum surecleri kolayca yonetin.
           </p>
 
           {/* Feature List */}
           <div className="space-y-4 w-full max-w-sm">
             <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-              <div className="w-10 h-10 bg-emerald-500/30 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-10 h-10 bg-primary/30 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
               <div>
                 <p className="font-medium">Ogrenci Yonetimi</p>
-                <p className="text-sm text-emerald-200/60">Tum ogrenci bilgilerini tek yerden yonetin</p>
+                <p className="text-sm text-white/60">Tum ogrenci bilgilerini tek yerden yonetin</p>
               </div>
             </div>
 
@@ -114,7 +114,7 @@ function LoginForm({ params }: LoginPageProps) {
               </div>
               <div>
                 <p className="font-medium">Yoklama Takibi</p>
-                <p className="text-sm text-emerald-200/60">Antrenman katilimlarini kayit altina alin</p>
+                <p className="text-sm text-white/60">Antrenman katilimlarini kayit altina alin</p>
               </div>
             </div>
 
@@ -126,7 +126,7 @@ function LoginForm({ params }: LoginPageProps) {
               </div>
               <div>
                 <p className="font-medium">Odeme Takibi</p>
-                <p className="text-sm text-emerald-200/60">Aidat ve odemelerinizi kolayca takip edin</p>
+                <p className="text-sm text-white/60">Aidat ve odemelerinizi kolayca takip edin</p>
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ function LoginForm({ params }: LoginPageProps) {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex flex-col items-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 mb-4">
+            <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/90 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/25 mb-4">
               <Trophy className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Futbol Okullari</h1>
@@ -173,7 +173,7 @@ function LoginForm({ params }: LoginPageProps) {
                     id="email"
                     type="email"
                     placeholder="ornek@email.com"
-                    className="pl-10 h-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="pl-10 h-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-primary"
                     {...register("email")}
                     disabled={isLoading}
                   />
@@ -196,7 +196,7 @@ function LoginForm({ params }: LoginPageProps) {
                     id="password"
                     type="password"
                     placeholder="********"
-                    className="pl-10 h-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="pl-10 h-12 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-primary"
                     {...register("password")}
                     disabled={isLoading}
                   />
@@ -211,7 +211,7 @@ function LoginForm({ params }: LoginPageProps) {
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30"
+                className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-white font-medium shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/25"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -245,7 +245,7 @@ export default function LoginPage({ params }: LoginPageProps) {
       fallback={
         <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 dark:bg-slate-950">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/25 animate-pulse">
+            <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary/90 rounded-2xl flex items-center justify-center shadow-lg shadow-primary/25 animate-pulse">
               <Trophy className="w-8 h-8 text-white" />
             </div>
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">

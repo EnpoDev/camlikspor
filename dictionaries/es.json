@@ -92,7 +92,9 @@
     "trainingPlans": "Planes de Entrenamiento",
     "tacticalBoard": "Pizarra Tactica",
     "trainingCalendar": "Calendario de Entrenamiento",
-    "legalDocuments": "Documentos Legales"
+    "legalDocuments": "Documentos Legales",
+    "matches": "Partidos",
+    "sponsors": "Patrocinadores"
   },
   "header": {
     "profile": "Perfil",

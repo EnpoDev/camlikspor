@@ -13,33 +13,18 @@ interface FeaturesSectionProps {
 const defaultFeatures = [
   {
     icon: "trophy",
-    title: "Profesyonel Egitim",
-    description: "UEFA lisansli antrenorlerimiz ile uluslararasi standartlarda egitim",
+    title: "Profesyonel Eğitim",
+    description: "UEFA lisanslı antrenörlerimiz ile uluslararası standartlarda futbol eğitimi sunuyoruz.",
   },
   {
     icon: "users",
-    title: "Yas Gruplari",
-    description: "4-18 yas arasi tum cocuklara uygun sinif ve grup egitimi",
-  },
-  {
-    icon: "calendar",
-    title: "Esnek Program",
-    description: "Hafta ici ve hafta sonu uygun saatlerde antrenman imkani",
+    title: "Her Yaş Grubuna Uygun",
+    description: "4-18 yaş arası tüm çocuklara özel sınıf ve grup eğitimi programları.",
   },
   {
     icon: "shield",
-    title: "Guvenli Ortam",
-    description: "Sigorta kapsaminda, guvenli tesislerde egitim",
-  },
-  {
-    icon: "target",
-    title: "Bireysel Gelisim",
-    description: "Her oyuncuya ozel gelisim takibi ve raporlama",
-  },
-  {
-    icon: "star",
-    title: "Turnuva Katilimi",
-    description: "Yurt ici ve yurt disi turnuvalara katilim imkani",
+    title: "Güvenli Ortam",
+    description: "Sigorta kapsamında, modern ve güvenli tesislerde eğitim imkânı sağlıyoruz.",
   },
 ];
 
@@ -60,7 +45,13 @@ export function FeaturesSection({ features, dictionary }: FeaturesSectionProps) 
     try {
       const parsed = JSON.parse(features);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        featureList = parsed;
+        // Only use parsed data if items have actual content
+        const validItems = parsed.filter(
+          (f: { title?: string; description?: string }) => f.title && f.description
+        );
+        if (validItems.length > 0) {
+          featureList = validItems;
+        }
       }
     } catch {
       // Use default features if parsing fails
@@ -68,7 +59,7 @@ export function FeaturesSection({ features, dictionary }: FeaturesSectionProps) 
   }
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-white border-t border-slate-200">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">

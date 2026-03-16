@@ -11,6 +11,7 @@ const blogPostSchema = z.object({
   excerpt: z.string().optional(),
   content: z.string().min(1, "İçerik gereklidir"),
   coverImage: z.string().optional(),
+  category: z.string().optional(),
   isPublished: z.boolean(),
 });
 
@@ -21,6 +22,7 @@ export interface BlogFormState {
     excerpt?: string[];
     content?: string[];
     coverImage?: string[];
+    category?: string[];
     _form?: string[];
   };
   message?: string;
@@ -46,6 +48,7 @@ export async function createBlogPostAction(
     excerpt: formData.get("excerpt") || undefined,
     content: formData.get("content"),
     coverImage: formData.get("coverImage") || undefined,
+    category: formData.get("category") || undefined,
     isPublished: formData.get("isPublished") === "true",
   });
 
@@ -80,6 +83,7 @@ export async function createBlogPostAction(
         excerpt: result.data.excerpt,
         content: result.data.content,
         coverImage: result.data.coverImage,
+        category: result.data.category,
         isPublished: result.data.isPublished,
         publishedAt: result.data.isPublished ? new Date() : null,
       },
@@ -119,6 +123,7 @@ export async function updateBlogPostAction(
     excerpt: formData.get("excerpt") || undefined,
     content: formData.get("content"),
     coverImage: formData.get("coverImage") || undefined,
+    category: formData.get("category") || undefined,
     isPublished: formData.get("isPublished") === "true",
   });
 
@@ -175,6 +180,7 @@ export async function updateBlogPostAction(
         excerpt: result.data.excerpt,
         content: result.data.content,
         coverImage: result.data.coverImage,
+        category: result.data.category,
         isPublished: result.data.isPublished,
         publishedAt:
           !wasPublished && willBePublished

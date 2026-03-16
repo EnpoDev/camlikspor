@@ -2,11 +2,15 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
+import { getMatchesByDealer } from "@/lib/actions/matches";
+import { getSponsorsByDealer } from "@/lib/actions/sponsors";
 import { HeroSection } from "@/components/public/hero-section";
-import { FeaturesSection } from "@/components/public/features-section";
 import { GallerySection } from "@/components/public/gallery-section";
-import { ContactSection } from "@/components/public/contact-section";
-import { ShopPreview } from "@/components/public/shop-preview";
+import { NewsSection } from "@/components/public/news-section";
+import { MatchesSection } from "@/components/public/matches-section";
+import { CtaGridSection } from "@/components/public/cta-grid-section";
+import { BannerSection } from "@/components/public/banner-section";
+import { SponsorsSection } from "@/components/public/sponsors-section";
 
 interface LandingPageProps {
   params: Promise<{ locale: string; dealerSlug: string }>;
@@ -51,10 +55,19 @@ export default async function LandingPage({ params }: LandingPageProps) {
       heroImage: true,
       heroTitle: true,
       heroSubtitle: true,
-      features: true,
       contactPhone: true,
       contactEmail: true,
       contactAddress: true,
+      // Banner
+      bannerImage: true,
+      bannerTitle: true,
+      bannerLink: true,
+      // Section visibility flags (from Dealer model)
+      showMatchesSection: true,
+      showNewsSection: true,
+      showSponsorsSection: true,
+      showShopPreviewSection: true,
+      showPreRegSection: true,
     },
   });
 
@@ -62,48 +75,55 @@ export default async function LandingPage({ params }: LandingPageProps) {
     notFound();
   }
 
-  // Fetch gallery images
-  const galleryImages = await prisma.galleryImage.findMany({
-    where: {
-      dealerId: dealer.id,
-      isActive: true,
-    },
-    orderBy: { sortOrder: "asc" },
-    take: 10,
-    select: {
-      id: true,
-      url: true,
-      title: true,
-      description: true,
-    },
-  });
-
-  // Fetch featured products
-  const products = await prisma.product.findMany({
-    where: {
-      dealerId: dealer.id,
-      isActive: true,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 4,
-    select: {
-      id: true,
-      name: true,
-      slug: true,
-      price: true,
-      images: true,
-      category: {
-        select: { name: true },
-      },
-    },
-  });
+  // Run all data fetches in parallel for performance
+  const [matches, sponsors, blogPosts, galleryImages, products] =
+    await Promise.all([
+      getMatchesByDealer(dealer.id),
+      getSponsorsByDealer(dealer.id),
+      prisma.blogPost.findMany({
+        where: { dealerId: dealer.id, isPublished: true },
+        orderBy: { publishedAt: "desc" },
+        take: 6,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          coverImage: true,
+          category: true,
+          publishedAt: true,
+        },
+      }),
+      prisma.galleryImage.findMany({
+        where: { dealerId: dealer.id, isActive: true },
+        orderBy: { sortOrder: "asc" },
+        take: 10,
+        select: { id: true, url: true, title: true, description: true },
+      }),
+      prisma.product.findMany({
+        where: { dealerId: dealer.id, isActive: true },
+        orderBy: { createdAt: "desc" },
+        take: 4,
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          price: true,
+          images: true,
+          category: { select: { name: true } },
+        },
+      }),
+    ]);
 
   const dictionary = await getDictionary(locale);
-  const publicDict = dictionary.public || {};
+  // Cast to any so we can safely access keys that may not exist in the
+  // current dictionary shape without TypeScript errors
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const publicDict = (dictionary.public || {}) as Record<string, any>;
 
   return (
     <>
-      {/* Hero Section */}
+      {/* 1. Hero */}
       <HeroSection
         dealerSlug={dealer.slug}
         dealerName={dealer.name}
@@ -117,61 +137,85 @@ export default async function LandingPage({ params }: LandingPageProps) {
         }}
       />
 
-      {/* Features Section */}
-      <FeaturesSection
-        features={dealer.features}
+      {/* 2. Matches */}
+      <MatchesSection
+        matches={matches as any}
+        sponsors={sponsors as any}
+        isVisible={dealer.showMatchesSection}
         dictionary={{
-          title: publicDict.features?.title || "Neden Bizi Tercih Etmelisiniz?",
-          subtitle:
-            publicDict.features?.subtitle ||
-            "Profesyonel eğitim kadromuz ve modern tesislerimizle farkı yaşayın.",
+          title: publicDict.matchesSection?.title || "Maclar",
+          matchTickets: publicDict.matchesSection?.matchTickets || "Bilet Al",
+          tbd: publicDict.matchesSection?.tbd || "TBD",
         }}
       />
 
-      {/* Shop Preview */}
-      {products.length > 0 && (
-        <ShopPreview
-          products={products}
-          dealerSlug={dealer.slug}
+      {/* 3. News */}
+      {dealer.showNewsSection && blogPosts.length > 0 && (
+        <NewsSection
+          posts={blogPosts}
           locale={locale}
+          dealerSlug={dealer.slug}
           dictionary={{
-            title: publicDict.shopSection?.title || "Magaza",
-            viewAll: publicDict.shopSection?.viewAll || "Tumunu Gor",
-            currency: "TL",
+            badge: publicDict.newsSection?.badge || "Haberler",
+            title: publicDict.newsSection?.title || "Son Haberler",
+            subtitle: publicDict.newsSection?.subtitle || "Kulübümüzden en güncel haberler",
+            featured: publicDict.newsSection?.featured || "ÖNE ÇIKAN",
+            viewAll: publicDict.newsSection?.viewAll || "Tüm Haberler",
           }}
         />
       )}
 
-      {/* Gallery Section */}
+      {/* 4. CTA Grid — Magaza + On Kayit */}
+      <CtaGridSection
+        dealerSlug={dealer.slug}
+        locale={locale}
+        shopVisible={dealer.showShopPreviewSection && products.length > 0}
+        preRegVisible={dealer.showPreRegSection}
+        dictionary={{
+          store: publicDict.ctaGrid?.store || "MAGAZA",
+          preReg: publicDict.ctaGrid?.preReg || "ON KAYIT",
+        }}
+      />
+
+      {/* 6. Banner */}
+      <BannerSection
+        bannerImage={dealer.bannerImage}
+        bannerTitle={dealer.bannerTitle}
+        bannerLink={dealer.bannerLink}
+        isVisible={!!(dealer.bannerTitle || dealer.bannerImage)}
+      />
+
+      {/* 7. Gallery */}
       {galleryImages.length > 0 && (
         <GallerySection
           images={galleryImages}
           dealerSlug={dealer.slug}
           locale={locale}
           dictionary={{
-            title: publicDict.gallerySection?.title || "Galeri",
-            viewAll: publicDict.gallerySection?.viewAll || "Tum Fotograflar",
+            title:
+              publicDict.gallerySection?.title || "Fotograf Galerisi",
+            viewAll:
+              publicDict.gallerySection?.viewAll || "Tum Galeriye Git",
           }}
         />
       )}
 
-      {/* Contact Section */}
-      <ContactSection
-        contactPhone={dealer.contactPhone}
-        contactEmail={dealer.contactEmail}
-        contactAddress={dealer.contactAddress}
+      {/* 8. Sponsors */}
+      <SponsorsSection
+        sponsors={sponsors as any}
+        isVisible={dealer.showSponsorsSection}
         dictionary={{
-          title: publicDict.contactSection?.title || "Iletisim",
-          subtitle:
-            publicDict.contactSection?.subtitle ||
-            "Sorulariniz icin bizimle iletisime gecin.",
-          phoneLabel: publicDict.contactSection?.phoneLabel || "Telefon",
-          emailLabel: publicDict.contactSection?.emailLabel || "E-posta",
-          addressLabel: publicDict.contactSection?.addressLabel || "Adres",
-          hoursLabel: publicDict.contactSection?.hoursLabel || "Calisma Saatleri",
-          hours: publicDict.contactSection?.hours || "Pazartesi - Cumartesi: 09:00 - 21:00",
+          title: publicDict.sponsorsSection?.title || "Resmi Ortaklar",
+          mainPartners:
+            publicDict.sponsorsSection?.mainPartners || "Ana Sponsor",
+          officialPartners:
+            publicDict.sponsorsSection?.officialPartners ||
+            "Resmi Ortaklar",
+          partners:
+            publicDict.sponsorsSection?.partners || "Partnerler",
         }}
       />
+
     </>
   );
 }

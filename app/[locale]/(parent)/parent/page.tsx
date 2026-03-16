@@ -2,15 +2,21 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getParentStudents } from "@/lib/actions/parents";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Calendar, CreditCard, CheckCircle, XCircle } from "lucide-react";
+import { Users, Calendar, CreditCard, CheckCircle, XCircle, Wallet } from "lucide-react";
+import Link from "next/link";
 
-export default async function ParentHomePage() {
+export default async function ParentHomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const session = await auth();
 
   if (!session?.user || session.user.role !== "PARENT") {
     redirect("/tr/parent-login");
   }
 
+  const { locale } = await params;
   const students = await getParentStudents(session.user.id);
 
   return (
@@ -90,53 +96,59 @@ export default async function ParentHomePage() {
 
       {/* Quick Links */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-              <Calendar className="h-6 w-6 text-purple-600 dark:text-purple-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Ders Programi
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Antrenman saatlerini gorun
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <Link href={`/${locale}/parent/parent/schedule`}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <CardContent className="flex items-center gap-4 p-6">
+              <div className="h-12 w-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                <Calendar className="h-6 w-6 text-primary dark:text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">
+                  Ders Programi
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Antrenman saatlerini gorun
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="h-12 w-12 rounded-lg bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
-              <Users className="h-6 w-6 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Devamsizlik
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Katilim durumunu gorun
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <Link href={`/${locale}/parent/parent/attendance`}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <CardContent className="flex items-center gap-4 p-6">
+              <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">
+                  Devamsizlik
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Katilim durumunu gorun
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow">
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
-              <CreditCard className="h-6 w-6 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 dark:text-white">
-                Aidat Takibi
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Odeme durumunu kontrol edin
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <Link href={`/${locale}/parent/parent/payments`}>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+            <CardContent className="flex items-center gap-4 p-6">
+              <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                <Wallet className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-900 dark:text-white">
+                  Aidat Takibi
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Odeme durumunu kontrol edin
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
     </div>
   );

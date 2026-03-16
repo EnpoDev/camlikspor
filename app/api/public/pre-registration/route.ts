@@ -10,6 +10,9 @@ const preRegistrationSchema = z.object({
   email: z.string().email("Geçerli bir e-posta adresi girin").optional().or(z.literal("")),
   studentAge: z.string().min(1, "Öğrenci yaşı gerekli"),
   message: z.string().optional(),
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: "Gizlilik sözleşmesini kabul etmelisiniz",
+  }),
 });
 
 export async function POST(request: Request) {

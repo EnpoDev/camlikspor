@@ -297,3 +297,53 @@ export async function copyGroupAction(
     return { message: "Bir hata olustu", success: false };
   }
 }
+
+export async function removeStudentFromGroupAction(
+  studentId: string,
+  groupId: string
+): Promise<{ success: boolean; message: string }> {
+  const session = await auth();
+
+  if (!session?.user?.dealerId) {
+    return { message: "Yetkilendirme hatasi", success: false };
+  }
+
+  try {
+    // Verify the group belongs to this dealer
+    const group = await prisma.group.findFirst({
+      where: { id: groupId, dealerId: session.user.dealerId },
+    });
+
+    if (!group) {
+      return { message: "Grup bulunamadi", success: false };
+    }
+
+    // Find the student-group relationship
+    const studentGroup = await prisma.studentGroup.findFirst({
+      where: {
+        studentId,
+        groupId,
+      },
+    });
+
+    if (!studentGroup) {
+      return { message: "Ogrenci bu grupta degil", success: false };
+    }
+
+    // Soft delete by setting isActive to false
+    await prisma.studentGroup.update({
+      where: { id: studentGroup.id },
+      data: { isActive: false },
+    });
+
+    revalidatePath("/[locale]/students");
+    revalidatePath(`/[locale]/students/${studentId}`);
+    revalidatePath("/[locale]/groups");
+    revalidatePath(`/[locale]/groups/${groupId}`);
+
+    return { message: "Ogrenci gruptan basariyla kaldirildi", success: true };
+  } catch (error) {
+    console.error("Remove student from group error:", error);
+    return { message: "Bir hata olustu", success: false };
+  }
+}

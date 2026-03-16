@@ -23,6 +23,15 @@ interface PublicDealer {
   themeSettings: string | null;
   layoutSettings: string | null;
   customCss: string | null;
+  bannerImage: string | null;
+  bannerTitle: string | null;
+  bannerLink: string | null;
+  showMatchesSection: boolean;
+  showNewsSection: boolean;
+  showSponsorsSection: boolean;
+  showShopPreviewSection: boolean;
+  showPreRegSection: boolean;
+  aboutText: string | null;
 }
 
 /**
@@ -67,6 +76,15 @@ export async function getPublicDealer(): Promise<PublicDealer | null> {
           themeSettings: true,
           layoutSettings: true,
           customCss: true,
+          bannerImage: true,
+          bannerTitle: true,
+          bannerLink: true,
+          showMatchesSection: true,
+          showNewsSection: true,
+          showSponsorsSection: true,
+          showShopPreviewSection: true,
+          showPreRegSection: true,
+          aboutText: true,
         },
       });
     } else if (dealerDomainType === "subdomain") {
@@ -96,6 +114,15 @@ export async function getPublicDealer(): Promise<PublicDealer | null> {
           themeSettings: true,
           layoutSettings: true,
           customCss: true,
+          bannerImage: true,
+          bannerTitle: true,
+          bannerLink: true,
+          showMatchesSection: true,
+          showNewsSection: true,
+          showSponsorsSection: true,
+          showShopPreviewSection: true,
+          showPreRegSection: true,
+          aboutText: true,
         },
       });
     }
@@ -103,7 +130,7 @@ export async function getPublicDealer(): Promise<PublicDealer | null> {
 
   // Fallback to default dealer
   if (!dealer) {
-    dealer = await prisma.dealer.findUnique({
+    dealer = await prisma.dealer.findFirst({
       where: {
         slug: DEFAULT_DEALER_SLUG,
         isActive: true,
@@ -128,6 +155,14 @@ export async function getPublicDealer(): Promise<PublicDealer | null> {
         themeSettings: true,
         layoutSettings: true,
         customCss: true,
+        bannerImage: true,
+        bannerTitle: true,
+        bannerLink: true,
+        showMatchesSection: true,
+        showNewsSection: true,
+        showSponsorsSection: true,
+        showShopPreviewSection: true,
+        showPreRegSection: true,
       },
     });
   }

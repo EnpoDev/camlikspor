@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { generateStudentNumber } from "@/lib/data/students";
+import { createOrLinkParent } from "@/lib/actions/parents";
+import { sendParentCredentialsSMS } from "@/lib/sms/send-parent-credentials";
 
 const convertSchema = z.object({
   branchId: z.string().min(1, "Brans secimi gerekli"),
@@ -96,6 +98,30 @@ export async function convertPreRegistrationAction(
         notes: validatedFields.data.notes || null,
       },
     });
+
+    // Create or link parent account if email is provided
+    if (preRegistration.parentEmail) {
+      try {
+        const parentResult = await createOrLinkParent({
+          dealerId: session.user.dealerId,
+          studentId: student.id,
+          parentName: preRegistration.parentName,
+          parentEmail: preRegistration.parentEmail,
+          parentPhone: preRegistration.parentPhone,
+          parentTcKimlik: null,
+        });
+
+        if (parentResult.temporaryPassword && preRegistration.parentPhone) {
+          await sendParentCredentialsSMS(
+            preRegistration.parentPhone,
+            parentResult.temporaryPassword
+          );
+        }
+      } catch (parentError) {
+        console.error("Parent creation/linking error:", parentError);
+        // Don't fail conversion if parent linking fails
+      }
+    }
 
     await prisma.preRegistration.update({
       where: { id: preRegistrationId },

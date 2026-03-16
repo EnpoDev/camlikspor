@@ -108,7 +108,7 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           onDragLeave={handleDragLeave}
           className={`relative border-2 border-dashed rounded-lg p-8 transition-colors ${
             isDragging
-              ? "border-emerald-500 bg-emerald-50 dark:bg-emerald-950"
+              ? "border-primary bg-primary/5 dark:bg-primary/20"
               : "border-slate-300 dark:border-slate-700"
           }`}
         >
@@ -123,13 +123,13 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
           <div className="flex flex-col items-center justify-center text-center space-y-4">
             {isUploading ? (
               <>
-                <Loader2 className="h-12 w-12 text-emerald-500 animate-spin" />
+                <Loader2 className="h-12 w-12 text-primary animate-spin" />
                 <p className="text-sm text-muted-foreground">Yükleniyor...</p>
               </>
             ) : (
               <>
-                <div className="p-4 bg-emerald-100 dark:bg-emerald-900 rounded-full">
-                  <ImageIcon className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+                <div className="p-4 bg-primary/10 dark:bg-primary/20 rounded-full">
+                  <ImageIcon className="h-8 w-8 text-primary dark:text-primary" />
                 </div>
                 <div className="space-y-2">
                   <p className="text-sm font-medium">

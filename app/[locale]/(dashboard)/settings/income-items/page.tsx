@@ -8,7 +8,7 @@ import {
   createIncomeItemAction,
   updateIncomeItemAction,
   deleteIncomeItemAction,
-} from "@/lib/actions/settings";
+} from "@/lib/actions/income-items";
 
 interface IncomeItemsPageProps {
   params: Promise<{ locale: string }>;

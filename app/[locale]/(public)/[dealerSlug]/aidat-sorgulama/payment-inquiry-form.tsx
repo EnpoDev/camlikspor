@@ -105,7 +105,7 @@ export function PaymentInquiryForm({ dealerId, locale }: PaymentInquiryFormProps
               className="flex-1"
               disabled={isSearching}
             />
-            <Button type="submit" disabled={isSearching} className="bg-emerald-600 hover:bg-emerald-700">
+            <Button type="submit" disabled={isSearching} className="bg-primary hover:bg-primary/90">
               {isSearching ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -138,22 +138,22 @@ export function PaymentInquiryForm({ dealerId, locale }: PaymentInquiryFormProps
       {result && (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {/* Student Info */}
-          <Card className="border-emerald-200 bg-emerald-50 dark:bg-emerald-950">
+          <Card className="border-primary/20 bg-primary/5 dark:bg-primary/5">
             <CardContent className="pt-6">
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-emerald-900 dark:text-emerald-100">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
                   {result.studentName}
                 </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-emerald-700 dark:text-emerald-300">Toplam Borç</p>
-                    <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
+                    <p className="text-primary dark:text-primary">Toplam Borç</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       {result.totalDebt.toLocaleString("tr-TR")} ₺
                     </p>
                   </div>
                   <div>
-                    <p className="text-emerald-700 dark:text-emerald-300">Toplam Ödenen</p>
-                    <p className="text-2xl font-bold text-emerald-900 dark:text-emerald-100">
+                    <p className="text-primary dark:text-primary">Toplam Ödenen</p>
+                    <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                       {result.totalPaid.toLocaleString("tr-TR")} ₺
                     </p>
                   </div>

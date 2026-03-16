@@ -35,7 +35,6 @@ const PROTECTED_ROUTES = [
   "gallery-admin",
   "sub-dealers",
   "commissions",
-  "blog",
   "hero-slides",
   "parent",
 ];

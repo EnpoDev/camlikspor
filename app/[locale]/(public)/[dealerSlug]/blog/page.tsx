@@ -50,7 +50,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-block mb-4">
-            <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+            <span className="bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
               Blog
             </span>
           </div>
@@ -60,7 +60,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed">
             Haberler, antrenman ipuçları ve daha fazlası
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full mx-auto mt-6" />
+          <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary/30 rounded-full mx-auto mt-6" />
         </div>
 
         {/* Blog Posts Grid */}
@@ -95,9 +95,9 @@ export default async function BlogPage({ params }: BlogPageProps) {
                   <CardHeader className="space-y-3">
                     <div className="flex items-center gap-2">
                       {post.publishedAt && (
-                        <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full">
-                          <Calendar className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                          <span className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">
+                        <div className="flex items-center gap-1.5 bg-primary/5 dark:bg-primary/20 px-3 py-1 rounded-full">
+                          <Calendar className="h-3.5 w-3.5 text-primary dark:text-primary" />
+                          <span className="text-xs text-primary dark:text-primary font-medium">
                             {format(new Date(post.publishedAt), "dd MMM yyyy", {
                               locale: tr,
                             })}
@@ -105,7 +105,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                         </div>
                       )}
                     </div>
-                    <CardTitle className="text-xl font-bold group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2 leading-tight">
+                    <CardTitle className="text-xl font-bold group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                       {post.title}
                     </CardTitle>
                   </CardHeader>
@@ -114,7 +114,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                       <p className="text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
                         {post.excerpt}
                       </p>
-                      <div className="mt-4 flex items-center text-emerald-600 dark:text-emerald-400 font-medium text-sm group-hover:gap-2 transition-all">
+                      <div className="mt-4 flex items-center text-primary dark:text-primary font-medium text-sm group-hover:gap-2 transition-all">
                         Devamını Oku
                         <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
                       </div>

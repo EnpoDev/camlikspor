@@ -1,4 +1,5 @@
-import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import React from "react";
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ContactSectionProps {
@@ -22,50 +23,53 @@ export function ContactSection({
   contactAddress,
   dictionary,
 }: ContactSectionProps) {
-  // Hardcoded contact information
-  const hardcodedPhone = "0532 241 24 31";
-  const hardcodedEmail = "info@camliksk.com";
-  const hardcodedAddress = "Ihlamurkuyu, Petrol Yolu Cd. no:63, 34771 Ümraniye/İstanbul";
-  const hardcodedWhatsApp = "905322412431";
+  // Build WhatsApp number: strip non-digits and ensure country code
+  const rawPhone = contactPhone ?? "";
+  const digitsOnly = rawPhone.replace(/\D/g, "");
+  const whatsAppNumber = digitsOnly.startsWith("90")
+    ? digitsOnly
+    : digitsOnly.length > 0
+    ? `90${digitsOnly}`
+    : "";
 
   const contactItems = [
-    {
+    contactPhone && {
       icon: Phone,
       label: dictionary.phoneLabel,
-      value: hardcodedPhone,
-      href: `tel:${hardcodedPhone}`,
+      value: contactPhone,
+      href: `tel:${contactPhone}`,
     },
-    {
+    whatsAppNumber && {
       icon: MessageCircle,
       label: "WhatsApp",
-      value: hardcodedPhone,
-      href: `https://wa.me/${hardcodedWhatsApp}`,
+      value: contactPhone!,
+      href: `https://wa.me/${whatsAppNumber}`,
     },
-    {
+    contactEmail && {
       icon: Mail,
       label: dictionary.emailLabel,
-      value: hardcodedEmail,
-      href: `mailto:${hardcodedEmail}`,
+      value: contactEmail,
+      href: `mailto:${contactEmail}`,
     },
-    {
+    contactAddress && {
       icon: MapPin,
       label: dictionary.addressLabel,
-      value: hardcodedAddress,
-      href: `https://maps.google.com/?q=${encodeURIComponent(hardcodedAddress)}`,
+      value: contactAddress,
+      href: `https://maps.google.com/?q=${encodeURIComponent(contactAddress)}`,
     },
-    {
-      icon: Clock,
-      label: dictionary.hoursLabel,
-      value: dictionary.hours,
-    },
-  ].filter((item) => item.value);
+  ].filter(Boolean) as {
+    icon: React.ElementType;
+    label: string;
+    value: string;
+    href?: string;
+  }[];
 
   if (contactItems.length === 0) {
     return null;
   }
 
   return (
-    <section id="contact" className="py-20 bg-muted/30">
+    <section id="contact" className="py-20 bg-slate-50 border-t border-slate-200">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
@@ -106,15 +110,18 @@ export function ContactSection({
           ))}
         </div>
 
-        {/* Map Embed (optional - placeholder) */}
-        <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
-          <div className="aspect-video w-full bg-muted flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <MapPin className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Harita icin Google Maps entegrasyonu eklenebilir</p>
-            </div>
+        {/* Map Embed — only shown when address is configured */}
+        {contactAddress && (
+          <div className="mt-12 rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              title="Konum"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(contactAddress)}&output=embed`}
+              className="w-full h-64 md:h-96 border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

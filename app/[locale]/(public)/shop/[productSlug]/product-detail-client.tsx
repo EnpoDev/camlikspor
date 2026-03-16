@@ -238,7 +238,7 @@ export function ProductDetailClient({
                     onClick={() => setSelectedImageIndex(index)}
                     className={`flex-shrink-0 w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${
                       index === selectedImageIndex
-                        ? "border-emerald-600 shadow-lg shadow-emerald-600/25"
+                        ? "border-primary shadow-lg shadow-primary/25"
                         : "border-transparent hover:border-slate-300"
                     }`}
                   >
@@ -260,16 +260,16 @@ export function ProductDetailClient({
             {/* Header */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <Badge className="bg-emerald-600 hover:bg-emerald-600">{product.category.name}</Badge>
+                <Badge className="bg-primary hover:bg-primary">{product.category.name}</Badge>
                 {!isOutOfStock && (
-                  <Badge variant="outline" className="text-emerald-600 border-emerald-200 bg-emerald-50">
+                  <Badge variant="outline" className="text-primary border-primary/20 bg-primary/5">
                     <Check className="h-3 w-3 mr-1" />
                     Stokta Var
                   </Badge>
                 )}
               </div>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{product.name}</h1>
-              <p className="text-4xl font-bold text-emerald-600">
+              <p className="text-4xl font-bold text-primary">
                 {formatPrice(product.price)}
               </p>
             </div>
@@ -304,10 +304,10 @@ export function ProductDetailClient({
                             disabled={stock === 0}
                             className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
                               isSelected
-                                ? "border-emerald-600 bg-emerald-600 text-white"
+                                ? "border-primary bg-primary text-white"
                                 : stock === 0
                                 ? "border-slate-200 text-slate-300 cursor-not-allowed line-through"
-                                : "border-slate-200 hover:border-emerald-600 hover:text-emerald-600"
+                                : "border-slate-200 hover:border-primary hover:text-primary"
                             }`}
                           >
                             {size}
@@ -333,8 +333,8 @@ export function ProductDetailClient({
                             onClick={() => handleColorChange(color)}
                             className={`px-4 py-2 rounded-lg border-2 font-medium transition-all ${
                               isSelected
-                                ? "border-emerald-600 bg-emerald-600 text-white"
-                                : "border-slate-200 hover:border-emerald-600 hover:text-emerald-600"
+                                ? "border-primary bg-primary text-white"
+                                : "border-slate-200 hover:border-primary hover:text-primary"
                             }`}
                           >
                             {color}
@@ -388,7 +388,7 @@ export function ProductDetailClient({
                 <div className="flex gap-3">
                   <Button
                     size="lg"
-                    className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-lg py-6"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-lg py-6"
                     onClick={handleAddToCart}
                     disabled={isOutOfStock}
                   >
@@ -421,11 +421,11 @@ export function ProductDetailClient({
             {/* Features */}
             <div className="grid grid-cols-3 gap-4">
               <Card className="border-0 shadow-md p-4 text-center">
-                <Truck className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
+                <Truck className="h-6 w-6 mx-auto mb-2 text-primary" />
                 <p className="text-xs font-medium">Ücretsiz Kargo</p>
               </Card>
               <Card className="border-0 shadow-md p-4 text-center">
-                <Shield className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
+                <Shield className="h-6 w-6 mx-auto mb-2 text-primary" />
                 <p className="text-xs font-medium">Güvenli Ödeme</p>
               </Card>
               <Card className="border-0 shadow-md p-4 text-center">

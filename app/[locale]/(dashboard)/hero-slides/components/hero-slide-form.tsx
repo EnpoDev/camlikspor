@@ -35,10 +35,10 @@ export function HeroSlideForm({ slide, dealerId, locale }: HeroSlideFormProps) {
     image: slide?.image || "",
     badge: slide?.badge || "YENİ",
     title: slide?.title || "",
-    titleColor: slide?.titleColor || "#10b981",
+    titleColor: slide?.titleColor || "#dc2626",
     subtitle: slide?.subtitle || "",
     ctaPrimary: slide?.ctaPrimary || "Kayıt Ol",
-    ctaPrimaryUrl: slide?.ctaPrimaryUrl || "#contact",
+    ctaPrimaryUrl: slide?.ctaPrimaryUrl || "/contact",
     ctaSecondary: slide?.ctaSecondary || "Hakkımızda",
     ctaSecondaryUrl: slide?.ctaSecondaryUrl || "#about",
     showCtaPrimary: slide?.showCtaPrimary ?? true,
@@ -278,15 +278,15 @@ export function HeroSlideForm({ slide, dealerId, locale }: HeroSlideFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, titleColor: e.target.value })
                 }
-                placeholder="#10b981"
+                placeholder="#dc2626"
                 className="flex-1 font-mono"
               />
               <div className="flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setFormData({ ...formData, titleColor: "#10b981" })}
+                  onClick={() => setFormData({ ...formData, titleColor: "#dc2626" })}
                   className="w-8 h-8 rounded border-2 border-gray-300"
-                  style={{ backgroundColor: "#10b981" }}
+                  style={{ backgroundColor: "#dc2626" }}
                   title="Yeşil"
                 />
                 <button
@@ -313,7 +313,7 @@ export function HeroSlideForm({ slide, dealerId, locale }: HeroSlideFormProps) {
               </div>
             </div>
             <p className="text-xs text-muted-foreground">
-              Başlık metninin rengi (hex kodu: #10b981)
+              Başlık metninin rengi (hex kodu: #dc2626)
             </p>
           </div>
 

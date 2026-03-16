@@ -90,6 +90,9 @@ model Dealer {
   otherPaymentTypes OtherPaymentType[]
   developmentTypes  DevelopmentType[]
   personnelTypes    PersonnelType[]
+  expenses          Expense[]
+  incomes           Income[]
+  personnel         Personnel[]
 
   // E-commerce relations
   products          Product[]
@@ -106,11 +109,27 @@ model Dealer {
   commissionsAsParent DealerCommission[] @relation("ParentDealerCommission")
   commissionsAsChild  DealerCommission[] @relation("ChildDealerCommission")
 
+  // Banner section
+  bannerImage String?
+  bannerTitle String?
+  bannerLink  String?
+
+  // Landing page section visibility
+  showMatchesSection      Boolean @default(true)
+  showNewsSection         Boolean @default(true)
+  showSponsorsSection     Boolean @default(true)
+  showShopPreviewSection  Boolean @default(true)
+  showPreRegSection       Boolean @default(true)
+
   // Training
   trainingPlans   TrainingPlan[]
   tacticalBoards  TacticalBoard[]
   blogPosts       BlogPost[]
   legalDocuments  LegalDocument[]
+
+  // Matches & Sponsors
+  matches   Match[]
+  sponsors  Sponsor[]
 
   @@index([slug])
   @@index([isActive])
@@ -279,11 +298,13 @@ model DealerTheme {
   productGridCols Int    @default(3)         // 2, 3, 4
 
   // Component visibility
-  showHeroSection  Boolean @default(true)
-  showFeatures     Boolean @default(true)
-  showGallery      Boolean @default(true)
-  showShopPreview  Boolean @default(true)
-  showContact      Boolean @default(true)
+  showHeroSection     Boolean @default(true)
+  showFeatures        Boolean @default(true)
+  showGallery         Boolean @default(true)
+  showShopPreview     Boolean @default(true)
+  showContact         Boolean @default(true)
+  showMatchesSection  Boolean @default(true)
+  showSponsorsSection Boolean @default(true)
 
   // Metadata
   isSystem  Boolean  @default(false) // System presets can't be deleted
@@ -406,10 +427,12 @@ model User {
   trainerId String?  @unique
   trainer   Trainer? @relation(fields: [trainerId], references: [id])
 
-  permissions UserPermission[]
-  auditLogs   AuditLog[]
-  sessions    Session[]
-  accounts    Account[]
+  permissions     UserPermission[]
+  auditLogs       AuditLog[]
+  sessions        Session[]
+  accounts        Account[]
+  createdExpenses Expense[]        @relation("ExpenseCreator")
+  createdIncomes  Income[]         @relation("IncomeCreator")
 
   @@index([email])
   @@index([dealerId])
@@ -688,16 +711,17 @@ model Student {
   facility     Facility      @relation(fields: [facilityId], references: [id])
   discountType DiscountType? @relation(fields: [discountTypeId], references: [id])
 
-  groups       StudentGroup[]
-  periods      StudentPeriod[]
-  attendances  Attendance[]
-  payments     Payment[]
-  invoices     Invoice[]
-  materials    StudentMaterial[]
-  developments StudentDevelopment[]
-  sizes        StudentSize[]
-  shopOrders   ShopOrder[]
-  parents      StudentParent[]
+  groups           StudentGroup[]
+  periods          StudentPeriod[]
+  attendances      Attendance[]
+  payments         Payment[]
+  invoices         Invoice[]
+  materials        StudentMaterial[]
+  developments     StudentDevelopment[]
+  sizes            StudentSize[]
+  shopOrders       ShopOrder[]
+  parents          StudentParent[]
+  bodyMeasurements BodyMeasurement[]
 
   @@unique([dealerId, studentNumber])
   @@index([dealerId])
@@ -1121,7 +1145,8 @@ model ExpenseItem {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
-  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  dealer   Dealer    @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  expenses Expense[]
 
   @@unique([dealerId, name])
   @@index([dealerId])
@@ -1134,7 +1159,8 @@ model IncomeItem {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
-  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  dealer  Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  incomes Income[]
 
   @@unique([dealerId, name])
   @@index([dealerId])
@@ -1247,7 +1273,8 @@ model PersonnelType {
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
 
-  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  dealer    Dealer      @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  personnel Personnel[]
 
   @@unique([dealerId, name])
   @@index([dealerId])
@@ -1268,6 +1295,97 @@ model StudentDevelopment {
 
   @@index([studentId])
   @@index([date])
+}
+
+model BodyMeasurement {
+  id        String   @id @default(cuid())
+  studentId String
+  date      DateTime @default(now())
+  height    Float?   // cm
+  weight    Float?   // kg
+  chestSize Float?   // cm
+  waistSize Float?   // cm
+  armSize   Float?   // cm
+  legSize   Float?   // cm
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([date])
+}
+
+model Expense {
+  id             String   @id @default(cuid())
+  dealerId       String
+  expenseItemId  String
+  amount         Float
+  date           DateTime @default(now())
+  description    String?
+  paymentMethod  String   @default("CASH") // CASH, BANK_TRANSFER, CREDIT_CARD
+  invoiceNumber  String?
+  createdById    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  dealer       Dealer      @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  expenseItem  ExpenseItem @relation(fields: [expenseItemId], references: [id])
+  createdBy    User        @relation("ExpenseCreator", fields: [createdById], references: [id])
+
+  @@index([dealerId])
+  @@index([expenseItemId])
+  @@index([date])
+}
+
+model Income {
+  id            String   @id @default(cuid())
+  dealerId      String
+  incomeItemId  String
+  amount        Float
+  date          DateTime @default(now())
+  description   String?
+  paymentMethod String   @default("CASH") // CASH, BANK_TRANSFER, CREDIT_CARD
+  receiptNumber String?
+  createdById   String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  dealer      Dealer     @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  incomeItem  IncomeItem @relation(fields: [incomeItemId], references: [id])
+  createdBy   User       @relation("IncomeCreator", fields: [createdById], references: [id])
+
+  @@index([dealerId])
+  @@index([incomeItemId])
+  @@index([date])
+}
+
+model Personnel {
+  id              String   @id @default(cuid())
+  dealerId        String
+  personnelTypeId String
+  firstName       String
+  lastName        String
+  tcKimlikNo      String?
+  phone           String
+  email           String?
+  address         String?
+  birthDate       DateTime?
+  hireDate        DateTime @default(now())
+  salary          Float?
+  workSchedule    String?  // JSON: work days and hours
+  notes           String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+
+  dealer        Dealer        @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  personnelType PersonnelType @relation(fields: [personnelTypeId], references: [id])
+
+  @@index([dealerId])
+  @@index([personnelTypeId])
 }
 
 // ============================================
@@ -1557,6 +1675,7 @@ model BlogPost {
   excerpt     String?   // Short description
   content     String    // Full blog post content (HTML)
   coverImage  String?   // Cover image URL
+  category    String?   // Duyuru, Turnuva, Basari, Etkinlik
   isPublished Boolean   @default(false)
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
@@ -1568,6 +1687,7 @@ model BlogPost {
   @@index([dealerId])
   @@index([isPublished])
   @@index([publishedAt])
+  @@index([category])
 }
 
 // ============================================
@@ -1590,4 +1710,62 @@ model LegalDocument {
   @@unique([dealerId, slug])
   @@index([dealerId])
   @@index([isActive])
+}
+
+// ============================================
+// MATCHES & SPONSORS
+// ============================================
+
+// MatchStatus: UPCOMING | LIVE | COMPLETED | CANCELLED
+// MatchType: HOME | AWAY | NEUTRAL
+
+model Match {
+  id           String   @id @default(cuid())
+  dealerId     String
+  homeTeam     String
+  awayTeam     String
+  homeScore    Int?
+  awayScore    Int?
+  matchDate    DateTime
+  venue        String?
+  competition  String?           // "Süper Lig", "U14 Ligi" etc.
+  matchType    String   @default("HOME") // HOME | AWAY | NEUTRAL
+  status       String   @default("UPCOMING") // UPCOMING | LIVE | COMPLETED | CANCELLED
+  homeTeamLogo String?
+  awayTeamLogo String?
+  ticketUrl    String?
+  isVisible    Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([dealerId, isVisible])
+  @@index([matchDate])
+  @@index([status])
+}
+
+// SponsorTier: main | official | partner
+
+model Sponsor {
+  id         String   @id @default(cuid())
+  dealerId   String
+  name       String
+  logoUrl    String?
+  websiteUrl String?
+  tier       String   @default("partner") // main | official | partner
+  isVisible  Boolean  @default(true)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([dealerId])
+  @@index([dealerId, isVisible])
+  @@index([tier])
+  @@index([sortOrder])
 }

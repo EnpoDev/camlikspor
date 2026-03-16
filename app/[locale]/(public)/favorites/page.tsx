@@ -50,7 +50,7 @@ export default function FavoritesPage() {
                 Beğendiğiniz ürünleri kalp ikonuna tıklayarak favorilerinize ekleyebilirsiniz.
               </p>
               <Link href={`/${locale}/shop`}>
-                <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Button className="bg-primary hover:bg-primary/90">
                   <ShoppingBag className="mr-2 h-4 w-4" />
                   Mağazaya Git
                 </Button>
@@ -99,12 +99,12 @@ export default function FavoritesPage() {
 
                   <CardContent className="p-4">
                     <Link href={`/${locale}/shop/${item.slug}`}>
-                      <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-emerald-600 transition-colors">
+                      <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-primary transition-colors">
                         {item.name}
                       </h3>
                     </Link>
                     <div className="flex items-center justify-between">
-                      <p className="text-xl font-bold text-emerald-600">
+                      <p className="text-xl font-bold text-primary">
                         {formatPrice(item.price)}
                       </p>
                       <Button

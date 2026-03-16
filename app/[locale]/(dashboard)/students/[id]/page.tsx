@@ -30,6 +30,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format, differenceInYears } from "date-fns";
 import { tr, enUS, es } from "date-fns/locale";
+import { RemoveFromGroupButton } from "@/components/students/RemoveFromGroupButton";
 
 interface StudentDetailPageProps {
   params: Promise<{ locale: string; id: string }>;
@@ -231,11 +232,18 @@ export default async function StudentDetailPage({
               <div className="border-t pt-4">
                 <p className="text-sm text-muted-foreground mb-2">Gruplar</p>
                 <div className="flex flex-wrap gap-2">
-                  {student.groups.map((sg: StudentGroup) => (
-                    <Badge key={sg.id} variant="outline">
-                      {sg.group.name}
-                    </Badge>
-                  ))}
+                  {student.groups
+                    .filter((sg: StudentGroup) => sg.isActive)
+                    .map((sg: StudentGroup) => (
+                      <Badge key={sg.id} variant="outline" className="flex items-center gap-1">
+                        {sg.group.name}
+                        <RemoveFromGroupButton
+                          studentId={student.id}
+                          groupId={sg.group.id}
+                          groupName={sg.group.name}
+                        />
+                      </Badge>
+                    ))}
                 </div>
               </div>
             )}

@@ -4,16 +4,21 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { Send, Loader2, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface ContactFormProps {
   dealerId: string;
+  dealerSlug: string;
+  locale: string;
 }
 
-export function ContactForm({ dealerId }: ContactFormProps) {
+export function ContactForm({ dealerId, dealerSlug, locale }: ContactFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -28,6 +33,7 @@ export function ContactForm({ dealerId }: ContactFormProps) {
       email: formData.get("email") as string,
       studentAge: formData.get("studentAge") as string,
       message: formData.get("message") as string,
+      termsAccepted,
     };
 
     try {
@@ -55,7 +61,7 @@ export function ContactForm({ dealerId }: ContactFormProps) {
   if (isSuccess) {
     return (
       <div className="text-center py-12">
-        <CheckCircle className="h-16 w-16 text-emerald-600 mx-auto mb-4" />
+        <CheckCircle className="h-16 w-16 text-primary mx-auto mb-4" />
         <h3 className="text-xl font-bold mb-2">Başvurunuz Alındı!</h3>
         <p className="text-muted-foreground mb-6">
           En kısa sürede sizinle iletişime geçeceğiz.
@@ -116,11 +122,42 @@ export function ContactForm({ dealerId }: ContactFormProps) {
         className="bg-slate-50 dark:bg-slate-800 border-0 resize-none"
         disabled={isLoading}
       />
+
+      {/* Privacy Policy Checkbox */}
+      <div className="flex items-start space-x-3 rounded-lg border p-4 bg-slate-50 dark:bg-slate-900">
+        <Checkbox
+          id="termsAccepted"
+          checked={termsAccepted}
+          onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+          required
+          className="mt-1"
+        />
+        <div className="flex-1">
+          <Label
+            htmlFor="termsAccepted"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+          >
+            {locale === "tr"
+              ? "Gizlilik sözleşmesini okudum ve kabul ediyorum"
+              : "I have read and accept the privacy policy"
+            }{" "}
+            <a
+              href={`/${locale}/${dealerSlug}/legal/gizlilik-sozlesmesi`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/90 underline"
+            >
+              {locale === "tr" ? "Gizlilik Sözleşmesi" : "Privacy Policy"}
+            </a>
+          </Label>
+        </div>
+      </div>
+
       <Button
         type="submit"
         size="lg"
-        className="w-full bg-emerald-600 hover:bg-emerald-700 h-12"
-        disabled={isLoading}
+        className="w-full bg-primary hover:bg-primary/90 h-12"
+        disabled={isLoading || !termsAccepted}
       >
         {isLoading ? (
           <>
