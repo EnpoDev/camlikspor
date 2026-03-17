@@ -707,6 +707,10 @@ model Student {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  passwordHash       String?
+  mustChangePassword Boolean   @default(true)
+  lastLoginAt        DateTime?
+
   dealer       Dealer        @relation(fields: [dealerId], references: [id], onDelete: Cascade)
   branch       Branch        @relation(fields: [branchId], references: [id])
   location     Location      @relation(fields: [locationId], references: [id])

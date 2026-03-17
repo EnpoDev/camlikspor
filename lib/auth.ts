@@ -18,6 +18,11 @@ const parentLoginSchema = z.object({
   password: z.string().min(1),
 });
 
+const studentLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   callbacks: {
@@ -155,6 +160,60 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           permissions: parentPermissions,
           isSubDealer: false,
           mustChangePassword: parent.mustChangePassword,
+        };
+      },
+    }),
+    Credentials({
+      id: "student-credentials",
+      name: "Student Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const parsed = studentLoginSchema.safeParse(credentials);
+        if (!parsed.success) return null;
+
+        const student = await prisma.student.findFirst({
+          where: { email: parsed.data.email },
+          include: {
+            branch: {
+              include: {
+                dealer: true,
+              },
+            },
+          },
+        });
+
+        if (!student || !student.isActive) return null;
+        if (!student.passwordHash) return null;
+
+        const passwordMatch = await bcrypt.compare(
+          parsed.data.password,
+          student.passwordHash
+        );
+        if (!passwordMatch) return null;
+
+        // Update last login
+        await prisma.student.update({
+          where: { id: student.id },
+          data: { lastLoginAt: new Date() },
+        });
+
+        // Student users have limited permissions
+        const studentPermissions: string[] = [];
+
+        return {
+          id: student.id,
+          email: student.email!,
+          name: `${student.firstName} ${student.lastName}`,
+          role: "STUDENT" as UserRole,
+          dealerId: student.branch?.dealer?.id || student.dealerId,
+          dealerName: student.branch?.dealer?.name || null,
+          dealerSlug: student.branch?.dealer?.slug || null,
+          permissions: studentPermissions,
+          isSubDealer: false,
+          mustChangePassword: student.mustChangePassword,
         };
       },
     }),

@@ -195,6 +195,9 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   [UserRole.PARENT]: [
     // Parents have no admin permissions - they only access their own parent panel
   ],
+  [UserRole.STUDENT]: [
+    // Students have no admin permissions - they only access their own student panel
+  ],
 };
 
 export function hasPermission(
