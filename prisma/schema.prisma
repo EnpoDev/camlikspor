@@ -131,6 +131,8 @@ model Dealer {
   matches   Match[]
   sponsors  Sponsor[]
 
+  messages  Message[]
+
   @@index([slug])
   @@index([isActive])
   @@index([customDomain])
@@ -783,12 +785,29 @@ model Parent {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  dealer   Dealer          @relation(fields: [dealerId], references: [id], onDelete: Cascade)
-  students StudentParent[]
+  dealer        Dealer          @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  students      StudentParent[]
+  notifications Notification[]
+  messages      Message[]
 
   @@index([dealerId])
   @@index([email])
   @@index([phone])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  parentId  String
+  title     String
+  message   String
+  type      String   @default("GENERAL") // PAYMENT_DUE, ATTENDANCE, SCHEDULE_CHANGE, GENERAL
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+
+  @@index([parentId])
+  @@index([isRead])
 }
 
 model StudentParent {
@@ -1768,4 +1787,28 @@ model Sponsor {
   @@index([dealerId, isVisible])
   @@index([tier])
   @@index([sortOrder])
+}
+
+// ============================================
+// MESSAGING SYSTEM
+// ============================================
+
+model Message {
+  id         String   @id @default(cuid())
+  parentId   String
+  dealerId   String
+  senderType String   // "PARENT" or "ADMIN"
+  senderName String
+  subject    String
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  parent Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  dealer Dealer @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+
+  @@index([parentId])
+  @@index([dealerId])
+  @@index([isRead])
+  @@index([createdAt])
 }
