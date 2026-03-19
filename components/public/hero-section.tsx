@@ -41,7 +41,7 @@ export function HeroSection({
         {heroImage ? (
           <Image
             src={backgroundImage}
-            alt=""
+            alt={`${dealerName} arka plan görseli`}
             fill
             className="object-cover"
             priority

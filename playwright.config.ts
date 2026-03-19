@@ -31,6 +31,16 @@ export default defineConfig({
         storageState: 'e2e/.auth/dealer-admin.json',
       },
     },
+    {
+      name: 'student',
+      testMatch: /student\/.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'parent',
+      testMatch: /parent\/.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
   webServer: {
     command: 'npm run dev',

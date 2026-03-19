@@ -12,7 +12,17 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "node_modules/",
+    "prisma/",
+    "e2e/",
   ]),
+  {
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "no-console": ["warn", { allow: ["warn", "error"] }],
+    },
+  },
 ]);
 
 export default eslintConfig;

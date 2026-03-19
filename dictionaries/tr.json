@@ -721,7 +721,8 @@
     "address": "Adres",
     "logo": "Logo URL",
     "customDomain": "Özel Domain",
-    "subdomain": "Subdomain"
+    "subdomain": "Subdomain",
+    "blog": "Haberler"
   },
   "commissions": {
     "title": "Komisyonlar",
@@ -886,6 +887,38 @@
     "verificationPending": "Doğrulama bekleniyor",
     "verificationSuccess": "Domain başarıyla doğrulandı",
     "verificationFailed": "Doğrulama başarısız"
+  },
+  "parent": {
+    "welcome": "Hoş Geldiniz",
+    "subtitle": "Çocuklarınızın futbol okulu gelişimini buradan takip edebilirsiniz",
+    "branch": "Branş",
+    "location": "Şube",
+    "facility": "Tesis",
+    "status": "Durum",
+    "active": "Aktif",
+    "passive": "Pasif",
+    "noStudents": "Kayıtlı öğrenci bulunamadı",
+    "schedule": "Ders Programı",
+    "scheduleSubtitle": "Antrenman saatlerini görün",
+    "attendance": "Devamsızlık",
+    "attendanceSubtitle": "Katılım durumunu görün",
+    "payments": "Aidat Takibi",
+    "paymentsSubtitle": "Ödeme durumunu kontrol edin"
+  },
+  "student": {
+    "welcome": "Hoş Geldin",
+    "activeGroups": "Aktif Grup",
+    "weeklyTraining": "Haftalık Antrenman",
+    "monthlyAttendance": "Bu Ay Yoklama",
+    "paymentStatus": "Ödeme Durumu",
+    "upcomingTrainings": "Yaklaşan Antrenmanlar",
+    "quickAccess": "Hızlı Erişim",
+    "viewSchedule": "Programımı Gör",
+    "viewAttendance": "Yoklama Geçmişi",
+    "viewDevelopment": "Gelişim Raporu",
+    "noUpcomingTraining": "Yaklaşan antrenman bulunamadı",
+    "today": "Bugün",
+    "tomorrow": "Yarın"
   },
   "privacy": {
     "title": "Gizlilik Politikası",

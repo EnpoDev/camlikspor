@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { hasPermission } from "@/lib/utils/permissions";
 import { Permission } from "@/lib/types";
+import { logAudit } from "@/lib/logger";
 
 const heroSlideSchema = z.object({
   badge: z.string().min(1, "Rozet gereklidir"),
@@ -74,7 +75,7 @@ export async function createHeroSlideAction(
   }
 
   try {
-    await prisma.heroSlide.create({
+    const newSlide = await prisma.heroSlide.create({
       data: {
         dealerId: session.user.dealerId,
         badge: result.data.badge,
@@ -88,6 +89,7 @@ export async function createHeroSlideAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "HeroSlide", entityId: newSlide.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/hero-slides");
     return {
       message: "Hero slider oluşturuldu",
@@ -173,6 +175,7 @@ export async function updateHeroSlideAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "HeroSlide", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/hero-slides");
     return {
       message: "Hero slider güncellendi",
@@ -228,6 +231,7 @@ export async function deleteHeroSlideAction(id: string): Promise<{
       where: { id },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "HeroSlide", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/hero-slides");
     return {
       success: true,

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { ActionErrors } from "./action-utils";
 
 const commissionSettingsSchema = z.object({
   childDealerId: z.string().min(1, "Alt-bayi seçimi gerekli"),
@@ -34,7 +35,7 @@ export async function createOrUpdateCommissionSettingsAction(
   }
 
   if (session.user.isSubDealer) {
-    return { message: "Yetkisiz islem", success: false };
+    return { message: "Yetkisiz islem", messageKey: ActionErrors.UNAUTHORIZED, success: false };
   }
 
   const rawData = {

@@ -258,7 +258,7 @@ export function PublicHeader({
                 href={`tel:${hardcodedPhone}`}
                 className="hidden xl:flex items-center gap-1.5 text-sm text-slate-600 dark:text-slate-400 hover:text-primary transition-colors mr-1"
               >
-                <Phone className="h-4 w-4" />
+                <Phone className="h-4 w-4" aria-hidden="true" />
                 <span className="font-medium">{hardcodedPhone}</span>
               </a>
 
@@ -525,7 +525,7 @@ export function PublicHeader({
                 className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 hover:text-primary transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <User className="h-5 w-5" />
+                <User className="h-5 w-5" aria-hidden="true" />
                 {dictionary.login}
               </Link>
               <Link
@@ -533,7 +533,7 @@ export function PublicHeader({
                 className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Heart className="h-5 w-5" />
+                <Heart className="h-5 w-5" aria-hidden="true" />
                 {dictionary.favorites}
                 {totalFavorites > 0 && (
                   <Badge className="ml-auto h-5 px-2 bg-red-500 hover:bg-red-500 text-[10px]">
@@ -549,7 +549,7 @@ export function PublicHeader({
                 href={`tel:${hardcodedPhone}`}
                 className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
               >
-                <Phone className="h-4 w-4" />
+                <Phone className="h-4 w-4" aria-hidden="true" />
                 {hardcodedPhone}
               </a>
               <a
@@ -558,14 +558,14 @@ export function PublicHeader({
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-green-600"
               >
-                <MessageCircle className="h-4 w-4" />
+                <MessageCircle className="h-4 w-4" aria-hidden="true" />
                 WhatsApp
               </a>
               <a
                 href={`mailto:${hardcodedEmail}`}
                 className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 dark:text-slate-400"
               >
-                <Mail className="h-4 w-4" />
+                <Mail className="h-4 w-4" aria-hidden="true" />
                 {hardcodedEmail}
               </a>
             </div>

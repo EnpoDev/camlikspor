@@ -94,7 +94,23 @@
     "trainingCalendar": "Training Calendar",
     "legalDocuments": "Legal Documents",
     "matches": "Matches",
-    "sponsors": "Sponsors"
+    "sponsors": "Sponsors",
+    "incomes": "Income Processing",
+    "expenses": "Expense Processing",
+    "periods": "Periods",
+    "branches": "Branches",
+    "locations": "Locations",
+    "facilities": "Facilities",
+    "discounts": "Discount Types",
+    "equipment": "Equipment",
+    "studentDevelopment": "Student Development",
+    "bodyMeasurements": "Body Measurements",
+    "personnel": "Personnel",
+    "expenseItems": "Expense Items",
+    "incomeItems": "Income Items",
+    "taskDefinitions": "Task Definitions",
+    "otherPaymentTypes": "Other Payment Types",
+    "duesTypes": "Dues Types"
   },
   "header": {
     "profile": "Profile",
@@ -904,5 +920,37 @@
     "contactText": "For questions about our privacy policy, please contact us:",
     "updateText": "This privacy policy was last updated on",
     "updateText2": ""
+  },
+  "parent": {
+    "welcome": "Welcome",
+    "subtitle": "Track your children's football academy progress here",
+    "branch": "Branch",
+    "location": "Location",
+    "facility": "Facility",
+    "status": "Status",
+    "active": "Active",
+    "passive": "Inactive",
+    "noStudents": "No registered students found",
+    "schedule": "Class Schedule",
+    "scheduleSubtitle": "View training times",
+    "attendance": "Attendance",
+    "attendanceSubtitle": "View attendance status",
+    "payments": "Payment Tracking",
+    "paymentsSubtitle": "Check payment status"
+  },
+  "student": {
+    "welcome": "Welcome",
+    "activeGroups": "Active Groups",
+    "weeklyTraining": "Weekly Training",
+    "monthlyAttendance": "Monthly Attendance",
+    "paymentStatus": "Payment Status",
+    "upcomingTrainings": "Upcoming Trainings",
+    "quickAccess": "Quick Access",
+    "viewSchedule": "View My Schedule",
+    "viewAttendance": "Attendance History",
+    "viewDevelopment": "Development Report",
+    "noUpcomingTraining": "No upcoming training found",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   }
 }

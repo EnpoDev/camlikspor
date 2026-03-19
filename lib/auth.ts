@@ -15,12 +15,12 @@ const loginSchema = z.object({
 
 const parentLoginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1),
+  password: z.string().min(6, "Sifre en az 6 karakter olmali"),
 });
 
 const studentLoginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1),
+  password: z.string().min(6, "Sifre en az 6 karakter olmali"),
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -79,7 +79,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           parsed.data.password,
           user.passwordHash
         );
-        if (!passwordMatch) return null;
+        if (!passwordMatch) {
+          console.log(`[AUTH] FAILED login for ${parsed.data.email} from IP: unknown`);
+          return null;
+        }
+
+        console.log(`[AUTH] SUCCESS login for ${parsed.data.email} from IP: unknown`);
 
         // Update last login
         await prisma.user.update({
@@ -138,7 +143,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           parsed.data.password,
           parent.passwordHash
         );
-        if (!passwordMatch) return null;
+        if (!passwordMatch) {
+          console.log(`[AUTH] FAILED login for ${parsed.data.email} from IP: unknown`);
+          return null;
+        }
+
+        console.log(`[AUTH] SUCCESS login for ${parsed.data.email} from IP: unknown`);
 
         // Update last login
         await prisma.parent.update({
@@ -192,7 +202,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           parsed.data.password,
           student.passwordHash
         );
-        if (!passwordMatch) return null;
+        if (!passwordMatch) {
+          console.log(`[AUTH] FAILED login for ${parsed.data.email} from IP: unknown`);
+          return null;
+        }
+
+        console.log(`[AUTH] SUCCESS login for ${parsed.data.email} from IP: unknown`);
 
         // Update last login
         await prisma.student.update({

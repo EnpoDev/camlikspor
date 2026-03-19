@@ -20,18 +20,18 @@ import { toast } from "sonner";
 import { Pencil, X, Save } from "lucide-react";
 
 const editProfileSchema = z.object({
-  name: z.string().min(2, "Ad Soyad en az 2 karakter olmalidir"),
+  name: z.string().min(2, "Ad Soyad en az 2 karakter olmalıdır"),
   phone: z
     .string()
     .regex(
       /^(\+90|0)?[5][0-9]{9}$/,
-      "Gecerli bir telefon numarasi giriniz (05XX XXX XX XX)"
+      "Geçerli bir telefon numarası giriniz (05XX XXX XX XX)"
     )
     .optional()
     .or(z.literal("")),
   email: z
     .string()
-    .email("Gecerli bir e-posta adresi giriniz")
+    .email("Geçerli bir e-posta adresi giriniz")
     .optional()
     .or(z.literal("")),
 });
@@ -79,10 +79,10 @@ export default function ParentSettingsPage() {
         const data = await res.json();
         setProfile(data.parent);
       } else {
-        toast.error("Profil bilgileri yuklenemedi");
+        toast.error("Profil bilgileri yüklenemedi");
       }
     } catch {
-      toast.error("Bir hata olustu. Lutfen sayfayi yenileyin.");
+      toast.error("Bir hata oluştu. Lütfen sayfayı yenileyin.");
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +119,7 @@ export default function ParentSettingsPage() {
       const result = await res.json();
 
       if (!res.ok) {
-        toast.error(result.message || "Profil guncellenemedi");
+        toast.error(result.message || "Profil güncellenemedi");
         return;
       }
 
@@ -127,10 +127,10 @@ export default function ParentSettingsPage() {
         prev ? { ...prev, ...result.parent } : result.parent
       );
       setIsEditing(false);
-      toast.success("Profil basariyla guncellendi!");
+      toast.success("Profil başarıyla güncellendi!");
       router.refresh();
     } catch {
-      toast.error("Bir hata olustu. Lutfen tekrar deneyin.");
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setIsSaving(false);
     }
@@ -141,7 +141,7 @@ export default function ParentSettingsPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Ayarlar</h1>
-          <p className="text-muted-foreground">Yukleniyor...</p>
+          <p className="text-muted-foreground">Yükleniyor...</p>
         </div>
       </div>
     );
@@ -152,7 +152,7 @@ export default function ParentSettingsPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Ayarlar</h1>
-          <p className="text-red-500">Profil bilgileri yuklenemedi.</p>
+          <p className="text-red-500">Profil bilgileri yüklenemedi.</p>
         </div>
       </div>
     );
@@ -163,7 +163,7 @@ export default function ParentSettingsPage() {
       <div>
         <h1 className="text-3xl font-bold">Ayarlar</h1>
         <p className="text-muted-foreground">
-          Hesap bilgilerinizi ve tercihlerinizi yonetin
+          Hesap bilgilerinizi ve tercihlerinizi yönetin
         </p>
       </div>
 
@@ -174,8 +174,8 @@ export default function ParentSettingsPage() {
             <CardTitle>Profil Bilgileri</CardTitle>
             <CardDescription>
               {isEditing
-                ? "Bilgilerinizi guncelleyin"
-                : "Kisisel bilgilerinizi goruntuleyin ve duzenleyin"}
+                ? "Bilgilerinizi güncelleyin"
+                : "Kişisel bilgilerinizi görüntüleyin ve düzenleyin"}
             </CardDescription>
           </div>
           {!isEditing && (
@@ -186,7 +186,7 @@ export default function ParentSettingsPage() {
               className="flex items-center gap-2 shrink-0"
             >
               <Pencil className="h-4 w-4" />
-              Duzenle
+              Düzenle
             </Button>
           )}
         </CardHeader>
@@ -243,7 +243,7 @@ export default function ParentSettingsPage() {
                     className="mt-1 cursor-not-allowed opacity-60"
                   />
                   <p className="text-xs text-muted-foreground">
-                    TC Kimlik No degistirilemez
+                    TC Kimlik No değiştirilemez
                   </p>
                 </div>
               </div>
@@ -264,7 +264,7 @@ export default function ParentSettingsPage() {
                   className="flex items-center gap-2"
                 >
                   <X className="h-4 w-4" />
-                  Iptal
+                  İptal
                 </Button>
               </div>
             </form>
@@ -298,14 +298,14 @@ export default function ParentSettingsPage() {
       {/* Change Password */}
       <Card className="shadow-md">
         <CardHeader>
-          <CardTitle>Sifre Degistir</CardTitle>
+          <CardTitle>Şifre Değiştir</CardTitle>
           <CardDescription>
-            Hesap guvenliginiz icin duzenli olarak sifrenizi degistirin
+            Hesap güvenliğiniz için düzenli olarak şifrenizi değiştirin
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Link href="/parent/parent/change-password">
-            <Button>Sifre Degistir</Button>
+            <Button>Şifre Değiştir</Button>
           </Link>
         </CardContent>
       </Card>
@@ -317,11 +317,11 @@ export default function ParentSettingsPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Son Giris:</span>
+            <span className="text-muted-foreground">Son Giriş:</span>
             <span className="font-medium">
               {profile.lastLoginAt
                 ? new Date(profile.lastLoginAt).toLocaleDateString("tr-TR")
-                : "Henuz giris yapilmadi"}
+                : "Henüz giriş yapılmadı"}
             </span>
           </div>
           <div className="flex justify-between">
@@ -337,10 +337,10 @@ export default function ParentSettingsPage() {
       <Card className="bg-slate-50 dark:bg-slate-900 shadow-md">
         <CardHeader>
           <CardTitle>Bildirim Tercihleri</CardTitle>
-          <CardDescription>Yakinda eklenecek</CardDescription>
+          <CardDescription>Yakında eklenecek</CardDescription>
         </CardHeader>
         <CardContent className="text-muted-foreground text-sm">
-          E-posta ve SMS bildirimleri icin tercihlerinizi yakinda buradan
+          E-posta ve SMS bildirimleri için tercihlerinizi yakında buradan
           ayarlayabileceksiniz.
         </CardContent>
       </Card>

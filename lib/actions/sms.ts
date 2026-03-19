@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { UserRole } from "@/lib/types";
 import { revalidatePath } from "next/cache";
 import { sendSms, getSmsBalance } from "@/lib/services/netgsm";
+import { logAudit } from "@/lib/logger";
 
 export interface SendSmsResult {
   success: boolean;
@@ -115,6 +116,7 @@ export async function sendSmsAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "SmsMessage", dealerId: dealerId, status: "SUCCESS" });
     revalidatePath("/sms");
 
     return {

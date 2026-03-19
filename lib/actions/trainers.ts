@@ -8,6 +8,7 @@ import {
   turkishPhoneSchema,
   tcKimlikOptionalSchema,
 } from "@/lib/utils/validation";
+import { logAudit } from "@/lib/logger";
 
 const trainerSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -108,6 +109,7 @@ export async function createTrainerAction(
       });
     }
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Trainer", entityId: trainer.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/trainers");
     return { messageKey: "trainerCreated", success: true };
   } catch (error) {
@@ -191,6 +193,7 @@ export async function updateTrainerAction(
       });
     }
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Trainer", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/trainers");
     revalidatePath(`/[locale]/trainers/${id}`);
     return { messageKey: "trainerUpdated", success: true };
@@ -213,6 +216,7 @@ export async function deleteTrainerAction(id: string): Promise<{ success: boolea
       data: { isActive: false, deletedAt: new Date() },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Trainer", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/trainers");
     return { messageKey: "trainerDeleted", success: true };
   } catch (error) {

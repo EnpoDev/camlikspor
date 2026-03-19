@@ -8,6 +8,7 @@ import {
   turkishPhoneSchema,
   tcKimlikOptionalSchema,
 } from "@/lib/utils/validation";
+import { encryptPII } from "@/lib/utils/pii";
 
 const personnelSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmalı"),
@@ -72,10 +73,10 @@ export async function createPersonnelAction(
         firstName: validatedFields.data.firstName,
         lastName: validatedFields.data.lastName,
         personnelTypeId: validatedFields.data.personnelTypeId,
-        phone: validatedFields.data.phone,
+        phone: encryptPII(validatedFields.data.phone) ?? validatedFields.data.phone,
         email: validatedFields.data.email || null,
         salary: validatedFields.data.salary || null,
-        tcKimlikNo: validatedFields.data.tcKimlikNo || null,
+        tcKimlikNo: encryptPII(validatedFields.data.tcKimlikNo),
         address: validatedFields.data.address || null,
         birthDate: validatedFields.data.birthDate
           ? new Date(validatedFields.data.birthDate)
@@ -135,10 +136,10 @@ export async function updatePersonnelAction(
         firstName: validatedFields.data.firstName,
         lastName: validatedFields.data.lastName,
         personnelTypeId: validatedFields.data.personnelTypeId,
-        phone: validatedFields.data.phone,
+        phone: encryptPII(validatedFields.data.phone) ?? validatedFields.data.phone,
         email: validatedFields.data.email || null,
         salary: validatedFields.data.salary || null,
-        tcKimlikNo: validatedFields.data.tcKimlikNo || null,
+        tcKimlikNo: encryptPII(validatedFields.data.tcKimlikNo),
         address: validatedFields.data.address || null,
         birthDate: validatedFields.data.birthDate
           ? new Date(validatedFields.data.birthDate)

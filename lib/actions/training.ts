@@ -4,6 +4,8 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
+import { ActionErrors } from "./action-utils";
 
 // Zod schemas
 const trainingPlanSchema = z.object({
@@ -50,6 +52,7 @@ const trainingSessionSchema = z.object({
 export type TrainingFormState = {
   errors?: { [key: string]: string[] };
   message?: string;
+  messageKey?: string;
   success?: boolean;
 };
 
@@ -60,7 +63,7 @@ export async function createTrainingPlanAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const rawData = {
@@ -82,6 +85,7 @@ export async function createTrainingPlanAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -105,7 +109,9 @@ export async function createTrainingPlanAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "TrainingPlan", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/plans");
+    revalidatePath("/dashboard");
     return { message: "Antrenman plani olusturuldu", success: true };
   } catch (error) {
     console.error("Create training plan error:", error);
@@ -120,7 +126,7 @@ export async function updateTrainingPlanAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const rawData = {
@@ -140,6 +146,7 @@ export async function updateTrainingPlanAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -160,8 +167,10 @@ export async function updateTrainingPlanAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "TrainingPlan", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/plans");
     revalidatePath(`/[locale]/training/plans/${id}`);
+    revalidatePath("/dashboard");
     return { message: "Antrenman plani guncellendi", success: true };
   } catch (error) {
     console.error("Update training plan error:", error);
@@ -171,14 +180,15 @@ export async function updateTrainingPlanAction(
 
 export async function deleteTrainingPlanAction(
   id: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; messageKey?: string }> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {
     await prisma.trainingPlan.delete({ where: { id } });
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "TrainingPlan", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/plans");
     return { message: "Antrenman plani silindi", success: true };
   } catch (error) {
@@ -193,7 +203,7 @@ export async function createExerciseAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const validatedFields = trainingExerciseSchema.safeParse(data);
@@ -201,6 +211,7 @@ export async function createExerciseAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -224,7 +235,7 @@ export async function updateExerciseAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const validatedFields = trainingExerciseSchema.safeParse(data);
@@ -232,6 +243,7 @@ export async function updateExerciseAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -253,10 +265,10 @@ export async function updateExerciseAction(
 export async function deleteExerciseAction(
   id: string,
   planId: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; messageKey?: string }> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {
@@ -276,7 +288,7 @@ export async function createTacticalBoardAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const rawData = {
@@ -293,6 +305,7 @@ export async function createTacticalBoardAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -311,6 +324,7 @@ export async function createTacticalBoardAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "TacticalBoard", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/tactical-board");
     return { message: "Taktik kaydedildi", success: true };
   } catch (error) {
@@ -326,7 +340,7 @@ export async function updateTacticalBoardAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const rawData = {
@@ -341,6 +355,7 @@ export async function updateTacticalBoardAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -356,6 +371,7 @@ export async function updateTacticalBoardAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "TacticalBoard", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/tactical-board");
     revalidatePath(`/[locale]/training/tactical-board/${id}`);
     return { message: "Taktik guncellendi", success: true };
@@ -367,10 +383,10 @@ export async function updateTacticalBoardAction(
 
 export async function deleteTacticalBoardAction(
   id: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; messageKey?: string }> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {
@@ -389,7 +405,7 @@ export async function createTrainingSessionAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   const validatedFields = trainingSessionSchema.safeParse(data);
@@ -397,6 +413,7 @@ export async function createTrainingSessionAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -412,7 +429,9 @@ export async function createTrainingSessionAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "TrainingSession", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/calendar");
+    revalidatePath("/dashboard");
     return { message: "Antrenman oturumu olusturuldu", success: true };
   } catch (error) {
     console.error("Create training session error:", error);
@@ -423,10 +442,10 @@ export async function createTrainingSessionAction(
 export async function updateTrainingSessionStatusAction(
   id: string,
   status: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; messageKey?: string }> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {
@@ -435,7 +454,9 @@ export async function updateTrainingSessionStatusAction(
       data: { status },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "TrainingSession", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/training/calendar");
+    revalidatePath("/dashboard");
     return { message: "Oturum durumu guncellendi", success: true };
   } catch (error) {
     console.error("Update training session error:", error);
@@ -445,10 +466,10 @@ export async function updateTrainingSessionStatusAction(
 
 export async function deleteTrainingSessionAction(
   id: string
-): Promise<{ success: boolean; message: string }> {
+): Promise<{ success: boolean; message: string; messageKey?: string }> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {
@@ -474,7 +495,7 @@ export async function bulkCreateExercisesAction(
 ): Promise<TrainingFormState> {
   const session = await auth();
   if (!session?.user?.dealerId) {
-    return { message: "Yetkilendirme hatasi", success: false };
+    return { message: "Yetkilendirme hatasi", messageKey: ActionErrors.AUTH_REQUIRED, success: false };
   }
 
   try {

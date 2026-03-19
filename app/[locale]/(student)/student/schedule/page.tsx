@@ -6,9 +6,9 @@ import { Calendar, MapPin, Clock } from "lucide-react";
 
 const DAYS_OF_WEEK = [
   { value: 1, label: "Pazartesi" },
-  { value: 2, label: "Sali" },
-  { value: 3, label: "Carsamba" },
-  { value: 4, label: "Persembe" },
+  { value: 2, label: "Salı" },
+  { value: 3, label: "Çarşamba" },
+  { value: 4, label: "Perşembe" },
   { value: 5, label: "Cuma" },
   { value: 6, label: "Cumartesi" },
   { value: 0, label: "Pazar" },
@@ -46,10 +46,10 @@ export default async function StudentSchedulePage() {
         <div className="absolute left-0 top-0 h-full w-1 bg-primary rounded-full" />
         <div className="pl-4">
           <h1 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
-            Ders Programi
+            Ders Programı
           </h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Haftalik antrenman programin
+            Haftalık antrenman programın
           </p>
         </div>
       </div>
@@ -58,10 +58,10 @@ export default async function StudentSchedulePage() {
         <div className="rounded-xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-12 text-center">
           <Calendar className="mx-auto mb-4 h-12 w-12 text-slate-300 dark:text-slate-600" />
           <p className="text-slate-500 dark:text-slate-400 font-medium">
-            Aktif gruba kayitli degilsiniz
+            Aktif gruba kayıtlı değilsiniz
           </p>
           <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">
-            Ders programi icin grup kaydinin yapilmasi gerekiyor.
+            Ders programı için grup kaydının yapılması gerekiyor.
           </p>
         </div>
       ) : (
@@ -92,7 +92,7 @@ export default async function StudentSchedulePage() {
                   </p>
                   {isToday && (
                     <p className="text-[10px] font-semibold uppercase tracking-wider opacity-80 mt-0.5">
-                      Bugun
+                      Bugün
                     </p>
                   )}
                 </div>

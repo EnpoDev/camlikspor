@@ -12,6 +12,8 @@ import {
 } from "@/lib/utils/validation";
 import { createOrLinkParent } from "@/lib/actions/parents";
 import { sendParentCredentialsSMS } from "@/lib/sms/send-parent-credentials";
+import { logAudit } from "@/lib/logger";
+import { encryptPII } from "@/lib/utils/pii";
 
 const studentSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -109,16 +111,16 @@ export async function createStudentAction(
         lastName: validatedFields.data.lastName,
         birthDate: new Date(validatedFields.data.birthDate),
         gender: validatedFields.data.gender,
-        tcKimlikNo: validatedFields.data.tcKimlikNo || null,
-        phone: validatedFields.data.phone || null,
+        tcKimlikNo: encryptPII(validatedFields.data.tcKimlikNo),
+        phone: encryptPII(validatedFields.data.phone),
         email: validatedFields.data.email || null,
         address: validatedFields.data.address || null,
         parentName: validatedFields.data.parentName,
-        parentPhone: validatedFields.data.parentPhone,
+        parentPhone: encryptPII(validatedFields.data.parentPhone) ?? validatedFields.data.parentPhone,
         parentEmail: validatedFields.data.parentEmail || null,
-        parentTcKimlik: validatedFields.data.parentTcKimlik || null,
+        parentTcKimlik: encryptPII(validatedFields.data.parentTcKimlik),
         emergencyContact: validatedFields.data.emergencyContact || null,
-        emergencyPhone: validatedFields.data.emergencyPhone || null,
+        emergencyPhone: encryptPII(validatedFields.data.emergencyPhone),
         branchId: validatedFields.data.branchId,
         locationId: validatedFields.data.locationId,
         facilityId: validatedFields.data.facilityId,
@@ -154,6 +156,7 @@ export async function createStudentAction(
       }
     }
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Student", entityId: student.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/students");
     return { messageKey: "studentCreated", success: true };
   } catch (error) {
@@ -223,16 +226,16 @@ export async function updateStudentAction(
         lastName: validatedFields.data.lastName,
         birthDate: new Date(validatedFields.data.birthDate),
         gender: validatedFields.data.gender,
-        tcKimlikNo: validatedFields.data.tcKimlikNo || null,
-        phone: validatedFields.data.phone || null,
+        tcKimlikNo: encryptPII(validatedFields.data.tcKimlikNo),
+        phone: encryptPII(validatedFields.data.phone),
         email: validatedFields.data.email || null,
         address: validatedFields.data.address || null,
         parentName: validatedFields.data.parentName,
-        parentPhone: validatedFields.data.parentPhone,
+        parentPhone: encryptPII(validatedFields.data.parentPhone) ?? validatedFields.data.parentPhone,
         parentEmail: validatedFields.data.parentEmail || null,
-        parentTcKimlik: validatedFields.data.parentTcKimlik || null,
+        parentTcKimlik: encryptPII(validatedFields.data.parentTcKimlik),
         emergencyContact: validatedFields.data.emergencyContact || null,
-        emergencyPhone: validatedFields.data.emergencyPhone || null,
+        emergencyPhone: encryptPII(validatedFields.data.emergencyPhone),
         branchId: validatedFields.data.branchId,
         locationId: validatedFields.data.locationId,
         facilityId: validatedFields.data.facilityId,
@@ -243,6 +246,7 @@ export async function updateStudentAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Student", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/students");
     revalidatePath(`/[locale]/students/${id}`);
     return { messageKey: "studentUpdated", success: true };
@@ -265,6 +269,7 @@ export async function deleteStudentAction(id: string): Promise<{ success: boolea
       data: { isActive: false, deletedAt: new Date() },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Student", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/students");
     return { messageKey: "studentDeleted", success: true };
   } catch (error) {

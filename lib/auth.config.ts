@@ -7,7 +7,7 @@ import { UserRole } from "@/lib/types";
 
 export const authConfig: NextAuthConfig = {
   trustHost: true,
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 24 * 60 * 60 },
   pages: {
     signIn: "/tr/login",
     error: "/tr/login",

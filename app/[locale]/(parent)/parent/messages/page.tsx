@@ -35,11 +35,11 @@ export default function ParentMessagesPage() {
   const fetchMessages = useCallback(async () => {
     try {
       const res = await fetch("/api/parent/messages");
-      if (!res.ok) throw new Error("Mesajlar yuklenemedi");
+      if (!res.ok) throw new Error("Mesajlar yüklenemedi");
       const data = await res.json();
       setMessages(data);
     } catch {
-      setError("Mesajlar yuklenirken bir hata olustu");
+      setError("Mesajlar yüklenirken bir hata oluştu");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function ParentMessagesPage() {
     setSuccess(null);
 
     if (!subject.trim() || !content.trim()) {
-      setError("Konu ve icerik gereklidir");
+      setError("Konu ve içerik gereklidir");
       return;
     }
 
@@ -84,11 +84,11 @@ export default function ParentMessagesPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message || "Mesaj gonderilemedi");
+        setError(data.message || "Mesaj gönderilemedi");
         return;
       }
 
-      setSuccess("Mesajiniz basariyla gonderildi");
+      setSuccess("Mesajınız başarıyla gönderildi");
       setSubject("");
       setContent("");
       setMessages((prev) => [data, ...prev]);
@@ -97,7 +97,7 @@ export default function ParentMessagesPage() {
         setSuccess(null);
       }, 1500);
     } catch {
-      setError("Mesaj gonderilirken bir hata olustu");
+      setError("Mesaj gönderilirken bir hata oluştu");
     } finally {
       setSending(false);
     }
@@ -111,7 +111,7 @@ export default function ParentMessagesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Mesajlar</h1>
-          <p className="text-muted-foreground">Okul yonetimiyle iletisime gecin</p>
+          <p className="text-muted-foreground">Okul yönetimiyle iletişime geçin</p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -157,16 +157,16 @@ export default function ParentMessagesPage() {
             <CardContent className="p-0">
               {loading ? (
                 <div className="text-center py-10 text-muted-foreground">
-                  Yukleniyor...
+                  Yükleniyor...
                 </div>
               ) : messages.length === 0 ? (
                 <div className="text-center py-12 px-4">
                   <div className="text-5xl mb-3 select-none">&#9993;</div>
                   <p className="font-semibold text-muted-foreground">
-                    Henuz mesajiniz bulunmuyor
+                    Henüz mesajınız bulunmuyor
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Okul yonetimiyle iletisime gecmek icin yeni mesaj gonderin
+                    Okul yönetimiyle iletişime geçmek için yeni mesaj gönderin
                   </p>
                 </div>
               ) : (
@@ -212,7 +212,7 @@ export default function ParentMessagesPage() {
                                 : "bg-orange-100 text-orange-700"
                             }`}
                           >
-                            {msg.senderType === "ADMIN" ? "Yonetim" : "Siz"}
+                            {msg.senderType === "ADMIN" ? "Yönetim" : "Siz"}
                           </Badge>
                           <span className="text-xs text-muted-foreground truncate">
                             {msg.senderName}
@@ -242,7 +242,7 @@ export default function ParentMessagesPage() {
                           : "bg-orange-100 text-orange-700"
                       }`}
                     >
-                      {selectedMessage.senderType === "ADMIN" ? "Yonetim" : "Siz"}
+                      {selectedMessage.senderType === "ADMIN" ? "Yönetim" : "Siz"}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground mt-1">
@@ -265,7 +265,7 @@ export default function ParentMessagesPage() {
               <CardContent className="flex flex-col items-center justify-center h-full min-h-[240px] text-muted-foreground">
                 <div className="text-4xl mb-3 select-none">&#128172;</div>
                 <p className="text-sm font-medium">
-                  Detaylari gormek icin bir mesaj secin
+                  Detayları görmek için bir mesaj seçin
                 </p>
               </CardContent>
             )}
@@ -278,7 +278,7 @@ export default function ParentMessagesPage() {
         <Card className="shadow-md max-w-2xl">
           <CardHeader className="pb-3 border-b">
             <CardTitle className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-              Yeni Mesaj Gonder
+              Yeni Mesaj Gönder
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-5">
@@ -289,7 +289,7 @@ export default function ParentMessagesPage() {
                 </label>
                 <Input
                   id="subject"
-                  placeholder="Mesajinizin konusunu yazin"
+                  placeholder="Mesajınızın konusunu yazın"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   maxLength={200}
@@ -298,11 +298,11 @@ export default function ParentMessagesPage() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-sm font-medium" htmlFor="content">
-                  Icerik
+                  İçerik
                 </label>
                 <Textarea
                   id="content"
-                  placeholder="Mesajinizi yazin..."
+                  placeholder="Mesajınızı yazın..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={7}
@@ -328,7 +328,7 @@ export default function ParentMessagesPage() {
                   disabled={sending}
                   className="font-bold uppercase text-xs tracking-wide bg-orange-600 hover:bg-orange-700 text-white"
                 >
-                  {sending ? "Gonderiliyor..." : "Gonder"}
+                  {sending ? "Gönderiliyor..." : "Gönder"}
                 </Button>
                 <Button
                   type="button"
@@ -341,7 +341,7 @@ export default function ParentMessagesPage() {
                   disabled={sending}
                   className="font-bold uppercase text-xs tracking-wide"
                 >
-                  Iptal
+                  İptal
                 </Button>
               </div>
             </form>

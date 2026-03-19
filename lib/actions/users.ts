@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcryptjs";
 import { turkishPhoneOptionalSchema } from "@/lib/utils/validation";
+import { logAudit } from "@/lib/logger";
 
 const userSchema = z.object({
   name: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -98,7 +99,7 @@ export async function createUserAction(
       }
     }
 
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         name: validatedFields.data.name,
         email: validatedFields.data.email,
@@ -109,6 +110,7 @@ export async function createUserAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "User", entityId: newUser.id, dealerId: targetDealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/[locale]/users");
     return { message: "Kullanici basariyla eklendi", success: true };
   } catch (error) {
@@ -209,6 +211,7 @@ export async function updateUserAction(
       data: updateData,
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "User", entityId: id, dealerId: targetDealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/[locale]/users");
     revalidatePath(`/[locale]/users/${id}`);
     return { message: "Kullanici basariyla guncellendi", success: true };
@@ -242,6 +245,7 @@ export async function deleteUserAction(id: string): Promise<{ success: boolean; 
       }),
     ]);
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "User", entityId: id, dealerId: session.user.dealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/[locale]/users");
     return { message: "Kullanici basariyla kaldirildi", success: true };
   } catch (error) {

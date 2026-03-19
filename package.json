@@ -14,9 +14,15 @@
     "db:seed": "cross-env RUN_SEED=true npx tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
+    "test": "vitest",
+    "test:unit": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed"
+    "test:e2e:headed": "playwright test --headed",
+    "type-check": "tsc --noEmit",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.74.0",

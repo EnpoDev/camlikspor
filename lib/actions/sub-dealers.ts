@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { checkSubDealerSlugExists } from "@/lib/data/sub-dealers";
+import { logAudit } from "@/lib/logger";
+import { ActionErrors } from "./action-utils";
 
 const subDealerSchema = z.object({
   name: z.string().min(2, "Isim en az 2 karakter olmali"),
@@ -50,7 +52,7 @@ export async function createSubDealerAction(
   }
 
   if (session.user.isSubDealer) {
-    return { message: "Yetkisiz islem", success: false };
+    return { message: "Yetkisiz islem", messageKey: ActionErrors.UNAUTHORIZED, success: false };
   }
 
   const rawData = {
@@ -72,6 +74,7 @@ export async function createSubDealerAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -93,7 +96,7 @@ export async function createSubDealerAction(
       select: { hierarchyLevel: true },
     });
 
-    await prisma.dealer.create({
+    const newSubDealer = await prisma.dealer.create({
       data: {
         name: validatedFields.data.name,
         slug: validatedFields.data.slug,
@@ -112,7 +115,10 @@ export async function createSubDealerAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "SubDealer", entityId: newSubDealer.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/sub-dealers");
+    revalidatePath("/dashboard");
+    revalidatePath("/settings");
 
     return {
       success: true,
@@ -198,6 +204,7 @@ export async function updateSubDealerAction(
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Lutfen formu kontrol edin",
+      messageKey: ActionErrors.VALIDATION_ERROR,
       success: false,
     };
   }
@@ -234,8 +241,11 @@ export async function updateSubDealerAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "SubDealer", entityId: subDealerId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/sub-dealers");
     revalidatePath(`/sub-dealers/${subDealerId}`);
+    revalidatePath("/dashboard");
+    revalidatePath("/settings");
 
     return {
       success: true,
@@ -300,7 +310,10 @@ export async function deleteSubDealerAction(
       where: { id: subDealerId },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "SubDealer", entityId: subDealerId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/sub-dealers");
+    revalidatePath("/dashboard");
+    revalidatePath("/settings");
 
     return {
       messageKey: "subDealerDeleted",

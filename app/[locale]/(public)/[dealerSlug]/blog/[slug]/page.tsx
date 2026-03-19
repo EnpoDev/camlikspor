@@ -1,11 +1,10 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -46,90 +45,119 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
+  // Estimate reading time (avg 200 words/min Turkish)
+  const wordCount = post.content.replace(/<[^>]*>/g, "").split(/\s+/).length;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          {/* Back Button */}
+    <div className="min-h-screen">
+      {/* Hero Section — dark with cover image */}
+      <div className="relative bg-slate-900 overflow-hidden">
+        {post.coverImage && (
+          <>
+            <Image
+              src={post.coverImage}
+              alt={post.title}
+              fill
+              className="object-cover opacity-30"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/60" />
+          </>
+        )}
+        {!post.coverImage && (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent" />
+        )}
+
+        <div className="container mx-auto relative z-10 max-w-5xl px-4 py-24">
+          {/* Back button */}
           <Link href={`/${locale}/${dealerSlug}/blog`}>
-            <Button variant="ghost" className="mb-8 hover:bg-primary/5 dark:hover:bg-primary/20">
+            <Button variant="ghost" className="mb-8 text-white/70 hover:text-white hover:bg-white/10">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Blog'a Dön
+              Blog&apos;a Don
             </Button>
           </Link>
 
-          {/* Article Card */}
-          <article className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden">
-            {/* Cover Image */}
-            {post.coverImage && (
-              <div className="relative w-full h-[400px] md:h-[500px]">
-                <Image
-                  src={post.coverImage}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
+          {/* Meta */}
+          <div className="flex items-center gap-4 mb-6 animate-fade-in-up">
+            {post.publishedAt && (
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-slate-900 text-sm font-bold">
+                <Calendar className="h-3.5 w-3.5" />
+                {format(new Date(post.publishedAt), "dd MMMM yyyy", { locale: tr })}
+              </span>
             )}
+            <span className="inline-flex items-center gap-1.5 text-white/60 text-sm">
+              <Clock className="h-3.5 w-3.5" />
+              {readingTime} dk okuma
+            </span>
+          </div>
 
-            {/* Content Container */}
-            <div className="p-8 md:p-12">
-              {/* Meta Info */}
-              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
-                {post.publishedAt && (
-                  <div className="flex items-center gap-2 bg-primary/5 dark:bg-primary/20 px-3 py-1.5 rounded-full">
-                    <Calendar className="h-4 w-4 text-primary dark:text-primary" />
-                    <span className="text-primary dark:text-primary font-medium">
-                      {format(new Date(post.publishedAt), "dd MMMM yyyy", {
-                        locale: tr,
-                      })}
-                    </span>
-                  </div>
-                )}
-              </div>
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide mb-6 text-white animate-fade-in-up">
+            {post.title}
+          </h1>
 
-              {/* Title */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-                {post.title}
-              </h1>
+          {/* Excerpt */}
+          {post.excerpt && (
+            <p className="text-lg md:text-xl max-w-3xl text-white/70 animate-fade-in-up">
+              {post.excerpt}
+            </p>
+          )}
+        </div>
+      </div>
 
-              {/* Excerpt */}
-              {post.excerpt && (
-                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed font-light border-l-4 border-primary pl-6 py-2">
-                  {post.excerpt}
-                </p>
-              )}
+      {/* Accent Bar */}
+      <div className="bg-primary">
+        <div className="container mx-auto px-4 py-1" />
+      </div>
 
-              {/* Divider */}
-              <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary/30 rounded-full mb-12" />
+      {/* Cover Image — full width */}
+      {post.coverImage && (
+        <div className="relative w-full h-[300px] md:h-[500px]">
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
 
-              {/* Content */}
-              <div
-                className="prose prose-lg md:prose-xl dark:prose-invert max-w-none
-                  prose-headings:font-bold prose-headings:tracking-tight
-                  prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-slate-900 dark:prose-h2:text-white prose-h2:border-b prose-h2:border-slate-200 dark:prose-h2:border-slate-800 prose-h2:pb-3
-                  prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-primary dark:prose-h3:text-primary
-                  prose-p:text-slate-700 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6
-                  prose-a:text-primary dark:prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-a:font-medium
-                  prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-semibold
-                  prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
-                  prose-li:text-slate-700 dark:prose-li:text-slate-300 prose-li:mb-2
-                  prose-img:rounded-xl prose-img:shadow-lg
-                  prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-slate-600 dark:prose-blockquote:text-slate-400
-                  prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-primary dark:prose-code:text-primary"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-            </div>
-          </article>
+      {/* Content */}
+      <div className="container mx-auto px-4 py-20">
+        <div className="max-w-4xl mx-auto">
+          {/* Divider */}
+          <div className="flex items-center gap-2 mb-10">
+            <span className="h-1 w-8 rounded-full bg-primary" />
+            <span className="text-primary text-sm font-bold uppercase tracking-widest">
+              Makale
+            </span>
+          </div>
 
-          {/* Back to Blog */}
-          <div className="mt-12 text-center">
+          {/* Article Content */}
+          <article
+            className="prose prose-lg md:prose-xl max-w-none
+              prose-headings:font-black prose-headings:tracking-wide prose-headings:uppercase
+              prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-slate-900 prose-h2:border-b prose-h2:border-slate-200 prose-h2:pb-3
+              prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-primary
+              prose-p:text-slate-700 prose-p:leading-relaxed prose-p:mb-6
+              prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-a:font-medium
+              prose-strong:text-slate-900 prose-strong:font-bold
+              prose-ul:my-6 prose-ul:list-disc prose-ul:pl-6
+              prose-li:text-slate-700 prose-li:mb-2
+              prose-img:rounded-xl prose-img:shadow-lg
+              prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:text-slate-600
+              prose-code:bg-slate-100 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-primary"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          {/* Back to Blog CTA */}
+          <div className="mt-16 pt-8 border-t border-slate-200">
             <Link href={`/${locale}/${dealerSlug}/blog`}>
-              <Button variant="outline" size="lg" className="shadow-md hover:shadow-lg transition-shadow">
+              <Button size="lg" className="bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Tüm Yazıları Gör
+                Tum Yazilari Gor
               </Button>
             </Link>
           </div>

@@ -58,7 +58,7 @@ function CtaCard({ href, backgroundSrc, label, icon, iconBadgeClass = "bg-primar
           <h3 className="text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-wide uppercase">
             {label}
           </h3>
-          <ArrowRight className="h-6 w-6 text-white/70 transition-all duration-300 group-hover:translate-x-2 group-hover:text-white" />
+          <ArrowRight className="h-6 w-6 text-white/70 transition-all duration-300 group-hover:translate-x-2 group-hover:text-white" aria-hidden="true" />
         </div>
 
         {/* Bottom accent line */}
@@ -85,7 +85,7 @@ export function CtaGridSection({
         href={`/${locale}/${dealerSlug}/shop`}
         backgroundSrc={STORE_BG}
         label={dictionary.store}
-        icon={<ShoppingBag className="h-6 w-6" />}
+        icon={<ShoppingBag className="h-6 w-6" aria-hidden="true" />}
       />
     );
   }
@@ -97,7 +97,7 @@ export function CtaGridSection({
         href={`/${locale}/${dealerSlug}/${preRegPath}`}
         backgroundSrc={PRE_REG_BG}
         label={dictionary.preReg}
-        icon={<ClipboardList className="h-6 w-6" />}
+        icon={<ClipboardList className="h-6 w-6" aria-hidden="true" />}
         iconBadgeClass="bg-secondary"
         accentClass="bg-secondary"
       />

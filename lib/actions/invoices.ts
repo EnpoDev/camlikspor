@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { UserRole } from "@/lib/types";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 export interface CreateInvoiceData {
   studentId: string;
@@ -125,6 +126,7 @@ export async function createInvoice(data: CreateInvoiceData): Promise<InvoiceRes
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Invoice", entityId: invoice.id, dealerId: dealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/invoices");
 
     return {
@@ -183,6 +185,7 @@ export async function updateInvoiceStatus(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Invoice", entityId: invoiceId, dealerId: dealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/invoices");
 
     return { success: true, message: "Fatura güncellendi" };
@@ -224,6 +227,7 @@ export async function deleteInvoice(invoiceId: string): Promise<InvoiceResult> {
       where: { id: invoiceId },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Invoice", entityId: invoiceId, dealerId: dealerId ?? undefined, status: "SUCCESS" });
     revalidatePath("/invoices");
 
     return { success: true, message: "Fatura silindi" };

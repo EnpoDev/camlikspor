@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { decryptPII } from "@/lib/utils/pii";
 
 export interface PreRegistrationFilters {
   status?: string;
@@ -62,11 +63,17 @@ export async function getPreRegistrations(
     prisma.preRegistration.count({ where }),
   ]);
 
-  return { data, total };
+  return {
+    data: data.map((r) => ({
+      ...r,
+      parentPhone: decryptPII(r.parentPhone) ?? r.parentPhone,
+    })),
+    total,
+  };
 }
 
 export async function getPreRegistrationById(id: string) {
-  return prisma.preRegistration.findUnique({
+  const record = await prisma.preRegistration.findUnique({
     where: { id },
     include: {
       dealer: {
@@ -74,6 +81,13 @@ export async function getPreRegistrationById(id: string) {
       },
     },
   });
+
+  if (!record) return null;
+
+  return {
+    ...record,
+    parentPhone: decryptPII(record.parentPhone) ?? record.parentPhone,
+  };
 }
 
 export async function createPreRegistration(

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 const equipmentSchema = z.object({
   name: z.string().min(2, "İsim en az 2 karakter olmalı"),
@@ -55,6 +56,7 @@ export async function createEquipmentAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Equipment", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/settings/equipment");
     return { message: "Malzeme başarıyla eklendi", success: true };
   } catch (error) {
@@ -91,6 +93,16 @@ export async function updateEquipmentAction(
   }
 
   try {
+    // Check ownership
+    const material = await prisma.material.findUnique({
+      where: { id },
+      select: { dealerId: true },
+    });
+    if (!material) return { message: "Malzeme bulunamadi", success: false };
+    if (material.dealerId !== session.user.dealerId) {
+      return { message: "Yetkilendirme hatası", success: false };
+    }
+
     await prisma.material.update({
       where: { id },
       data: {
@@ -100,6 +112,7 @@ export async function updateEquipmentAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Equipment", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/settings/equipment");
     return { message: "Malzeme başarıyla güncellendi", success: true };
   } catch (error) {
@@ -118,11 +131,22 @@ export async function deleteEquipmentAction(
   }
 
   try {
+    // Check ownership
+    const material = await prisma.material.findUnique({
+      where: { id },
+      select: { dealerId: true },
+    });
+    if (!material) return { message: "Malzeme bulunamadi", success: false };
+    if (material.dealerId !== session.user.dealerId) {
+      return { message: "Yetkilendirme hatası", success: false };
+    }
+
     await prisma.material.update({
       where: { id },
       data: { isActive: false },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Equipment", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/settings/equipment");
     return { message: "Malzeme silindi", success: true };
   } catch (error) {

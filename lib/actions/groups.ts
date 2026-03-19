@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 const groupSchema = z.object({
   name: z.string().min(2, "Grup adi en az 2 karakter olmali"),
@@ -78,6 +79,7 @@ export async function createGroupAction(
       });
     }
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Group", entityId: group.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/groups");
     return { message: "Grup basariyla eklendi", success: true };
   } catch (error) {
@@ -145,6 +147,7 @@ export async function updateGroupAction(
       });
     }
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Group", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/groups");
     revalidatePath(`/[locale]/groups/${id}`);
     return { message: "Grup basariyla guncellendi", success: true };
@@ -179,6 +182,7 @@ export async function deleteGroupAction(id: string): Promise<{ success: boolean;
       data: { isActive: false },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Group", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/groups");
     return { message: "Grup silindi", success: true };
   } catch (error) {

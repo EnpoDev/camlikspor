@@ -10,11 +10,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Trophy, Mail, Lock, Loader2, ArrowRight } from "lucide-react";
+import { Trophy, Mail, Lock, Loader2, ArrowRight, Users, GraduationCap, Shield } from "lucide-react";
+
+const roles = [
+  {
+    id: "admin" as const,
+    label: "Yönetim",
+    icon: Shield,
+    provider: "credentials",
+    redirect: "/dashboard",
+    description: "Yönetici ve antrenör girişi",
+    color: "from-primary to-primary/80",
+  },
+  {
+    id: "parent" as const,
+    label: "Veli",
+    icon: Users,
+    provider: "parent-credentials",
+    redirect: "/parent/parent",
+    description: "Veli paneli girişi",
+    color: "from-blue-600 to-blue-500",
+  },
+  {
+    id: "student" as const,
+    label: "Sporcu",
+    icon: GraduationCap,
+    provider: "student-credentials",
+    redirect: "/student/student",
+    description: "Sporcu paneli girişi",
+    color: "from-amber-600 to-amber-500",
+  },
+] as const;
+
+type RoleId = (typeof roles)[number]["id"];
 
 const loginSchema = z.object({
-  email: z.string().email("Gecerli bir e-posta adresi giriniz"),
-  password: z.string().min(8, "Sifre en az 8 karakter olmali"),
+  email: z.string().email("Geçerli bir e-posta adresi giriniz"),
+  password: z.string().min(1, "Şifre gereklidir"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -26,8 +58,14 @@ interface LoginPageProps {
 function LoginForm({ params }: LoginPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const initialRole = (searchParams.get("role") as RoleId) || "admin";
+  const [selectedRole, setSelectedRole] = useState<RoleId>(
+    roles.find((r) => r.id === initialRole) ? initialRole : "admin"
+  );
   const [isLoading, setIsLoading] = useState(false);
+
+  const currentRole = roles.find((r) => r.id === selectedRole)!;
+  const callbackUrl = searchParams.get("callbackUrl") || currentRole.redirect;
 
   const {
     register,
@@ -41,25 +79,24 @@ function LoginForm({ params }: LoginPageProps) {
     setIsLoading(true);
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn(currentRole.provider, {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
       if (result?.error) {
-        toast.error("Gecersiz e-posta veya sifre");
+        toast.error("Geçersiz e-posta veya şifre");
         return;
       }
 
-      toast.success("Giris basarili!");
+      toast.success("Giriş başarılı!");
 
-      // Get locale from params
       const { locale } = await params;
       router.push(`/${locale}${callbackUrl}`);
       router.refresh();
     } catch {
-      toast.error("Bir hata olustu. Lutfen tekrar deneyin.");
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setIsLoading(false);
     }
@@ -87,9 +124,11 @@ function LoginForm({ params }: LoginPageProps) {
             </div>
           </div>
 
-          <h1 className="text-4xl font-bold mb-4 text-center">Futbol Okullari</h1>
+          <h1 className="text-4xl font-black uppercase tracking-wide mb-4 text-center">
+            Futbol Okullari
+          </h1>
           <p className="text-white/80 text-lg text-center max-w-md mb-12">
-            Profesyonel futbol okulu yonetim sistemi ile ogrencilerinizi, antrenmanlarinizi ve tum surecleri kolayca yonetin.
+            Profesyonel futbol okulu yönetim sistemi ile öğrencilerinizi, antrenmanlarınızı ve tüm süreçleri kolayca yönetin.
           </p>
 
           {/* Feature List */}
@@ -101,8 +140,8 @@ function LoginForm({ params }: LoginPageProps) {
                 </svg>
               </div>
               <div>
-                <p className="font-medium">Ogrenci Yonetimi</p>
-                <p className="text-sm text-white/60">Tum ogrenci bilgilerini tek yerden yonetin</p>
+                <p className="font-medium">Öğrenci Yönetimi</p>
+                <p className="text-sm text-white/60">Tüm öğrenci bilgilerini tek yerden yönetin</p>
               </div>
             </div>
 
@@ -114,7 +153,7 @@ function LoginForm({ params }: LoginPageProps) {
               </div>
               <div>
                 <p className="font-medium">Yoklama Takibi</p>
-                <p className="text-sm text-white/60">Antrenman katilimlarini kayit altina alin</p>
+                <p className="text-sm text-white/60">Antrenman katılımlarını kayıt altına alın</p>
               </div>
             </div>
 
@@ -125,8 +164,8 @@ function LoginForm({ params }: LoginPageProps) {
                 </svg>
               </div>
               <div>
-                <p className="font-medium">Odeme Takibi</p>
-                <p className="text-sm text-white/60">Aidat ve odemelerinizi kolayca takip edin</p>
+                <p className="font-medium">Ödeme Takibi</p>
+                <p className="text-sm text-white/60">Aidat ve ödemelerinizi kolayca takip edin</p>
               </div>
             </div>
           </div>
@@ -151,14 +190,47 @@ function LoginForm({ params }: LoginPageProps) {
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Futbol Okullari</h1>
           </div>
 
+          {/* Role Tabs */}
+          <div className="flex gap-2 mb-6">
+            {roles.map((role) => {
+              const Icon = role.icon;
+              const isActive = selectedRole === role.id;
+              return (
+                <button
+                  key={role.id}
+                  type="button"
+                  onClick={() => setSelectedRole(role.id)}
+                  className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-200 ${
+                    isActive
+                      ? "border-primary bg-primary/5 dark:bg-primary/10 shadow-md"
+                      : "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-900"
+                  }`}
+                >
+                  <Icon
+                    className={`h-5 w-5 ${
+                      isActive ? "text-primary" : "text-slate-400"
+                    }`}
+                  />
+                  <span
+                    className={`text-xs font-bold uppercase tracking-wide ${
+                      isActive ? "text-primary" : "text-slate-500 dark:text-slate-400"
+                    }`}
+                  >
+                    {role.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
           {/* Form Card */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-200 dark:border-slate-800 p-8">
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                Hos Geldiniz
+                Hoş Geldiniz
               </h2>
               <p className="text-slate-500 dark:text-slate-400">
-                Devam etmek icin hesabiniza giris yapin
+                {currentRole.description}
               </p>
             </div>
 
@@ -188,7 +260,7 @@ function LoginForm({ params }: LoginPageProps) {
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-slate-700 dark:text-slate-300">
-                  Sifre
+                  Şifre
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
@@ -217,11 +289,11 @@ function LoginForm({ params }: LoginPageProps) {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Giris yapiliyor...
+                    Giriş yapılıyor...
                   </>
                 ) : (
                   <>
-                    Giris Yap
+                    Giriş Yap
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </>
                 )}
@@ -231,7 +303,7 @@ function LoginForm({ params }: LoginPageProps) {
 
           {/* Footer */}
           <p className="text-center text-sm text-slate-500 dark:text-slate-400 mt-8">
-            &copy; {new Date().getFullYear()} Futbol Okullari. Tum haklar saklidir.
+            &copy; {new Date().getFullYear()} Futbol Okullari. Tüm hakları saklıdır.
           </p>
         </div>
       </div>
@@ -250,7 +322,7 @@ export default function LoginPage({ params }: LoginPageProps) {
             </div>
             <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
               <Loader2 className="h-5 w-5 animate-spin" />
-              <span>Yukleniyor...</span>
+              <span>Yükleniyor...</span>
             </div>
           </div>
         </div>

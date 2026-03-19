@@ -97,7 +97,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
           <Card key={stat.title} className={stat.bgColor}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className={`h-5 w-5 ${stat.color}`} />
+              <stat.icon className={`h-5 w-5 ${stat.color}`} aria-hidden="true" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
@@ -153,11 +153,17 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{dictionary.attendance.present}</span>
-                  <Badge variant="default">{stats.todayAttendance.present}</Badge>
+                  <Badge variant="default" aria-label={`${dictionary.attendance.present}: ${stats.todayAttendance.present}`}>
+                    <span aria-hidden="true">{stats.todayAttendance.present}</span>
+                    <span className="sr-only">{stats.todayAttendance.present} {dictionary.attendance.present}</span>
+                  </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{dictionary.attendance.absent}</span>
-                  <Badge variant="destructive">{stats.todayAttendance.absent}</Badge>
+                  <Badge variant="destructive" aria-label={`${dictionary.attendance.absent}: ${stats.todayAttendance.absent}`}>
+                    <span aria-hidden="true">{stats.todayAttendance.absent}</span>
+                    <span className="sr-only">{stats.todayAttendance.absent} {dictionary.attendance.absent}</span>
+                  </Badge>
                 </div>
                 <div className="flex justify-between border-t pt-2">
                   <span className="font-medium">{dictionary.common.total}</span>

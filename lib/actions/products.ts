@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 // Product Category Schema
 const categorySchema = z.object({
@@ -99,6 +100,7 @@ export async function createCategoryAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "ProductCategory", entityId: category.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
     revalidatePath("/[locale]/products/categories");
 
@@ -136,6 +138,16 @@ export async function updateCategoryAction(
   }
 
   try {
+    // Check ownership
+    const category = await prisma.productCategory.findUnique({
+      where: { id: categoryId },
+      select: { dealerId: true },
+    });
+    if (!category) return { message: "Kategori bulunamadi", success: false };
+    if (category.dealerId !== session.user.dealerId) {
+      return { message: "Yetkilendirme hatasi", success: false };
+    }
+
     // Check if slug already exists for another category
     const existingCategory = await prisma.productCategory.findFirst({
       where: {
@@ -157,6 +169,7 @@ export async function updateCategoryAction(
       data: validatedFields.data,
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "ProductCategory", entityId: categoryId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
     revalidatePath("/[locale]/products/categories");
 
@@ -177,6 +190,16 @@ export async function deleteCategoryAction(
   }
 
   try {
+    // Check ownership
+    const category = await prisma.productCategory.findUnique({
+      where: { id: categoryId },
+      select: { dealerId: true },
+    });
+    if (!category) return { success: false, message: "Kategori bulunamadi" };
+    if (category.dealerId !== session.user.dealerId) {
+      return { success: false, message: "Yetkilendirme hatasi" };
+    }
+
     // Check if category has products
     const productCount = await prisma.product.count({
       where: { categoryId },
@@ -193,6 +216,7 @@ export async function deleteCategoryAction(
       where: { id: categoryId },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "ProductCategory", entityId: categoryId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
     revalidatePath("/[locale]/products/categories");
 
@@ -279,6 +303,7 @@ export async function createProductAction(
       }
     }
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Product", entityId: product.id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
 
     return { success: true, productId: product.id };
@@ -320,6 +345,16 @@ export async function updateProductAction(
   }
 
   try {
+    // Check ownership
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { dealerId: true },
+    });
+    if (!product) return { message: "Urun bulunamadi", success: false };
+    if (product.dealerId !== session.user.dealerId) {
+      return { message: "Yetkilendirme hatasi", success: false };
+    }
+
     // Check if slug already exists for another product
     const existingProduct = await prisma.product.findFirst({
       where: {
@@ -369,6 +404,7 @@ export async function updateProductAction(
       }
     }
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Product", entityId: productId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
     revalidatePath(`/[locale]/products/${productId}`);
 
@@ -389,6 +425,16 @@ export async function deleteProductAction(
   }
 
   try {
+    // Check ownership
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { dealerId: true },
+    });
+    if (!product) return { success: false, message: "Urun bulunamadi" };
+    if (product.dealerId !== session.user.dealerId) {
+      return { success: false, message: "Yetkilendirme hatasi" };
+    }
+
     // Check if product has orders
     const orderItemCount = await prisma.shopOrderItem.count({
       where: { productId },
@@ -411,6 +457,7 @@ export async function deleteProductAction(
       where: { id: productId },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Product", entityId: productId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/products");
 
     return { success: true };
@@ -431,6 +478,16 @@ export async function updateProductStatusAction(
   }
 
   try {
+    // Check ownership
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { dealerId: true },
+    });
+    if (!product) return { success: false, message: "Urun bulunamadi" };
+    if (product.dealerId !== session.user.dealerId) {
+      return { success: false, message: "Yetkilendirme hatasi" };
+    }
+
     await prisma.product.update({
       where: { id: productId },
       data: { isActive },
@@ -458,6 +515,16 @@ export async function updateOrderStatusAction(
   }
 
   try {
+    // Check ownership
+    const order = await prisma.shopOrder.findUnique({
+      where: { id: orderId },
+      select: { dealerId: true },
+    });
+    if (!order) return { success: false, message: "Siparis bulunamadi" };
+    if (order.dealerId !== session.user.dealerId) {
+      return { success: false, message: "Yetkilendirme hatasi" };
+    }
+
     await prisma.shopOrder.update({
       where: { id: orderId },
       data: { status },
@@ -482,6 +549,16 @@ export async function deleteOrderAction(
   }
 
   try {
+    // Check ownership
+    const order = await prisma.shopOrder.findUnique({
+      where: { id: orderId },
+      select: { dealerId: true },
+    });
+    if (!order) return { success: false, message: "Siparis bulunamadi" };
+    if (order.dealerId !== session.user.dealerId) {
+      return { success: false, message: "Yetkilendirme hatasi" };
+    }
+
     // Get order items to restore stock
     const orderItems = await prisma.shopOrderItem.findMany({
       where: { orderId },

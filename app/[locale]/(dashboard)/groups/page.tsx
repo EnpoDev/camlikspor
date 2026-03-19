@@ -43,6 +43,11 @@ export default async function GroupsPage({ params }: GroupsPageProps) {
       facility: { select: { name: true } },
       period: { select: { name: true } },
       _count: { select: { students: { where: { isActive: true } } } },
+      trainers: {
+        include: {
+          trainer: { select: { id: true, firstName: true, lastName: true } },
+        },
+      },
     },
     orderBy: { name: "asc" },
   });

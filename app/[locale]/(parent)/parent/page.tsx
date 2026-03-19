@@ -23,10 +23,10 @@ export default async function ParentHomePage({
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Hos Geldiniz, {session.user.name}
+          Hoş Geldiniz, {session.user.name}
         </h1>
         <p className="text-slate-500 dark:text-slate-400">
-          Cocuklarinizin futbol okulu gelisimini buradan takip edebilirsiniz
+          Çocuklarınızın futbol okulu gelişimini buradan takip edebilirsiniz
         </p>
       </div>
 
@@ -51,11 +51,11 @@ export default async function ParentHomePage({
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600 dark:text-slate-400">Brans:</span>
+                <span className="text-slate-600 dark:text-slate-400">Branş:</span>
                 <span className="font-medium">{student.branch?.name}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600 dark:text-slate-400">Sube:</span>
+                <span className="text-slate-600 dark:text-slate-400">Şube:</span>
                 <span className="font-medium">{student.location?.name}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
@@ -88,7 +88,7 @@ export default async function ParentHomePage({
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Users className="h-12 w-12 text-slate-300 dark:text-slate-600 mb-4" />
             <p className="text-slate-500 dark:text-slate-400">
-              Kayitli ogrenci bulunamadi
+              Kayıtlı öğrenci bulunamadı
             </p>
           </CardContent>
         </Card>
@@ -104,10 +104,10 @@ export default async function ParentHomePage({
               </div>
               <div>
                 <h3 className="font-semibold text-slate-900 dark:text-white">
-                  Ders Programi
+                  Ders Programı
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Antrenman saatlerini gorun
+                  Antrenman saatlerini görün
                 </p>
               </div>
             </CardContent>
@@ -122,10 +122,10 @@ export default async function ParentHomePage({
               </div>
               <div>
                 <h3 className="font-semibold text-slate-900 dark:text-white">
-                  Devamsizlik
+                  Devamsızlık
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Katilim durumunu gorun
+                  Katılım durumunu görün
                 </p>
               </div>
             </CardContent>
@@ -143,7 +143,7 @@ export default async function ParentHomePage({
                   Aidat Takibi
                 </h3>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
-                  Odeme durumunu kontrol edin
+                  Ödeme durumunu kontrol edin
                 </p>
               </div>
             </CardContent>

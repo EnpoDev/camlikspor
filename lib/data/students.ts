@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { decryptPII } from "@/lib/utils/pii";
 
 export interface StudentFilters {
   branchId?: string;
@@ -22,6 +23,8 @@ export interface StudentListItem {
   branch: { id: string; name: string };
   facility: { id: string; name: string };
   registrationDate: Date;
+  groups: { groupId: string; isActive: boolean; group: { id: string; name: string } }[];
+  parents: { parentId: string; parent: { id: string; name: string; email: string | null } }[];
 }
 
 export async function getStudents(
@@ -64,6 +67,20 @@ export async function getStudents(
         registrationDate: true,
         branch: { select: { id: true, name: true } },
         facility: { select: { id: true, name: true } },
+        groups: {
+          where: { isActive: true },
+          select: {
+            groupId: true,
+            isActive: true,
+            group: { select: { id: true, name: true } },
+          },
+        },
+        parents: {
+          select: {
+            parentId: true,
+            parent: { select: { id: true, name: true, email: true } },
+          },
+        },
       },
       orderBy: { registrationDate: "desc" },
       skip: (page - 1) * pageSize,
@@ -72,11 +89,17 @@ export async function getStudents(
     prisma.student.count({ where }),
   ]);
 
-  return { data, total };
+  return {
+    data: data.map((s) => ({
+      ...s,
+      parentPhone: decryptPII(s.parentPhone) ?? s.parentPhone,
+    })),
+    total,
+  };
 }
 
 export async function getStudentById(id: string) {
-  return prisma.student.findUnique({
+  const student = await prisma.student.findUnique({
     where: { id },
     include: {
       dealer: { select: { name: true } },
@@ -107,6 +130,17 @@ export async function getStudentById(id: string) {
       },
     },
   });
+
+  if (!student) return null;
+
+  return {
+    ...student,
+    tcKimlikNo: decryptPII(student.tcKimlikNo),
+    phone: student.phone ? decryptPII(student.phone) ?? student.phone : student.phone,
+    parentPhone: decryptPII(student.parentPhone) ?? student.parentPhone,
+    parentTcKimlik: decryptPII(student.parentTcKimlik),
+    emergencyPhone: student.emergencyPhone ? decryptPII(student.emergencyPhone) ?? student.emergencyPhone : student.emergencyPhone,
+  };
 }
 
 export async function generateStudentNumber(dealerId: string): Promise<string> {

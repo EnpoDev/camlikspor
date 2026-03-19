@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 export type AttendanceStatus = "PRESENT" | "ABSENT" | "LATE" | "EXCUSED";
 
@@ -71,6 +72,7 @@ export async function createAttendanceSessionAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "AttendanceSession", entityId: groupId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/attendance");
     return { message: "Yoklama basariyla kaydedildi", success: true };
   } catch (error) {
@@ -107,6 +109,7 @@ export async function updateAttendanceSessionAction(
       ),
     ]);
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "AttendanceSession", entityId: sessionId, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/attendance");
     return { message: "Yoklama guncellendi", success: true };
   } catch (error) {

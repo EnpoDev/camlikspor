@@ -11,6 +11,10 @@ export const URLS = {
   groups: '/tr/groups',
   users: '/tr/users',
   settings: '/tr/settings',
+  studentLogin: '/tr/student-login',
+  parentLogin: '/tr/parent-login',
+  studentDashboard: '/tr/student/student',
+  parentDashboard: '/tr/parent/parent',
 } as const;
 
 export const CREDENTIALS = {
@@ -21,6 +25,14 @@ export const CREDENTIALS = {
   superAdmin: {
     email: 'admin@futbolokullari.com',
     password: 'Admin123!',
+  },
+  student: {
+    email: 'student@camlikspor.com',
+    password: 'Student123!',
+  },
+  parent: {
+    email: 'parent@camlikspor.com',
+    password: 'Parent123!',
   },
 } as const;
 

@@ -66,9 +66,13 @@ export function Header({
     <header className="sticky top-0 z-50 flex h-16 items-center gap-2 md:gap-4 border-b bg-background px-3 md:px-6">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden shrink-0">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
+          <Button
+            variant="outline"
+            size="icon"
+            className="lg:hidden shrink-0"
+            aria-label="Navigasyon menüsünü aç/kapat"
+          >
+            <Menu className="h-5 w-5" aria-hidden="true" />
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-64 overflow-hidden">

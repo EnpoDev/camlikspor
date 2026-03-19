@@ -42,28 +42,28 @@ export default async function StudentAttendancePage() {
       bg: "bg-slate-100 dark:bg-slate-800",
     },
     {
-      label: "Katildi",
+      label: "Katıldı",
       value: stats.present,
       icon: CheckCircle2,
       color: "text-green-700 dark:text-green-400",
       bg: "bg-green-50 dark:bg-green-950",
     },
     {
-      label: "Devamsiz",
+      label: "Devamsız",
       value: stats.absent,
       icon: XCircle,
       color: "text-red-700 dark:text-red-400",
       bg: "bg-red-50 dark:bg-red-950",
     },
     {
-      label: "Gec Kaldi",
+      label: "Geç Kaldı",
       value: stats.late,
       icon: Clock3,
       color: "text-yellow-700 dark:text-yellow-400",
       bg: "bg-yellow-50 dark:bg-yellow-950",
     },
     {
-      label: "Katilim Orani",
+      label: "Katılım Oranı",
       value: `${stats.attendanceRate}%`,
       icon: BarChart3,
       color: "text-primary dark:text-primary",
@@ -81,7 +81,7 @@ export default async function StudentAttendancePage() {
             Yoklama Takibi
           </h1>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Ders katilim durumun
+            Ders katılım durumun
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default async function StudentAttendancePage() {
         <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-black uppercase tracking-wide text-slate-700 dark:text-slate-300">
-              Katilim Durumu
+              Katılım Durumu
             </p>
             <p className="text-sm font-bold text-primary">{stats.attendanceRate}%</p>
           </div>
@@ -127,19 +127,19 @@ export default async function StudentAttendancePage() {
           <div className="mt-3 flex flex-wrap gap-3 text-xs text-slate-500 dark:text-slate-400">
             <span className="flex items-center gap-1">
               <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
-              Katildi: {stats.present}
+              Katıldı: {stats.present}
             </span>
             <span className="flex items-center gap-1">
               <span className="inline-block h-2 w-2 rounded-full bg-yellow-500" />
-              Gec: {stats.late}
+              Geç: {stats.late}
             </span>
             <span className="flex items-center gap-1">
               <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
-              Devamsiz: {stats.absent}
+              Devamsız: {stats.absent}
             </span>
             <span className="flex items-center gap-1">
               <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
-              Izinli: {stats.excused}
+              İzinli: {stats.excused}
             </span>
           </div>
         </div>
@@ -151,7 +151,7 @@ export default async function StudentAttendancePage() {
         <div className="flex items-center gap-3 border-b border-slate-200 dark:border-slate-800 px-5 py-4">
           <div className="h-5 w-1 rounded-full bg-primary" />
           <h2 className="text-sm font-black uppercase tracking-wide text-slate-900 dark:text-white">
-            Yoklama Gecmisi
+            Yoklama Geçmişi
           </h2>
         </div>
 
@@ -159,7 +159,7 @@ export default async function StudentAttendancePage() {
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <CalendarOff className="mb-4 h-12 w-12 text-slate-300 dark:text-slate-600" />
             <p className="font-medium text-slate-500 dark:text-slate-400">
-              Henuz yoklama kaydi bulunmuyor
+              Henüz yoklama kaydı bulunmuyor
             </p>
           </div>
         ) : (

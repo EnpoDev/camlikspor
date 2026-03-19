@@ -427,7 +427,7 @@ model User {
   dealerId  String?
   dealer    Dealer?  @relation(fields: [dealerId], references: [id])
   trainerId String?  @unique
-  trainer   Trainer? @relation(fields: [trainerId], references: [id])
+  trainer   Trainer? @relation(fields: [trainerId], references: [id], onDelete: Cascade)
 
   permissions     UserPermission[]
   auditLogs       AuditLog[]
@@ -590,9 +590,10 @@ model Group {
   name        String
   description String?
   maxCapacity Int?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 
   dealer   Dealer   @relation(fields: [dealerId], references: [id], onDelete: Cascade)
   branch   Branch   @relation(fields: [branchId], references: [id])
@@ -736,6 +737,7 @@ model Student {
   @@index([facilityId])
   @@index([isActive])
   @@index([parentPhone])
+  @@index([createdAt])
 }
 
 model StudentGroup {
@@ -991,8 +993,9 @@ model Payment {
   description String?
   notes       String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   dealer  Dealer  @relation(fields: [dealerId], references: [id], onDelete: Cascade)
   student Student @relation(fields: [studentId], references: [id])
@@ -1003,6 +1006,8 @@ model Payment {
   @@index([status])
   @@index([dueDate])
   @@index([paytrOrderId])
+  @@index([createdAt])
+  @@index([dealerId, createdAt])
 }
 
 // TransactionType: INCOME | EXPENSE

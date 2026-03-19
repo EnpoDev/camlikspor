@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { sendParentCredentialsSMS } from "@/lib/sms/send-parent-credentials";
+import { encryptPII } from "@/lib/utils/pii";
 
 /**
  * Generates a random temporary password for parents
@@ -65,8 +66,8 @@ export async function createOrLinkParent({
       email: parentEmail,
       passwordHash,
       name: parentName,
-      phone: parentPhone,
-      tcKimlikNo: parentTcKimlik || null,
+      phone: encryptPII(parentPhone) ?? parentPhone,
+      tcKimlikNo: encryptPII(parentTcKimlik),
       mustChangePassword: true, // Force password change on first login
     },
   });

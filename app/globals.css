@@ -266,11 +266,26 @@
   display: none;
 }
 
-/* Print styles for invoices */
+/* Print styles */
 @media print {
-  .print\:hidden,
-  [class*="print:hidden"] {
+  /* Hide elements with data-print-hide attribute */
+  [data-print-hide] {
     display: none !important;
+  }
+
+  /* Show elements with data-print-only attribute */
+  [data-print-only] {
+    display: block !important;
+  }
+
+  /* Invoice-specific print */
+  .invoice-print-mode body * {
+    visibility: hidden;
+  }
+
+  .invoice-print-mode .invoice-printable,
+  .invoice-print-mode .invoice-printable * {
+    visibility: visible;
   }
 
   .invoice-printable {
@@ -282,16 +297,15 @@
     padding: 2rem;
   }
 
-  .invoice-printable * {
-    visibility: visible;
+  /* Print-friendly overrides */
+  [data-print-area] {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
   }
 
-  body * {
-    visibility: hidden;
-  }
-
-  .invoice-printable,
-  .invoice-printable * {
-    visibility: visible;
+  [data-print-area] * {
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
 }

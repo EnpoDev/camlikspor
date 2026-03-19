@@ -2,14 +2,43 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1),
   newPassword: z.string().min(8),
 });
 
-export async function PUT(request: Request) {
+// Rate limiter: 5 attempts / 15 minutes / IP
+const rateLimitMap = new Map<string, { count: number; windowStart: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { count: 1, windowStart: now });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) return false;
+  entry.count += 1;
+  return true;
+}
+
+export async function PUT(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json(
+      { message: "Cok fazla deneme. Lutfen 15 dakika sonra tekrar deneyin." },
+      { status: 429 }
+    );
+  }
+
   try {
     const session = await auth();
 

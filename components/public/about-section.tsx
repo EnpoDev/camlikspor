@@ -58,7 +58,7 @@ export function AboutSection({
                 className="flex items-start gap-4 p-5 rounded-xl bg-slate-50 border border-slate-100"
               >
                 <div className="flex-shrink-0 h-11 w-11 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Icon className="h-5 w-5 text-primary" />
+                  <Icon className="h-5 w-5 text-primary" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-1">

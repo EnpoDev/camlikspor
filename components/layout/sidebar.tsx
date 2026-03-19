@@ -138,6 +138,8 @@ function SidebarItem({
       <div>
         <button
           onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-current={isActive ? "page" : undefined}
           className={cn(
             "flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm font-medium transition-colors",
             isActive
@@ -146,7 +148,7 @@ function SidebarItem({
           )}
         >
           <div className="flex items-center gap-3">
-            <Icon className="h-5 w-5" />
+            <Icon className="h-5 w-5" aria-hidden="true" />
             <span>{label}</span>
           </div>
           <ChevronDown
@@ -154,6 +156,7 @@ function SidebarItem({
               "h-4 w-4 transition-transform",
               isOpen && "rotate-180"
             )}
+            aria-hidden="true"
           />
         </button>
         {isOpen && (
@@ -176,6 +179,7 @@ function SidebarItem({
   return (
     <Link
       href={href}
+      aria-current={isActive ? "page" : undefined}
       className={cn(
         "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors",
         isActive
@@ -183,7 +187,7 @@ function SidebarItem({
           : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
       )}
     >
-      <Icon className="h-5 w-5" />
+      <Icon className="h-5 w-5" aria-hidden="true" />
       <span>{label}</span>
     </Link>
   );

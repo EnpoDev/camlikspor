@@ -117,7 +117,7 @@ export function HeroSlider({ dealerName, locale, slides: initialSlides }: HeroSl
         >
           <Image
             src={slide.image}
-            alt=""
+            alt={slide.title || "Slider arka plan görseli"}
             fill
             className="object-cover"
             priority={index === 0}

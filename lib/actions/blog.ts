@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { logAudit } from "@/lib/logger";
 
 const blogPostSchema = z.object({
   title: z.string().min(1, "Başlık gereklidir"),
@@ -89,6 +90,7 @@ export async function createBlogPostAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "BlogPost", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/blog");
     return {
       message: "Blog yazısı oluşturuldu",
@@ -191,6 +193,7 @@ export async function updateBlogPostAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "BlogPost", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/blog");
     revalidatePath(`/blog/${result.data.slug}`);
     return {
@@ -238,6 +241,7 @@ export async function deleteBlogPostAction(id: string): Promise<{
       where: { id },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "BlogPost", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/blog");
     return {
       success: true,

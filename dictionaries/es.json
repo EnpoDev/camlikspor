@@ -94,7 +94,23 @@
     "trainingCalendar": "Calendario de Entrenamiento",
     "legalDocuments": "Documentos Legales",
     "matches": "Partidos",
-    "sponsors": "Patrocinadores"
+    "sponsors": "Patrocinadores",
+    "incomes": "Procesamiento de Ingresos",
+    "expenses": "Procesamiento de Gastos",
+    "periods": "Periodos",
+    "branches": "Ramas",
+    "locations": "Sedes",
+    "facilities": "Instalaciones",
+    "discounts": "Tipos de Descuento",
+    "equipment": "Equipamiento",
+    "studentDevelopment": "Desarrollo del Estudiante",
+    "bodyMeasurements": "Medidas Corporales",
+    "personnel": "Personal",
+    "expenseItems": "Partidas de Gastos",
+    "incomeItems": "Partidas de Ingresos",
+    "taskDefinitions": "Definiciones de Tareas",
+    "otherPaymentTypes": "Otros Tipos de Pago",
+    "duesTypes": "Tipos de Cuota"
   },
   "header": {
     "profile": "Perfil",
@@ -904,5 +920,37 @@
     "contactText": "Para preguntas sobre nuestra política de privacidad, contáctenos:",
     "updateText": "Esta política de privacidad se actualizó por última vez el",
     "updateText2": ""
+  },
+  "parent": {
+    "welcome": "Bienvenido",
+    "subtitle": "Siga el progreso de su hijo en la escuela de fútbol aquí",
+    "branch": "Rama",
+    "location": "Sede",
+    "facility": "Instalación",
+    "status": "Estado",
+    "active": "Activo",
+    "passive": "Inactivo",
+    "noStudents": "No se encontraron estudiantes registrados",
+    "schedule": "Horario de Clases",
+    "scheduleSubtitle": "Ver horarios de entrenamiento",
+    "attendance": "Asistencia",
+    "attendanceSubtitle": "Ver estado de asistencia",
+    "payments": "Seguimiento de Pagos",
+    "paymentsSubtitle": "Verificar estado de pago"
+  },
+  "student": {
+    "welcome": "Bienvenido",
+    "activeGroups": "Grupos Activos",
+    "weeklyTraining": "Entrenamiento Semanal",
+    "monthlyAttendance": "Asistencia Mensual",
+    "paymentStatus": "Estado de Pago",
+    "upcomingTrainings": "Próximos Entrenamientos",
+    "quickAccess": "Acceso Rápido",
+    "viewSchedule": "Ver Mi Horario",
+    "viewAttendance": "Historial de Asistencia",
+    "viewDevelopment": "Informe de Desarrollo",
+    "noUpcomingTraining": "No se encontraron próximos entrenamientos",
+    "today": "Hoy",
+    "tomorrow": "Mañana"
   }
 }

@@ -7,6 +7,7 @@ import { logAudit } from "@/lib/logger";
 import { UserRole, Permission } from "@/lib/types";
 import { z } from "zod";
 import { turkishPhoneSchema } from "@/lib/utils/validation";
+import { encryptPII } from "@/lib/utils/pii";
 
 const preRegistrationSchema = z.object({
   firstName: z.string().min(2, "Ad en az 2 karakter olmali"),
@@ -96,7 +97,7 @@ export async function createPreRegistrationAction(
         birthDate: data.birthDate ? new Date(data.birthDate) : null,
         gender,
         parentName: data.parentName,
-        parentPhone: data.parentPhone,
+        parentPhone: encryptPII(data.parentPhone) ?? data.parentPhone,
         parentEmail: data.parentEmail || null,
         branchInterest,
         notes: data.notes || null,
@@ -172,7 +173,7 @@ export async function updatePreRegistrationAction(
         birthDate: data.birthDate ? new Date(data.birthDate) : null,
         gender: data.gender || null,
         parentName: data.parentName,
-        parentPhone: data.parentPhone,
+        parentPhone: encryptPII(data.parentPhone) ?? data.parentPhone,
         parentEmail: data.parentEmail || null,
         branchInterest: data.branchInterest || null,
         notes: data.notes || null,

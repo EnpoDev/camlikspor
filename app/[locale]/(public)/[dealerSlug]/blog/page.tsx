@@ -1,11 +1,10 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { i18n, type Locale } from "@/lib/i18n/config";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar } from "lucide-react";
+import { Calendar, Newspaper, ArrowRight } from "lucide-react";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -45,33 +44,54 @@ export default async function BlogPage({ params }: BlogPageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
-      <div className="container mx-auto px-4 py-16">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-block mb-4">
-            <span className="bg-gradient-to-r from-primary to-primary/90 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-              Blog
+    <div className="min-h-screen">
+      {/* Hero Section — dark */}
+      <div className="relative bg-slate-900 py-24 px-4 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent" />
+        <div className="container mx-auto relative z-10 max-w-5xl">
+          <span className="inline-block px-4 py-1 rounded-full bg-secondary text-slate-900 text-sm font-bold uppercase tracking-widest mb-6 animate-fade-in-up">
+            Blog
+          </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide mb-4 text-white animate-fade-in-up">
+            Futbol Dunyasi
+          </h1>
+          <p className="text-lg md:text-xl max-w-3xl text-white/70 animate-fade-in-up">
+            Haberler, antrenman ipuclari ve daha fazlasi
+          </p>
+        </div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="bg-primary">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-center gap-3">
+            <Newspaper className="h-5 w-5 text-white/60" />
+            <span className="text-2xl font-black text-white">{posts.length}</span>
+            <span className="text-sm text-white/70 font-medium uppercase tracking-wide">Yazi</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Blog Posts */}
+      <div className="container mx-auto px-4 py-20">
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="h-1 w-8 rounded-full bg-primary" />
+            <span className="text-primary text-sm font-bold uppercase tracking-widest">
+              Yazilar
             </span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">
-            Futbol Dünyası
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed">
-            Haberler, antrenman ipuçları ve daha fazlası
-          </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-primary/30 rounded-full mx-auto mt-6" />
+          <h2 className="text-3xl md:text-4xl font-black text-slate-900 uppercase tracking-wide">
+            Son Yazilar
+          </h2>
         </div>
 
-        {/* Blog Posts Grid */}
         {posts.length === 0 ? (
-          <Card className="max-w-2xl mx-auto shadow-xl">
-            <CardContent className="pt-6 text-center py-12">
-              <p className="text-muted-foreground text-lg">
-                Henüz blog yazısı bulunmuyor.
-              </p>
-            </CardContent>
-          </Card>
+          <div className="text-center py-20">
+            <Newspaper className="h-24 w-24 mx-auto text-slate-300 mb-6" />
+            <h3 className="text-2xl font-bold mb-2 text-slate-900">Henuz Yazi Yok</h3>
+            <p className="text-slate-500">Blog yazilari yakinda eklenecek.</p>
+          </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
             {posts.map((post) => (
@@ -80,7 +100,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
                 href={`/${locale}/${dealerSlug}/blog/${post.slug}`}
                 className="group"
               >
-                <Card className="h-full hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden border-0 shadow-lg bg-white dark:bg-slate-900">
+                <Card className="h-full border-0 shadow-lg hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
                   {post.coverImage && (
                     <div className="relative w-full h-56 overflow-hidden">
                       <Image
@@ -93,30 +113,26 @@ export default async function BlogPage({ params }: BlogPageProps) {
                     </div>
                   )}
                   <CardHeader className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      {post.publishedAt && (
-                        <div className="flex items-center gap-1.5 bg-primary/5 dark:bg-primary/20 px-3 py-1 rounded-full">
-                          <Calendar className="h-3.5 w-3.5 text-primary dark:text-primary" />
-                          <span className="text-xs text-primary dark:text-primary font-medium">
-                            {format(new Date(post.publishedAt), "dd MMM yyyy", {
-                              locale: tr,
-                            })}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <CardTitle className="text-xl font-bold group-hover:text-primary dark:group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                    {post.publishedAt && (
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5 text-primary" />
+                        <span className="text-xs text-primary font-medium">
+                          {format(new Date(post.publishedAt), "dd MMM yyyy", { locale: tr })}
+                        </span>
+                      </div>
+                    )}
+                    <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors line-clamp-2 leading-tight">
                       {post.title}
                     </CardTitle>
                   </CardHeader>
                   {post.excerpt && (
                     <CardContent>
-                      <p className="text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                      <p className="text-slate-600 line-clamp-3 leading-relaxed">
                         {post.excerpt}
                       </p>
-                      <div className="mt-4 flex items-center text-primary dark:text-primary font-medium text-sm group-hover:gap-2 transition-all">
-                        Devamını Oku
-                        <span className="inline-block group-hover:translate-x-1 transition-transform">→</span>
+                      <div className="mt-4 flex items-center text-primary font-bold text-sm uppercase tracking-wide group-hover:gap-2 transition-all">
+                        Devamini Oku
+                        <ArrowRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </CardContent>
                   )}

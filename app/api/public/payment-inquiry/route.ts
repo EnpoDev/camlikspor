@@ -2,7 +2,39 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { calculateStudentPaymentSummary } from "@/lib/utils/payment-calculations";
 
+// In-memory rate limiter: IP -> { count, windowStart }
+const rateLimitMap = new Map<string, { count: number; windowStart: number }>();
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(ip, { count: 1, windowStart: now });
+    return true;
+  }
+  if (entry.count >= RATE_LIMIT_MAX) {
+    return false;
+  }
+  entry.count += 1;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown";
+
+  if (!checkRateLimit(ip)) {
+    console.error(`[PAYMENT_INQUIRY] Rate limit exceeded for IP: ${ip}`);
+    return NextResponse.json(
+      { error: "Çok fazla istek gönderildi. Lütfen bir saat sonra tekrar deneyin." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
     const { query } = body;
@@ -37,6 +69,8 @@ export async function POST(request: NextRequest) {
     console.log("Student search result:", student ? "Found" : "Not found");
 
     if (!student) {
+      console.error(`[PAYMENT_INQUIRY] Student not found for query from IP: ${ip}`);
+      await new Promise((resolve) => setTimeout(resolve, 500));
       return NextResponse.json(
         { error: "Öğrenci bulunamadı. Lütfen TC Kimlik No veya Telefon No'yu kontrol edin." },
         { status: 404 }
@@ -93,9 +127,14 @@ export async function POST(request: NextRequest) {
         periodName: getPeriodName(p),
       }));
 
+    const maskedTcKimlikNo = student.tcKimlikNo
+      ? `*******${student.tcKimlikNo.slice(-4)}`
+      : null;
+
     const result = {
       studentName: `${student.firstName} ${student.lastName}`,
       studentId: student.id,
+      tcKimlikNo: maskedTcKimlikNo,
       totalDebt: paymentSummary.totalDebt,
       currentMonthDebt: paymentSummary.currentMonthDebt,
       futurePaymentsTotal: paymentSummary.futurePaymentsTotal,
@@ -122,9 +161,10 @@ export async function POST(request: NextRequest) {
       futurePaymentsCount: result.futurePayments.length
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 500));
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Payment inquiry error:", error);
+    console.error(`[PAYMENT_INQUIRY] Error for IP: ${ip}`, error);
     const errorMessage = error instanceof Error ? error.message : "Bilinmeyen hata";
     return NextResponse.json(
       { error: `Sorgulama sırasında bir hata oluştu: ${errorMessage}` },

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+import { logAudit } from "@/lib/logger";
 
 const expenseSchema = z.object({
   expenseItemId: z.string().min(1, "Gider kalemi seçilmeli"),
@@ -73,6 +74,7 @@ export async function createExpenseAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "CREATE", entity: "Expense", dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/accounting/expenses");
     return { message: "Gider başarıyla eklendi", success: true };
   } catch (error) {
@@ -124,6 +126,7 @@ export async function updateExpenseAction(
       },
     });
 
+    logAudit({ actor: session.user.id, action: "UPDATE", entity: "Expense", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/accounting/expenses");
     return { message: "Gider başarıyla güncellendi", success: true };
   } catch (error) {
@@ -146,6 +149,7 @@ export async function deleteExpenseAction(
       where: { id },
     });
 
+    logAudit({ actor: session.user.id, action: "DELETE", entity: "Expense", entityId: id, dealerId: session.user.dealerId, status: "SUCCESS" });
     revalidatePath("/[locale]/accounting/expenses");
     return { message: "Gider silindi", success: true };
   } catch (error) {
