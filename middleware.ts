@@ -220,12 +220,12 @@ export default auth(async function middleware(request) {
   if (session && isAuth) {
     if (session.user.role === "PARENT") {
       return NextResponse.redirect(
-        new URL(`/${currentLocale}/parent/parent`, request.url)
+        new URL(`/${currentLocale}/parent`, request.url)
       );
     }
     if (session.user.role === "STUDENT") {
       return NextResponse.redirect(
-        new URL(`/${currentLocale}/student/student`, request.url)
+        new URL(`/${currentLocale}/student`, request.url)
       );
     }
     return NextResponse.redirect(

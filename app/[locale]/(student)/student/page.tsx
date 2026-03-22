@@ -287,7 +287,7 @@ export default async function StudentDashboardPage({
           Hızlı Erişim
         </h2>
         <div className="grid gap-4 md:grid-cols-3">
-          <Link href={`/${locale}/student/student/schedule`}>
+          <Link href={`/${locale}/student/schedule`}>
             <Card className="cursor-pointer border-slate-200 dark:border-slate-800 hover:shadow-lg hover:border-primary/30 transition-all group">
               <CardContent className="flex items-center gap-4 p-6">
                 <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
@@ -305,7 +305,7 @@ export default async function StudentDashboardPage({
             </Card>
           </Link>
 
-          <Link href={`/${locale}/student/student/attendance`}>
+          <Link href={`/${locale}/student/attendance`}>
             <Card className="cursor-pointer border-slate-200 dark:border-slate-800 hover:shadow-lg hover:border-green-500/30 transition-all group">
               <CardContent className="flex items-center gap-4 p-6">
                 <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors">
@@ -323,7 +323,7 @@ export default async function StudentDashboardPage({
             </Card>
           </Link>
 
-          <Link href={`/${locale}/student/student/development`}>
+          <Link href={`/${locale}/student/development`}>
             <Card className="cursor-pointer border-slate-200 dark:border-slate-800 hover:shadow-lg hover:border-blue-500/30 transition-all group">
               <CardContent className="flex items-center gap-4 p-6">
                 <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">

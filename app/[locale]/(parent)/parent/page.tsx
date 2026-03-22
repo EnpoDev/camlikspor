@@ -96,7 +96,7 @@ export default async function ParentHomePage({
 
       {/* Quick Links */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Link href={`/${locale}/parent/parent/schedule`}>
+        <Link href={`/${locale}/parent/schedule`}>
           <Card className="cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="flex items-center gap-4 p-6">
               <div className="h-12 w-12 rounded-lg bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
@@ -114,7 +114,7 @@ export default async function ParentHomePage({
           </Card>
         </Link>
 
-        <Link href={`/${locale}/parent/parent/attendance`}>
+        <Link href={`/${locale}/parent/attendance`}>
           <Card className="cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="flex items-center gap-4 p-6">
               <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
@@ -132,7 +132,7 @@ export default async function ParentHomePage({
           </Card>
         </Link>
 
-        <Link href={`/${locale}/parent/parent/payments`}>
+        <Link href={`/${locale}/parent/payments`}>
           <Card className="cursor-pointer hover:shadow-lg transition-shadow">
             <CardContent className="flex items-center gap-4 p-6">
               <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">

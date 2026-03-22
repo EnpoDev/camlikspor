@@ -55,7 +55,7 @@ export default function ChangePasswordPage() {
       }
 
       toast.success("Şifre başarıyla değiştirildi!");
-      router.push("/tr/parent/parent");
+      router.push("/tr/parent");
       router.refresh();
     } catch (error) {
       toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");

@@ -40,38 +40,38 @@ export default async function StudentLayout({
   }
 
   if (session.user.mustChangePassword) {
-    redirect(`/${locale}/student/student/change-password`);
+    redirect(`/${locale}/student/change-password`);
   }
 
   const menuItems = [
     {
       title: "Ana Sayfa",
-      href: `/${locale}/student/student`,
+      href: `/${locale}/student`,
       icon: Home,
     },
     {
       title: "Ders Programı",
-      href: `/${locale}/student/student/schedule`,
+      href: `/${locale}/student/schedule`,
       icon: Calendar,
     },
     {
       title: "Yoklama",
-      href: `/${locale}/student/student/attendance`,
+      href: `/${locale}/student/attendance`,
       icon: Users,
     },
     {
       title: "Ödemeler",
-      href: `/${locale}/student/student/payments`,
+      href: `/${locale}/student/payments`,
       icon: CreditCard,
     },
     {
       title: "Gelişim",
-      href: `/${locale}/student/student/development`,
+      href: `/${locale}/student/development`,
       icon: TrendingUp,
     },
     {
       title: "Ayarlar",
-      href: `/${locale}/student/student/settings`,
+      href: `/${locale}/student/settings`,
       icon: Settings,
     },
   ];

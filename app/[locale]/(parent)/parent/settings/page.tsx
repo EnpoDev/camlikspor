@@ -304,7 +304,7 @@ export default function ParentSettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Link href="/parent/parent/change-password">
+          <Link href="/parent/change-password">
             <Button>Şifre Değiştir</Button>
           </Link>
         </CardContent>

@@ -63,7 +63,7 @@ export default function StudentChangePasswordPage() {
       }
 
       toast.success("Şifre başarıyla değiştirildi!");
-      router.push("/tr/student/student");
+      router.push("/tr/student");
       router.refresh();
     } catch {
       toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");

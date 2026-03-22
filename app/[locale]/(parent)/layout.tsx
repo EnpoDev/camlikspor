@@ -32,7 +32,7 @@ export default async function ParentLayout({
   }
 
   if (session.user.mustChangePassword) {
-    redirect(`/${locale}/parent/parent/change-password`);
+    redirect(`/${locale}/parent/change-password`);
   }
 
   const dictionary = await getDictionary(locale);
@@ -40,37 +40,37 @@ export default async function ParentLayout({
   const menuItems = [
     {
       title: "Ana Sayfa",
-      href: `/${locale}/parent/parent`,
+      href: `/${locale}/parent`,
       icon: Home,
     },
     {
       title: "Ders Programı",
-      href: `/${locale}/parent/parent/schedule`,
+      href: `/${locale}/parent/schedule`,
       icon: Calendar,
     },
     {
       title: "Devamsızlık",
-      href: `/${locale}/parent/parent/attendance`,
+      href: `/${locale}/parent/attendance`,
       icon: Users,
     },
     {
       title: "Aidat Takibi",
-      href: `/${locale}/parent/parent/payments`,
+      href: `/${locale}/parent/payments`,
       icon: CreditCard,
     },
     {
       title: "Mesajlar",
-      href: `/${locale}/parent/parent/messages`,
+      href: `/${locale}/parent/messages`,
       icon: MessageSquare,
     },
     {
       title: "Bildirimler",
-      href: `/${locale}/parent/parent/notifications`,
+      href: `/${locale}/parent/notifications`,
       icon: Bell,
     },
     {
       title: "Ayarlar",
-      href: `/${locale}/parent/parent/settings`,
+      href: `/${locale}/parent/settings`,
       icon: Settings,
     },
   ];
@@ -151,7 +151,7 @@ export default async function ParentLayout({
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href={`/${locale}/parent/parent/notifications`} className="relative">
+            <Link href={`/${locale}/parent/notifications`} className="relative">
               <Bell className="h-5 w-5 text-slate-300 hover:text-secondary transition-colors" />
             </Link>
             <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
