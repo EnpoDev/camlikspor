@@ -37,10 +37,11 @@ const PROTECTED_ROUTES = [
   "commissions",
   "hero-slides",
   "parent",
+  "student",
 ];
 
 // Auth routes
-const AUTH_ROUTES = ["login", "forgot-password", "parent-login"];
+const AUTH_ROUTES = ["login", "forgot-password", "parent-login", "student-login"];
 
 // Domain detection helper
 function getDealerFromHost(host: string): {
@@ -204,27 +205,29 @@ export default auth(async function middleware(request) {
 
   // Redirect unauthenticated users to login (for protected routes)
   if (!session && isProtected) {
-    // If accessing parent routes, redirect to parent-login
-    if (pathAfterLocale.startsWith("parent")) {
-      const loginUrl = new URL(`/${currentLocale}/parent-login`, request.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
-
+    // Redirect to unified login with appropriate role
     const loginUrl = new URL(`/${currentLocale}/login`, request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
+    if (pathAfterLocale.startsWith("parent")) {
+      loginUrl.searchParams.set("role", "parent");
+    } else if (pathAfterLocale.startsWith("student")) {
+      loginUrl.searchParams.set("role", "student");
+    }
     return NextResponse.redirect(loginUrl);
   }
 
   // Redirect authenticated users away from auth pages
   if (session && isAuth) {
-    // Parent users should go to parent dashboard
     if (session.user.role === "PARENT") {
       return NextResponse.redirect(
         new URL(`/${currentLocale}/parent/parent`, request.url)
       );
     }
-
+    if (session.user.role === "STUDENT") {
+      return NextResponse.redirect(
+        new URL(`/${currentLocale}/student/student`, request.url)
+      );
+    }
     return NextResponse.redirect(
       new URL(`/${currentLocale}/dashboard`, request.url)
     );

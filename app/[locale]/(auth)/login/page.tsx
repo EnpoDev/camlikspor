@@ -234,6 +234,27 @@ function LoginForm({ params }: LoginPageProps) {
               </p>
             </div>
 
+            {/* Demo User Info */}
+            {(selectedRole === "parent" || selectedRole === "student") && (
+              <div className="mb-4 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl">
+                <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-2">
+                  Demo Hesap Bilgileri
+                </p>
+                {selectedRole === "parent" && (
+                  <div className="space-y-1 text-sm text-amber-800 dark:text-amber-300">
+                    <p><span className="font-medium">E-posta:</span> veli@test.com</p>
+                    <p><span className="font-medium">Sifre:</span> Test1234</p>
+                  </div>
+                )}
+                {selectedRole === "student" && (
+                  <div className="space-y-1 text-sm text-amber-800 dark:text-amber-300">
+                    <p><span className="font-medium">E-posta:</span> ogrenci@test.com</p>
+                    <p><span className="font-medium">Sifre:</span> Test1234</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-slate-700 dark:text-slate-300">
