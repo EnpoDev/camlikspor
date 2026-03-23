@@ -21,8 +21,8 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
     // Determine if shop or aidat payment
-    const isShop = orderId.startsWith("SHOP-");
-    const isAidat = orderId.startsWith("AIDAT-");
+    const isShop = orderId.startsWith("SHOP");
+    const isAidat = orderId.startsWith("AIDAT");
 
     // Verify hash - only for successful transactions (mdstatus=1, procreturncode=00)
     const hashValid = procreturncode === "00" ? verifyResponseHash(formData) : true;
@@ -39,11 +39,9 @@ export async function POST(request: NextRequest) {
     const success = isPaymentSuccessful(formData);
 
     if (isShop) {
-      // Extract order number from "SHOP-ORD-XXXXX-YYYY"
-      const orderNumber = orderId.replace("SHOP-", "");
-
+      // Find order by garantiOrderId
       const order = await prisma.shopOrder.findFirst({
-        where: { OR: [{ garantiOrderId: orderId }, { orderNumber }] },
+        where: { garantiOrderId: orderId },
       });
 
       if (order) {
@@ -57,9 +55,10 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      const displayOrder = order?.orderNumber || orderId;
       const redirectUrl = success
-        ? `${appUrl}/tr/checkout/success?order=${orderNumber || orderId}`
-        : `${appUrl}/tr/checkout/result?status=error&order=${orderNumber || orderId}&message=${encodeURIComponent(errmsg || "Odeme basarisiz")}`;
+        ? `${appUrl}/tr/checkout/success?order=${displayOrder}`
+        : `${appUrl}/tr/checkout/result?status=error&order=${displayOrder}&message=${encodeURIComponent(errmsg || "Odeme basarisiz")}`;
 
       return NextResponse.redirect(redirectUrl, { status: 303 });
     }
