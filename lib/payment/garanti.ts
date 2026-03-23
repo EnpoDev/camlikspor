@@ -28,10 +28,11 @@ function generateHashedPassword(): string {
 }
 
 // Generate security hash for OOS form
-// SHA512(terminalId + orderId + amount + successUrl + errorUrl + txnType + installmentCount + storeKey + hashedPassword)
+// SHA512(terminalId + orderId + amount + currencyCode + successUrl + errorUrl + txnType + installmentCount + storeKey + hashedPassword)
 export function generateOosHash(params: {
   orderId: string;
   amount: string; // in kuruş, e.g. "10000" for 100 TL
+  currencyCode?: string;
   successUrl: string;
   errorUrl: string;
   txnType?: string;
@@ -42,6 +43,7 @@ export function generateOosHash(params: {
     padTerminalId(CONFIG.terminalId),
     params.orderId,
     params.amount,
+    params.currencyCode || "949",
     params.successUrl,
     params.errorUrl,
     params.txnType || "sales",
@@ -87,6 +89,7 @@ export function buildOosFormFields(params: {
   const hash = generateOosHash({
     orderId: params.orderId,
     amount: amountStr,
+    currencyCode: "949",
     successUrl: params.successUrl,
     errorUrl: params.errorUrl,
     txnType: "sales",
@@ -96,7 +99,7 @@ export function buildOosFormFields(params: {
   return {
     mode: CONFIG.mode,
     apiversion: "512",
-    secure3dsecuritylevel: "3D_OOS_PAY",
+    secure3dsecuritylevel: "3D_OOS_PAY", // OOS with 3D verification
     terminalid: padTerminalId(CONFIG.terminalId),
     terminalmerchantid: CONFIG.merchantId,
     terminaluserid: "PROVOOS",
