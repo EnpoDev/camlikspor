@@ -116,8 +116,8 @@ export function buildOosFormFields(params: {
   return {
     mode: CONFIG.mode,
     apiversion: "512",
-    secure3dsecuritylevel: "3D_OOS_PAY", // OOS with 3D verification
-    terminalid: padTerminalId(CONFIG.terminalId),
+    secure3dsecuritylevel: "OOS_PAY",
+    terminalid: CONFIG.terminalId,
     terminalmerchantid: CONFIG.merchantId,
     terminaluserid: "PROVOOS",
     terminalprovuserid: "PROVAUT",
