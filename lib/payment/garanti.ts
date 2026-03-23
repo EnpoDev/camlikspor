@@ -39,7 +39,7 @@ export function generateOosHash(params: {
 }): string {
   const hashedPassword = generateHashedPassword();
   const hashStr = [
-    CONFIG.terminalId,
+    padTerminalId(CONFIG.terminalId),
     params.orderId,
     params.amount,
     params.successUrl,
@@ -130,7 +130,7 @@ function generateRefundHashedPassword(): string {
 // Generate hash for XML API (refund/cancel)
 // HashData = SHA512(orderId + terminalId + amount + hashedPassword)
 function generateXmlHash(orderId: string, amount: string, hashedPassword: string): string {
-  const hashStr = orderId + CONFIG.terminalId + amount + hashedPassword;
+  const hashStr = orderId + padTerminalId(CONFIG.terminalId) + amount + hashedPassword;
   return crypto.createHash("sha512").update(hashStr, "utf8").digest("hex").toUpperCase();
 }
 
