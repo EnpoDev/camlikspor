@@ -39,8 +39,6 @@ export function generateOosHash(params: {
   installmentCount?: string;
 }): string {
   const hashedPassword = generateHashedPassword();
-  // Official docs: SHA512 uses raw terminalId (NOT padded)
-  // Padding ("0" prefix) is ONLY for SHA1 password hash
   const hashStr = [
     CONFIG.terminalId,
     params.orderId,
@@ -54,7 +52,24 @@ export function generateOosHash(params: {
     hashedPassword,
   ].join("");
 
-  return crypto.createHash("sha512").update(hashStr, "utf8").digest("hex").toUpperCase();
+  const result = crypto.createHash("sha512").update(hashStr, "utf8").digest("hex").toUpperCase();
+
+  console.log("[GARANTI HASH DEBUG]", JSON.stringify({
+    terminalId: CONFIG.terminalId,
+    orderId: params.orderId,
+    amount: params.amount,
+    currencyCode: params.currencyCode || "949",
+    successUrl: params.successUrl,
+    errorUrl: params.errorUrl,
+    txnType: params.txnType || "sales",
+    installmentCount: params.installmentCount || "",
+    storeKey: CONFIG.storeKey ? CONFIG.storeKey.substring(0, 5) + "..." : "EMPTY",
+    hashedPassword,
+    hashInput: hashStr.substring(0, 80) + "...",
+    result: result.substring(0, 20) + "...",
+  }));
+
+  return result;
 }
 
 // Verify response hash from Garanti callback

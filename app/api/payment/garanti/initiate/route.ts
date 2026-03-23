@@ -92,6 +92,20 @@ export async function POST(request: NextRequest) {
       errorUrl: `${appUrl}/api/payment/garanti/callback`,
     });
 
+    console.log("[GARANTI INITIATE]", JSON.stringify({
+      orderId,
+      amount,
+      customerEmail,
+      customerIp,
+      successUrl: `${appUrl}/api/payment/garanti/callback`,
+      gatewayUrl: getGatewayUrl(),
+      formFieldKeys: Object.keys(formFields),
+      terminalid: formFields.terminalid,
+      txnamount: formFields.txnamount,
+      mode: formFields.mode,
+      secure3dhash: formFields.secure3dhash?.substring(0, 20) + "...",
+    }));
+
     return NextResponse.json({
       gatewayUrl: getGatewayUrl(),
       formFields,
