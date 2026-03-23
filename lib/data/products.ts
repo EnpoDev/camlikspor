@@ -101,6 +101,8 @@ export interface OrderDetail {
     firstName: string;
     lastName: string;
   } | null;
+  paymentId: string | null;
+  garantiOrderId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -371,6 +373,8 @@ export async function getOrderById(
           lastName: true,
         },
       },
+      paymentId: true,
+      garantiOrderId: true,
       createdAt: true,
       updatedAt: true,
     },

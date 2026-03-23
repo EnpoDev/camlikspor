@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowLeft, User, Package, MapPin, Phone, Mail } from "lucide-react";
+import { RefundButton } from "@/components/payment/RefundButton";
 import Link from "next/link";
 import { format } from "date-fns";
 import { tr, enUS, es } from "date-fns/locale";
@@ -103,13 +104,19 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <Badge variant={statusInfo.variant} className="text-sm">
             {statusInfo.label}
           </Badge>
           <Badge variant={paymentInfo.variant} className="text-sm">
             {paymentInfo.label}
           </Badge>
+          {order.paymentStatus === "PAID" && (order.garantiOrderId || order.paymentId) && (
+            <RefundButton
+              shopOrderId={order.id}
+              amount={order.total}
+            />
+          )}
         </div>
       </div>
 

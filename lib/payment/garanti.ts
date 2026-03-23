@@ -5,11 +5,15 @@ const CONFIG = {
   merchantId: process.env.GARANTI_MERCHANT_ID || "",
   terminalId: process.env.GARANTI_TERMINAL_ID || "",
   provOosPassword: process.env.GARANTI_PROVOOS_PASSWORD || "",
+  provRfnPassword: process.env.GARANTI_PROVRFN_PASSWORD || "",
   storeKey: process.env.GARANTI_STORE_KEY || "",
   mode: process.env.GARANTI_MODE || "TEST",
   gatewayUrl:
     process.env.GARANTI_GATEWAY_URL ||
     "https://sanalposprovtest.garantibbva.com.tr/servlet/gt3dengine",
+  xmlUrl:
+    process.env.GARANTI_XML_URL ||
+    "https://sanalposprovtest.garantibbva.com.tr/VPServlet",
 };
 
 // Pad terminal ID to 9 digits
@@ -115,6 +119,93 @@ export function buildOosFormFields(params: {
 
 export function getGatewayUrl(): string {
   return CONFIG.gatewayUrl;
+}
+
+// Generate hashed password for PROVRFN (refund user)
+function generateRefundHashedPassword(): string {
+  const data = CONFIG.provRfnPassword + padTerminalId(CONFIG.terminalId);
+  return crypto.createHash("sha1").update(data, "utf8").digest("hex").toUpperCase();
+}
+
+// Generate hash for XML API (refund/cancel)
+// HashData = SHA512(orderId + terminalId + amount + hashedPassword)
+function generateXmlHash(orderId: string, amount: string, hashedPassword: string): string {
+  const hashStr = orderId + CONFIG.terminalId + amount + hashedPassword;
+  return crypto.createHash("sha512").update(hashStr, "utf8").digest("hex").toUpperCase();
+}
+
+// Send refund request to Garanti BBVA via XML API
+export async function sendRefundRequest(params: {
+  orderId: string;
+  amount: number; // in TL
+  customerIp?: string;
+}): Promise<{ success: boolean; message: string; rawResponse?: string }> {
+  const amountStr = amountToKurus(params.amount);
+  const hashedPassword = generateRefundHashedPassword();
+  const hashData = generateXmlHash(params.orderId, amountStr, hashedPassword);
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<GVPSRequest>
+  <Mode>${CONFIG.mode}</Mode>
+  <Version>v0.01</Version>
+  <Terminal>
+    <ProvUserID>PROVRFN</ProvUserID>
+    <HashData>${hashData}</HashData>
+    <UserID>PROVRFN</UserID>
+    <ID>${padTerminalId(CONFIG.terminalId)}</ID>
+    <MerchantID>${CONFIG.merchantId}</MerchantID>
+  </Terminal>
+  <Customer>
+    <IPAddress>${params.customerIp || "127.0.0.1"}</IPAddress>
+    <EmailAddress></EmailAddress>
+  </Customer>
+  <Order>
+    <OrderID>${params.orderId}</OrderID>
+  </Order>
+  <Transaction>
+    <Type>refund</Type>
+    <InstallmentCnt></InstallmentCnt>
+    <Amount>${amountStr}</Amount>
+    <CurrencyCode>949</CurrencyCode>
+    <CardholderPresentCode>0</CardholderPresentCode>
+    <MotoInd>N</MotoInd>
+  </Transaction>
+</GVPSRequest>`;
+
+  try {
+    const response = await fetch(CONFIG.xmlUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/xml" },
+      body: xml,
+    });
+
+    const responseText = await response.text();
+    console.log(`[GARANTI REFUND] orderId=${params.orderId} response=${responseText.substring(0, 500)}`);
+
+    // Parse response - look for ReasonCode and Message
+    const reasonCodeMatch = responseText.match(/<ReasonCode>(\d+)<\/ReasonCode>/);
+    const messageMatch = responseText.match(/<Message>([^<]*)<\/Message>/);
+    const errorMsgMatch = responseText.match(/<ErrorMsg>([^<]*)<\/ErrorMsg>/);
+    const reasonCode = reasonCodeMatch?.[1] || "";
+    const message = messageMatch?.[1] || "";
+    const errorMsg = errorMsgMatch?.[1] || "";
+
+    if (reasonCode === "00" || message === "Approved") {
+      return { success: true, message: "Iade basariyla tamamlandi", rawResponse: responseText };
+    }
+
+    return {
+      success: false,
+      message: errorMsg || message || `Iade basarisiz (Kod: ${reasonCode})`,
+      rawResponse: responseText,
+    };
+  } catch (error) {
+    console.error("[GARANTI REFUND] Error:", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Iade istegi gonderilemedi",
+    };
+  }
 }
 
 // Check if payment response is successful
