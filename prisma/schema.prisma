@@ -977,7 +977,7 @@ model Payment {
   dealerId  String
   studentId String
   type      String @default("MONTHLY_FEE") // REGISTRATION_FEE, MONTHLY_FEE, MATERIAL, OTHER
-  method    String @default("CASH")        // CASH, CREDIT_CARD, BANK_TRANSFER, ONLINE_PAYTR
+  method    String @default("CASH")        // CASH, CREDIT_CARD, BANK_TRANSFER, ONLINE_PAYTR, GARANTI_POS
   status    String @default("PENDING")     // PENDING, COMPLETED, FAILED, REFUNDED
 
   amount  Float
@@ -987,8 +987,9 @@ model Payment {
   periodMonth Int?
   periodYear  Int?
 
-  paytrOrderId String?
-  paytrToken   String?
+  paytrOrderId   String?
+  paytrToken     String?
+  garantiOrderId String?  // Garanti BBVA order ID
 
   description String?
   notes       String?
@@ -1525,8 +1526,9 @@ model ShopOrder {
   subtotal        Float
   shippingCost    Float    @default(0)
   total           Float
-  paymentId       String?  // PayTR payment ID
+  paymentId       String?  // PayTR / Garanti payment ID
   paymentStatus   String   @default("PENDING") // PENDING, PAID, FAILED, REFUNDED
+  garantiOrderId  String?  // Garanti BBVA order ID
   notes           String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

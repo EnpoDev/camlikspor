@@ -7,6 +7,7 @@ import { StudentSelector } from "@/components/parent/StudentSelector";
 import { PaymentMethodBadge } from "@/components/parent/PaymentMethodBadge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { PayOnlineButton } from "@/components/payment/PayOnlineButton";
 import { format, isPast } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -102,6 +103,7 @@ export default async function ParentPaymentsPage({
                   <TableHead>Tutar</TableHead>
                   <TableHead>Son Ödeme Tarihi</TableHead>
                   <TableHead>Durum</TableHead>
+                  <TableHead>İşlem</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -128,6 +130,13 @@ export default async function ParentPaymentsPage({
                         ) : (
                           <Badge variant="secondary">Bekliyor</Badge>
                         )}
+                      </TableCell>
+                      <TableCell>
+                        <PayOnlineButton
+                          paymentId={payment.id}
+                          amount={payment.amount}
+                          email={session.user.email || undefined}
+                        />
                       </TableCell>
                     </TableRow>
                   );
@@ -189,8 +198,8 @@ export default async function ParentPaymentsPage({
       <Card className="bg-blue-50 dark:bg-blue-950">
         <CardContent className="pt-6">
           <p className="text-sm text-blue-900 dark:text-blue-100">
-            <strong>Not:</strong> Ödemelerinizi banka havalesi veya okulda nakit olarak yapabilirsiniz.
-            Online ödeme özelliği yakında eklenecektir.
+            <strong>Not:</strong> Bekleyen odemelerinizi tablodaki &quot;Ode&quot; butonuyla kredi karti ile online olarak odeyebilirsiniz.
+            Ayrica banka havalesi veya okulda nakit olarak da odeme yapabilirsiniz.
           </p>
         </CardContent>
       </Card>

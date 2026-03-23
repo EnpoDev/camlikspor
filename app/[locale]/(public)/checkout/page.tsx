@@ -125,7 +125,8 @@ export default function CheckoutPage() {
       const result = await response.json();
       setOrderCompleted(true);
       clearCart();
-      router.push(`/${locale}/checkout/success?order=${result.orderNumber}`);
+      // Redirect to Garanti BBVA payment page
+      router.push(`/${locale}/payment/garanti?shopOrderId=${result.orderId}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Bir hata oluştu");
     } finally {

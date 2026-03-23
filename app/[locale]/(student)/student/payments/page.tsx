@@ -13,6 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { PayOnlineButton } from "@/components/payment/PayOnlineButton";
 import { format, isPast } from "date-fns";
 import { tr } from "date-fns/locale";
 import { CreditCard, TrendingDown, TrendingUp, AlertCircle } from "lucide-react";
@@ -132,6 +133,7 @@ export default async function StudentPaymentsPage() {
                   <TableHead className="text-slate-400">Tutar</TableHead>
                   <TableHead className="text-slate-400">Son Ödeme Tarihi</TableHead>
                   <TableHead className="text-slate-400">Durum</TableHead>
+                  <TableHead className="text-slate-400">İşlem</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -166,6 +168,13 @@ export default async function StudentPaymentsPage() {
                             Bekliyor
                           </Badge>
                         )}
+                      </TableCell>
+                      <TableCell>
+                        <PayOnlineButton
+                          paymentId={payment.id}
+                          amount={payment.amount}
+                          email={session.user.email || undefined}
+                        />
                       </TableCell>
                     </TableRow>
                   );
@@ -231,9 +240,9 @@ export default async function StudentPaymentsPage() {
         <CardContent className="pt-5 flex items-start gap-3">
           <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <p className="text-sm text-slate-300">
-            <span className="font-semibold text-white">Bilgi:</span> Ödemelerinizi banka
-            havalesi veya okulda nakit olarak yapabilirsiniz. Online ödeme özelliği
-            yakında eklenecektir.
+            <span className="font-semibold text-white">Bilgi:</span> Bekleyen odemelerinizi
+            tablodaki &quot;Ode&quot; butonuyla kredi karti ile online olarak odeyebilirsiniz.
+            Ayrica banka havalesi veya okulda nakit olarak da odeme yapabilirsiniz.
           </p>
         </CardContent>
       </Card>

@@ -6,6 +6,7 @@ const methodConfig = {
   CREDIT_CARD: { label: "Kredi Kartı", icon: CreditCard },
   BANK_TRANSFER: { label: "Havale", icon: Building2 },
   ONLINE_PAYTR: { label: "Online", icon: Smartphone },
+  GARANTI_POS: { label: "Kredi Kartı (Online)", icon: CreditCard },
 };
 
 export function PaymentMethodBadge({ method }: { method: keyof typeof methodConfig }) {
