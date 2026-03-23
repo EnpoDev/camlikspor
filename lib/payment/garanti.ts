@@ -133,6 +133,7 @@ export function buildOosFormFields(params: {
     customeripaddress: params.customerIp,
     secure3dhash: hash,
     lang: "tr",
+    txntimestamp: new Date().toISOString(),
     refreshtime: "5",
     companyname: "CAMLIK SK",
   };
