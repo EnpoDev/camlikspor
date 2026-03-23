@@ -39,8 +39,10 @@ export function generateOosHash(params: {
   installmentCount?: string;
 }): string {
   const hashedPassword = generateHashedPassword();
+  // Official docs: SHA512 uses raw terminalId (NOT padded)
+  // Padding ("0" prefix) is ONLY for SHA1 password hash
   const hashStr = [
-    padTerminalId(CONFIG.terminalId),
+    CONFIG.terminalId,
     params.orderId,
     params.amount,
     params.currencyCode || "949",
