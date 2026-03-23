@@ -43,7 +43,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Bu siparis zaten odendi" }, { status: 400 });
       }
 
-      orderId = `SHOP-${order.orderNumber}`;
+      // Garanti orderId: only alphanumeric, no dashes
+      orderId = `SHOP${order.orderNumber}`.replace(/-/g, "");
       amount = order.total;
       customerEmail = order.customerEmail;
 
@@ -67,7 +68,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: "Bu odeme zaten tamamlandi" }, { status: 400 });
       }
 
-      orderId = `AIDAT-${payment.id.slice(-8).toUpperCase()}-${Date.now().toString(36).toUpperCase()}`;
+      // Garanti orderId: only alphanumeric, no dashes
+      orderId = `AIDAT${payment.id.slice(-8).toUpperCase()}${Date.now().toString(36).toUpperCase()}`;
       amount = payment.amount;
       customerEmail = validated.customerEmail || payment.student?.email || "noemail@camliksk.com";
 
