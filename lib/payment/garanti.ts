@@ -39,9 +39,9 @@ export function generateOosHash(params: {
   installmentCount?: string;
 }): string {
   const hashedPassword = generateHashedPassword();
-  // terminalId in hash MUST match form's terminalid field (padded)
+  // terminalId in hash MUST match form's terminalid field
   const hashStr = [
-    padTerminalId(CONFIG.terminalId),
+    CONFIG.terminalId,
     params.orderId,
     params.amount,
     params.currencyCode || "949",
@@ -118,7 +118,7 @@ export function buildOosFormFields(params: {
     mode: CONFIG.mode,
     apiversion: "512",
     secure3dsecuritylevel: "OOS_PAY",
-    terminalid: padTerminalId(CONFIG.terminalId),
+    terminalid: CONFIG.terminalId,
     terminalmerchantid: CONFIG.merchantId,
     terminaluserid: "PROVOOS",
     terminalprovuserid: "PROVAUT",
