@@ -372,6 +372,15 @@ export function PublicFooter({
             >
               Kullanım Şartları
             </Link>
+            <a
+              href="https://drive.google.com/file/d/1M2WOYDZUItOb3GV80gUjzZGlsEKFaBWg/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-secondary transition-colors flex items-center gap-1"
+            >
+              Yetki Belgesi
+              <FileText className="h-3 w-3" />
+            </a>
             {legalDocuments.filter((doc) => doc.fileUrl).map((doc) => (
               <a
                 key={doc.id}
