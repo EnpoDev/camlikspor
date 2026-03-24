@@ -100,6 +100,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     Permission.HERO_SLIDES_CREATE,
     Permission.HERO_SLIDES_EDIT,
     Permission.HERO_SLIDES_DELETE,
+    // Gallery
+    Permission.GALLERY_VIEW,
+    Permission.GALLERY_CREATE,
+    Permission.GALLERY_EDIT,
+    Permission.GALLERY_DELETE,
     // Matches
     Permission.MATCHES_VIEW,
     Permission.MATCHES_CREATE,
@@ -498,6 +503,12 @@ export const MENU_ITEMS: MenuItem[] = [
     labelKey: "sidebar.heroSlides",
     href: "/hero-slides",
     permission: Permission.HERO_SLIDES_VIEW,
+  },
+  {
+    key: "gallery",
+    labelKey: "sidebar.gallery",
+    href: "/gallery",
+    permission: Permission.GALLERY_VIEW,
   },
   {
     key: "sub-dealers",

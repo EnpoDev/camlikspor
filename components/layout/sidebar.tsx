@@ -69,6 +69,7 @@ const iconMap: Record<string, React.ElementType> = {
   orders: ShoppingCart,
   blog: Newspaper,
   "hero-slides": Images,
+  gallery: Images,
   matches: Trophy,
   sponsors: Handshake,
   "sub-dealers": Store,
