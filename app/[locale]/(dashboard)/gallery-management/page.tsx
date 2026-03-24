@@ -37,7 +37,7 @@ export default async function GalleryPage({ params }: GalleryPageProps) {
             Galeri sayfanızdaki fotoğrafları yönetin
           </p>
         </div>
-        <Link href={`/${locale}/gallery/new`}>
+        <Link href={`/${locale}/gallery-management/new`}>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Yeni Fotoğraf Ekle

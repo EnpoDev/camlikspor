@@ -27,7 +27,7 @@ export default async function EditGalleryImagePage({
   });
 
   if (!image) {
-    redirect(`/${locale}/gallery`);
+    redirect(`/${locale}/gallery-management`);
   }
 
   return (

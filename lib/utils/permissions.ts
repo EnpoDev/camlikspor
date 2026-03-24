@@ -507,7 +507,7 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     key: "gallery",
     labelKey: "sidebar.gallery",
-    href: "/gallery",
+    href: "/gallery-management",
     permission: Permission.GALLERY_VIEW,
   },
   {

@@ -109,7 +109,7 @@ export function GalleryImageForm({ image, dealerId, locale }: GalleryImageFormPr
         throw new Error(errorData.error || "Failed to save gallery image");
       }
 
-      router.push(`/${locale}/gallery`);
+      router.push(`/${locale}/gallery-management`);
       router.refresh();
     } catch (error) {
       console.error("Error saving gallery image:", error);
@@ -282,7 +282,7 @@ export function GalleryImageForm({ image, dealerId, locale }: GalleryImageFormPr
             <Button
               type="button"
               variant="outline"
-              onClick={() => router.push(`/${locale}/gallery`)}
+              onClick={() => router.push(`/${locale}/gallery-management`)}
             >
               İptal
             </Button>

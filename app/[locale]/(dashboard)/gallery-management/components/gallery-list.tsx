@@ -113,7 +113,7 @@ export function GalleryList({ images, locale }: GalleryListProps) {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                  <Link href={`/${locale}/gallery/${image.id}`}>
+                  <Link href={`/${locale}/gallery-management/${image.id}`}>
                     <Button variant="ghost" size="sm">
                       <Pencil className="h-4 w-4" />
                     </Button>
